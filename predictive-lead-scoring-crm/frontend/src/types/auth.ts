@@ -1,3 +1,19 @@
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface AuthResponse {
+  success: boolean;
+  message?: string;
+  user?: User;
+  token?: string;
+  errors?: Record<string, string[]>;
+}
+
 export interface LoginFormData {
   email: string;
   password: string;
@@ -6,7 +22,7 @@ export interface LoginFormData {
 export interface RegisterFormData {
   name: string;
   email: string;
-  company: string;
+  company?: string;
   password: string;
   passwordConfirmation: string;
 }
@@ -14,4 +30,3 @@ export interface RegisterFormData {
 export interface FormErrors {
   [key: string]: string;
 }
-

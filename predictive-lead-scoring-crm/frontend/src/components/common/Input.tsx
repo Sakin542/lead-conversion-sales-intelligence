@@ -21,32 +21,32 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({
   const inputId = id || (label ? label.toLowerCase().replace(/\s+/g, '-') : undefined);
 
   return (
-    <div className="w-full space-y-1">
+    <div className="w-full space-y-1.5">
       {label && (
-        <label htmlFor={inputId} className="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
+        <label htmlFor={inputId} className="block text-xs font-semibold text-slate-300 tracking-wide">
           {label}
         </label>
       )}
-      <div className="relative rounded-lg shadow-sm">
+      <div className="relative rounded-xl shadow-sm">
         {leftIcon && (
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
             {leftIcon}
           </div>
         )}
         <input
           ref={ref}
           id={inputId}
-          className={`block w-full rounded-lg border text-sm transition-colors focus:outline-none ${
+          className={`block w-full rounded-xl border text-sm transition-all focus:outline-none min-h-[42px] ${
             leftIcon ? 'pl-10' : 'pl-3.5'
           } ${rightIcon ? 'pr-10' : 'pr-3.5'} py-2.5 ${
             error
               ? 'border-red-500/80 text-red-200 placeholder-red-400 focus:border-red-500 focus:ring-1 focus:ring-red-500 bg-red-950/20'
-              : 'border-slate-800 text-slate-100 placeholder-slate-500 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 bg-slate-900/80'
+              : 'border-slate-800 text-slate-100 placeholder-slate-500 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 bg-slate-950'
           } ${className}`}
           {...props}
         />
         {rightIcon && (
-          <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-slate-400">
+          <div className="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-slate-400">
             {rightIcon}
           </div>
         )}

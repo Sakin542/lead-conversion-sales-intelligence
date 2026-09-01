@@ -148,12 +148,21 @@ export const Home: React.FC = () => {
 
               <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
                 <Link to="/register" className="w-full sm:w-auto">
-                  <Button variant="primary" size="lg" className="w-full sm:w-auto shadow-lg shadow-indigo-500/25 bg-gradient-to-r from-indigo-600 to-purple-600 border-none font-bold" rightIcon={<ArrowRight className="w-4 h-4" />}>
+                  <Button
+                    variant="primary"
+                    size="lg"
+                    className="w-full sm:w-auto min-w-[210px] min-h-[50px] px-8 py-3.5 text-base font-bold shadow-xl shadow-indigo-500/25 bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-500 hover:to-purple-500 border-none transition-all hover:scale-[1.02]"
+                    rightIcon={<ArrowRight className="w-4 h-4" />}
+                  >
                     Get Started Free
                   </Button>
                 </Link>
                 <Link to="/login" className="w-full sm:w-auto">
-                  <Button variant="outline" size="lg" className="w-full sm:w-auto font-semibold text-slate-200 border-slate-800 bg-slate-900/60 hover:bg-slate-800">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="w-full sm:w-auto min-w-[190px] min-h-[50px] px-8 py-3.5 text-base font-semibold text-slate-200 border-slate-800 bg-slate-900/80 hover:bg-slate-800 transition-all"
+                  >
                     Sign In to CRM
                   </Button>
                 </Link>
@@ -765,7 +774,11 @@ export const Home: React.FC = () => {
           </div>
           <div className="pt-2">
             <Link to="/register">
-              <Button variant="primary" size="lg" className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white border-none shadow-2xl font-bold">
+              <Button
+                variant="primary"
+                size="lg"
+                className="min-w-[220px] min-h-[52px] px-9 py-4 text-base font-bold bg-gradient-to-r from-indigo-500 via-indigo-600 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white border-none shadow-2xl rounded-xl transition-all hover:scale-[1.02]"
+              >
                 Get Started Free
               </Button>
             </Link>
