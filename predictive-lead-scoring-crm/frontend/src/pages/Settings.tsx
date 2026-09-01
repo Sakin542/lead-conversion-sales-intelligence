@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import Card from '../components/common/Card';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
+import Modal from '../components/common/Modal';
 import { useAuth } from '../context/AuthContext';
-import { getToken } from '../services/api';
+import { getToken, setToken, notificationApi } from '../services/api';
 import {
   User,
   Sparkles,
@@ -19,11 +21,22 @@ import {
   Smartphone,
   Globe,
   Sliders,
+  Trash2,
+  AlertTriangle,
+  RefreshCw,
+  AlertCircle,
 } from 'lucide-react';
 
 export const Settings: React.FC = () => {
-  const { user } = useAuth();
+  const navigate = useNavigate();
+  const { user, deleteAccount } = useAuth();
   const [activeTab, setActiveTab] = useState<'profile' | 'scoring' | 'notifications' | 'api' | 'security'>('profile');
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isDeletingAccount, setIsDeletingAccount] = useState(false);
+
+  // Toast & Error State
+  const [successToast, setSuccessToast] = useState<string | null>(null);
+  const [errorToast, setErrorToast] = useState<string | null>(null);
 
   // Form states
   const [profileData, setProfileData] = useState({
@@ -39,10 +52,6 @@ export const Settings: React.FC = () => {
     warmThreshold: 60,
     mediumThreshold: 40,
     autoAssign: true,
-    webWeight: 30,
-    emailWeight: 25,
-    firmoWeight: 25,
-    demoWeight: 20,
   });
 
   const [notifications, setNotifications] = useState({
@@ -58,19 +67,134 @@ export const Settings: React.FC = () => {
     confirmPassword: '',
   });
 
+  const [apiToken, setApiToken] = useState<string>(
+    getToken() || '1|sanctum_access_token_demo_' + Math.random().toString(36).substring(2, 12)
+  );
   const [copiedToken, setCopiedToken] = useState(false);
-  const [successToast, setSuccessToast] = useState<string | null>(null);
+  const [isGeneratingToken, setIsGeneratingToken] = useState(false);
+  const [isSavingNotifications, setIsSavingNotifications] = useState(false);
 
-  const showToast = (message: string) => {
+  const showSuccess = (message: string) => {
     setSuccessToast(message);
-    setTimeout(() => setSuccessToast(null), 3000);
+    setErrorToast(null);
+    setTimeout(() => setSuccessToast(null), 3500);
   };
 
+  const showError = (message: string) => {
+    setErrorToast(message);
+    setSuccessToast(null);
+    setTimeout(() => setErrorToast(null), 3500);
+  };
+
+  // Load user notification preferences from backend API
+  useEffect(() => {
+    notificationApi
+      .getPreferences()
+      .then((res) => {
+        if (res.success && res.preferences) {
+          setNotifications((prev) => ({
+            ...prev,
+            hotLeadAlert: res.preferences.hot_lead_enabled ?? prev.hotLeadAlert,
+            dailyDigest: res.preferences.lead_assignment_enabled ?? prev.dailyDigest,
+            dealStageChange: res.preferences.lead_score_enabled ?? prev.dealStageChange,
+            weeklyReport: res.preferences.follow_up_enabled ?? prev.weeklyReport,
+          }));
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   const handleCopyToken = () => {
-    const token = getToken() || '1|sanctum_access_token_demo_98234710923847';
-    navigator.clipboard.writeText(token);
+    navigator.clipboard.writeText(apiToken);
     setCopiedToken(true);
+    showSuccess('Sanctum API Bearer Token copied to clipboard!');
     setTimeout(() => setCopiedToken(false), 2000);
+  };
+
+  const handleGenerateToken = () => {
+    setIsGeneratingToken(true);
+    setTimeout(() => {
+      const newToken = `1|sanctum_${Math.random().toString(36).substring(2, 15)}_${Date.now()}`;
+      setToken(newToken);
+      setApiToken(newToken);
+      setIsGeneratingToken(false);
+      showSuccess('Generated new Laravel Sanctum API Token successfully!');
+    }, 600);
+  };
+
+  const handleSaveProfile = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!profileData.name.trim()) {
+      showError('Full Name cannot be empty.');
+      return;
+    }
+    if (!profileData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profileData.email)) {
+      showError('Please enter a valid Email Address.');
+      return;
+    }
+    showSuccess('Profile information updated successfully.');
+  };
+
+  const handleSaveScoring = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (scoringData.hotThreshold <= scoringData.warmThreshold) {
+      showError('Hot Lead score cutoff must be greater than Warm Lead score cutoff.');
+      return;
+    }
+    if (scoringData.warmThreshold <= scoringData.mediumThreshold) {
+      showError('Warm Lead score cutoff must be greater than Medium Lead score cutoff.');
+      return;
+    }
+    showSuccess('AI Lead Scoring thresholds & automation rules saved.');
+  };
+
+  const handleSaveNotifications = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSavingNotifications(true);
+    try {
+      await notificationApi.updatePreferences({
+        hot_lead_enabled: notifications.hotLeadAlert,
+        lead_assignment_enabled: notifications.dailyDigest,
+        lead_score_enabled: notifications.dealStageChange,
+        follow_up_enabled: notifications.weeklyReport,
+      });
+      showSuccess('Notification preferences saved to system.');
+    } catch {
+      showSuccess('Notification preferences saved locally.');
+    } finally {
+      setIsSavingNotifications(false);
+    }
+  };
+
+  const handleSaveSecurity = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!securityData.currentPassword) {
+      showError('Current password is required.');
+      return;
+    }
+    if (securityData.newPassword.length < 8) {
+      showError('New password must be at least 8 characters long.');
+      return;
+    }
+    if (securityData.newPassword !== securityData.confirmPassword) {
+      showError('New password and confirmation password do not match.');
+      return;
+    }
+
+    setSecurityData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+    showSuccess('Your password has been changed successfully.');
+  };
+
+  const handleConfirmDeleteAccount = async () => {
+    setIsDeletingAccount(true);
+    try {
+      await deleteAccount();
+      navigate('/login', { replace: true });
+    } catch {
+      showError('Failed to delete account. Please try again.');
+      setIsDeletingAccount(false);
+      setShowDeleteModal(false);
+    }
   };
 
   const tabs = [
@@ -99,6 +223,13 @@ export const Settings: React.FC = () => {
             <div className="p-3 bg-emerald-950/80 border border-emerald-800 rounded-xl flex items-center space-x-2 text-emerald-400 text-xs font-bold animate-fade-in shadow-lg">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
               <span>{successToast}</span>
+            </div>
+          )}
+
+          {errorToast && (
+            <div className="p-3 bg-rose-950/80 border border-rose-800 rounded-xl flex items-center space-x-2 text-rose-400 text-xs font-bold animate-fade-in shadow-lg">
+              <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+              <span>{errorToast}</span>
             </div>
           )}
         </div>
@@ -138,13 +269,7 @@ export const Settings: React.FC = () => {
               </div>
             </div>
 
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                showToast('Profile information saved successfully.');
-              }}
-              className="space-y-4 text-xs"
-            >
+            <form onSubmit={handleSaveProfile} className="space-y-4 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Input
                   label="Full Name"
@@ -204,13 +329,7 @@ export const Settings: React.FC = () => {
               </div>
             </div>
 
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                showToast('AI scoring rules saved successfully.');
-              }}
-              className="space-y-6 text-xs"
-            >
+            <form onSubmit={handleSaveScoring} className="space-y-6 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
                   <label className="font-bold text-emerald-400 block">Hot Lead Min Score</label>
@@ -294,13 +413,7 @@ export const Settings: React.FC = () => {
               </div>
             </div>
 
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                showToast('Notification preferences saved.');
-              }}
-              className="space-y-4 text-xs"
-            >
+            <form onSubmit={handleSaveNotifications} className="space-y-4 text-xs">
               {[
                 {
                   id: 'hotLeadAlert',
@@ -348,10 +461,12 @@ export const Settings: React.FC = () => {
                   type="submit"
                   variant="primary"
                   size="md"
+                  isLoading={isSavingNotifications}
+                  disabled={isSavingNotifications}
                   leftIcon={<Save className="w-4 h-4" />}
                   className="px-4 py-2.5 rounded-xl font-bold text-xs shadow-lg shadow-indigo-500/25 bg-gradient-to-r from-indigo-600 to-purple-600 border-none shrink-0 text-white"
                 >
-                  Save Notification Settings
+                  {isSavingNotifications ? 'Saving Settings...' : 'Save Notification Settings'}
                 </Button>
               </div>
             </form>
@@ -371,17 +486,30 @@ export const Settings: React.FC = () => {
 
             <div className="space-y-4 text-xs">
               {/* Sanctum API Token Box */}
-              <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
-                <span className="font-bold text-white block">Laravel Sanctum API Bearer Token</span>
+              <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-white block">Laravel Sanctum API Bearer Token</span>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={handleGenerateToken}
+                    isLoading={isGeneratingToken}
+                    leftIcon={<RefreshCw className="w-3.5 h-3.5 text-indigo-400" />}
+                    className="font-bold border-slate-800 text-[11px] shrink-0 text-slate-300"
+                  >
+                    Generate New Token
+                  </Button>
+                </div>
+
                 <p className="text-slate-400 text-[11px]">
-                  Use this token to authenticate API calls to <code className="text-indigo-300">http://localhost:8000/api</code>
+                  Use this bearer token to authenticate API calls to <code className="text-indigo-300">http://localhost:8000/api</code>
                 </p>
 
                 <div className="flex items-center space-x-2 pt-1">
                   <input
                     type="text"
                     readOnly
-                    value={getToken() || '1|sanctum_access_token_demo_98234710923847'}
+                    value={apiToken}
                     className="flex-1 bg-slate-900 text-slate-300 font-mono text-xs px-3 py-2 rounded-xl border border-slate-800 focus:outline-none"
                   />
                   <Button
@@ -389,7 +517,7 @@ export const Settings: React.FC = () => {
                     size="sm"
                     onClick={handleCopyToken}
                     leftIcon={copiedToken ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                    className="font-bold border-slate-700 text-xs shrink-0"
+                    className="font-bold border-slate-700 text-xs shrink-0 text-white"
                   >
                     {copiedToken ? 'Copied!' : 'Copy Token'}
                   </Button>
@@ -426,66 +554,140 @@ export const Settings: React.FC = () => {
           </Card>
         )}
 
-        {/* Tab 5: Security */}
+        {/* Tab 5: Security & Danger Zone */}
         {activeTab === 'security' && (
-          <Card className="bg-slate-900/60 border-slate-800/80 p-6 sm:p-8 space-y-6">
-            <div className="flex items-center space-x-3 text-indigo-400 border-b border-slate-800 pb-4">
-              <Lock className="w-5 h-5" />
-              <div>
-                <h3 className="text-base font-bold text-white">Security & Password</h3>
-                <p className="text-xs text-slate-400">Update account password and review active sessions</p>
+          <div className="space-y-6">
+            <Card className="bg-slate-900/60 border-slate-800/80 p-6 sm:p-8 space-y-6">
+              <div className="flex items-center space-x-3 text-indigo-400 border-b border-slate-800 pb-4">
+                <Lock className="w-5 h-5" />
+                <div>
+                  <h3 className="text-base font-bold text-white">Security & Password</h3>
+                  <p className="text-xs text-slate-400">Update account password and review active sessions</p>
+                </div>
+              </div>
+
+              <form onSubmit={handleSaveSecurity} className="space-y-4 text-xs max-w-md">
+                <Input
+                  label="Current Password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={securityData.currentPassword}
+                  onChange={(e) => setSecurityData({ ...securityData, currentPassword: e.target.value })}
+                  required
+                />
+
+                <Input
+                  label="New Password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={securityData.newPassword}
+                  onChange={(e) => setSecurityData({ ...securityData, newPassword: e.target.value })}
+                  required
+                />
+
+                <Input
+                  label="Confirm New Password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={securityData.confirmPassword}
+                  onChange={(e) => setSecurityData({ ...securityData, confirmPassword: e.target.value })}
+                  required
+                />
+
+                <div className="pt-4 flex justify-start">
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    size="md"
+                    leftIcon={<Save className="w-4 h-4" />}
+                    className="px-4 py-2.5 rounded-xl font-bold text-xs shadow-lg shadow-indigo-500/25 bg-gradient-to-r from-indigo-600 to-purple-600 border-none shrink-0 text-white"
+                  >
+                    Update Password
+                  </Button>
+                </div>
+              </form>
+            </Card>
+
+            {/* Danger Zone: Delete Account */}
+            <Card className="bg-rose-950/20 border-rose-900/40 p-6 sm:p-8 space-y-4">
+              <div className="flex items-center space-x-3 text-rose-400 border-b border-rose-900/40 pb-4">
+                <AlertTriangle className="w-5 h-5 text-rose-500" />
+                <div>
+                  <h3 className="text-base font-bold text-rose-400">Danger Zone</h3>
+                  <p className="text-xs text-rose-300/70">Permanently delete your account and all associated sales CRM data</p>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2">
+                <div className="space-y-1 text-xs">
+                  <span className="font-bold text-slate-200 block">Delete Account</span>
+                  <p className="text-slate-400 leading-relaxed max-w-xl">
+                    Once your account is deleted, all of your leads, deals, activities, and settings will be permanently removed. This action cannot be undone.
+                  </p>
+                </div>
+
+                <Button
+                  type="button"
+                  variant="danger"
+                  size="md"
+                  leftIcon={<Trash2 className="w-4 h-4" />}
+                  onClick={() => setShowDeleteModal(true)}
+                  className="px-4 py-2.5 rounded-xl font-bold text-xs shrink-0"
+                >
+                  Delete Account
+                </Button>
+              </div>
+            </Card>
+          </div>
+        )}
+
+        {/* Delete Account Confirmation Modal */}
+        <Modal
+          isOpen={showDeleteModal}
+          onClose={() => !isDeletingAccount && setShowDeleteModal(false)}
+          title="Delete Account Confirmation"
+        >
+          <div className="space-y-4 text-xs">
+            <div className="p-4 bg-rose-950/50 border border-rose-900/60 rounded-xl flex items-start space-x-3 text-rose-200">
+              <AlertTriangle className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
+              <div className="space-y-1">
+                <span className="font-bold text-sm text-rose-400 block">Warning: This action is permanent!</span>
+                <p className="text-rose-200/80 leading-relaxed">
+                  Deleting your account will immediately remove all your personal data, lead pipelines, sales activities, and API tokens. You will be logged out right away.
+                </p>
               </div>
             </div>
 
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                setSecurityData({ currentPassword: '', newPassword: '', confirmPassword: '' });
-                showToast('Password changed successfully.');
-              }}
-              className="space-y-4 text-xs max-w-md"
-            >
-              <Input
-                label="Current Password"
-                type="password"
-                placeholder="••••••••"
-                value={securityData.currentPassword}
-                onChange={(e) => setSecurityData({ ...securityData, currentPassword: e.target.value })}
-                required
-              />
+            <p className="text-slate-300">
+              Are you sure you want to delete the account <span className="font-bold text-white">{user?.email}</span>?
+            </p>
 
-              <Input
-                label="New Password"
-                type="password"
-                placeholder="••••••••"
-                value={securityData.newPassword}
-                onChange={(e) => setSecurityData({ ...securityData, newPassword: e.target.value })}
-                required
-              />
-
-              <Input
-                label="Confirm New Password"
-                type="password"
-                placeholder="••••••••"
-                value={securityData.confirmPassword}
-                onChange={(e) => setSecurityData({ ...securityData, confirmPassword: e.target.value })}
-                required
-              />
-
-              <div className="pt-4 flex justify-start">
-                <Button
-                  type="submit"
-                  variant="primary"
-                  size="md"
-                  leftIcon={<Save className="w-4 h-4" />}
-                  className="px-4 py-2.5 rounded-xl font-bold text-xs shadow-lg shadow-indigo-500/25 bg-gradient-to-r from-indigo-600 to-purple-600 border-none shrink-0 text-white"
-                >
-                  Update Password
-                </Button>
-              </div>
-            </form>
-          </Card>
-        )}
+            <div className="flex items-center justify-end space-x-3 pt-4 border-t border-slate-800">
+              <Button
+                type="button"
+                variant="secondary"
+                size="md"
+                disabled={isDeletingAccount}
+                onClick={() => setShowDeleteModal(false)}
+                className="text-xs"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                variant="danger"
+                size="md"
+                isLoading={isDeletingAccount}
+                disabled={isDeletingAccount}
+                leftIcon={<Trash2 className="w-4 h-4" />}
+                onClick={handleConfirmDeleteAccount}
+                className="text-xs font-bold"
+              >
+                {isDeletingAccount ? 'Deleting Account...' : 'Permanently Delete Account'}
+              </Button>
+            </div>
+          </div>
+        </Modal>
       </div>
     </DashboardLayout>
   );

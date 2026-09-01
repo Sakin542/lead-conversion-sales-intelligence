@@ -18,6 +18,7 @@ class Lead extends Model
      */
     protected $fillable = [
         'user_id',
+        'assigned_to',
         'first_name',
         'last_name',
         'email',
@@ -30,6 +31,9 @@ class Lead extends Model
         'company_size',
         'estimated_value',
         'notes',
+        'score',
+        'last_notified_score',
+        'hot_notified',
     ];
 
     /**
@@ -39,6 +43,9 @@ class Lead extends Model
      */
     protected $casts = [
         'estimated_value' => 'decimal:2',
+        'score' => 'integer',
+        'last_notified_score' => 'integer',
+        'hot_notified' => 'boolean',
     ];
 
     /**
@@ -47,6 +54,22 @@ class Lead extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the assigned sales rep user.
+     */
+    public function assignedToUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'assigned_to');
+    }
+
+    /**
+     * Get the assigned sales rep or fallback to lead owner.
+     */
+    public function getAssignedSalesRepresentative(): ?User
+    {
+        return $this->assignedToUser ?? $this->user;
     }
 
     /**
@@ -64,5 +87,12 @@ class Lead extends Model
     {
         return $this->hasMany(Deal::class);
     }
-}
 
+    /**
+     * Get the follow ups for the lead.
+     */
+    public function followUps(): HasMany
+    {
+        return $this->hasMany(FollowUp::class);
+    }
+}

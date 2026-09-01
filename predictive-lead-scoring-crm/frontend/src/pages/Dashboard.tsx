@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import StatCard from '../components/dashboard/StatCard';
@@ -15,6 +16,7 @@ import { kpiMetrics, KPIMetric } from '../data/dashboardData';
 import { Plus, Filter } from 'lucide-react';
 
 export const Dashboard: React.FC = () => {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const firstName = user?.name ? user.name.split(' ')[0] : 'Alex';
   const [timeframe, setTimeframe] = useState<'7d' | '30d' | '90d' | '1y'>('30d');
@@ -68,7 +70,8 @@ export const Dashboard: React.FC = () => {
             variant="primary"
             size="md"
             leftIcon={<Plus className="w-4 h-4" />}
-            className="px-4 py-2.5 rounded-xl font-bold text-xs shadow-lg shadow-indigo-500/25 bg-gradient-to-r from-indigo-600 to-purple-600 border-none shrink-0"
+            onClick={() => navigate('/leads/new')}
+            className="px-4 py-2.5 rounded-xl font-bold text-xs shadow-lg shadow-indigo-500/25 bg-gradient-to-r from-indigo-600 to-purple-600 border-none shrink-0 text-white"
           >
             Add Lead
           </Button>

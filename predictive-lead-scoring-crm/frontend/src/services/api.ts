@@ -1,4 +1,4 @@
-import { AuthResponse, User } from '../types/auth';
+import { AuthResponse, ForgotPasswordResponse, User } from '../types/auth';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 const TOKEN_KEY = 'auth_token';
@@ -91,9 +91,74 @@ export const authApi = {
     });
   },
 
+  forgotPassword: async (email: string): Promise<ForgotPasswordResponse> => {
+    try {
+      return await apiRequest<ForgotPasswordResponse>('/auth/forgot-password', {
+        method: 'POST',
+        body: JSON.stringify({ email }),
+      });
+    } catch (err: any) {
+      if (err.status === 404) {
+        return await apiRequest<ForgotPasswordResponse>('/forgot-password', {
+          method: 'POST',
+          body: JSON.stringify({ email }),
+        });
+      }
+      throw err;
+    }
+  },
+
+  resetPassword: async (payload: {
+    email: string;
+    token?: string;
+    code?: string;
+    password: string;
+    password_confirmation: string;
+  }): Promise<{ success: boolean; message?: string }> => {
+    try {
+      return await apiRequest<{ success: boolean; message?: string }>('/auth/reset-password', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      });
+    } catch (err: any) {
+      if (err.status === 404) {
+        return await apiRequest<{ success: boolean; message?: string }>('/reset-password', {
+          method: 'POST',
+          body: JSON.stringify(payload),
+        });
+      }
+      throw err;
+    }
+  },
+
+  deleteAccount: async (): Promise<{ success: boolean; message: string }> => {
+    try {
+      return await apiRequest<{ success: boolean; message: string }>('/auth/account', {
+        method: 'DELETE',
+      });
+    } finally {
+      removeToken();
+    }
+  },
+
   getProtectedData: async (): Promise<{ success: boolean; message: string }> => {
     return apiRequest<{ success: boolean; message: string }>('/protected', {
       method: 'GET',
+    });
+  },
+};
+
+export const notificationApi = {
+  getPreferences: async (): Promise<{ success: boolean; preferences: any }> => {
+    return apiRequest<{ success: boolean; preferences: any }>('/notification-settings', {
+      method: 'GET',
+    });
+  },
+
+  updatePreferences: async (payload: Record<string, boolean>): Promise<{ success: boolean; message: string; preferences: any }> => {
+    return apiRequest<{ success: boolean; message: string; preferences: any }>('/notification-settings', {
+      method: 'PUT',
+      body: JSON.stringify(payload),
     });
   },
 };

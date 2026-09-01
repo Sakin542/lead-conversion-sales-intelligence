@@ -43,7 +43,8 @@ class StoreLeadRequest extends FormRequest
             'company_size' => ['nullable', 'string', 'max:255'],
             'estimated_value' => ['nullable', 'numeric', 'min:0'],
             'notes' => ['nullable', 'string'],
+            'assigned_to' => ['nullable', 'exists:users,id'],
+            'score' => ['nullable', 'integer', 'min:0', 'max:100'],
         ];
     }
 }
-

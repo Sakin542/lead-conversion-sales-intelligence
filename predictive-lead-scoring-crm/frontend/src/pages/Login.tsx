@@ -82,7 +82,8 @@ export const Login: React.FC = () => {
         });
         setErrors(fieldErrors);
       } else {
-        setApiError(err.data?.message || err.message || 'Invalid credentials');
+        const msg = err.data?.message || err.message;
+        setApiError(!msg || msg === 'Invalid credentials' ? 'Invalid email or password' : msg);
       }
     } finally {
       setIsSubmitting(false);
@@ -169,7 +170,7 @@ export const Login: React.FC = () => {
               </label>
 
               <Link to="/forgot-password" className="font-semibold text-indigo-400 hover:text-indigo-300">
-                Forgot password?
+                Forgot your password?
               </Link>
             </div>
 
@@ -181,7 +182,7 @@ export const Login: React.FC = () => {
                 className="w-full justify-center shadow-lg shadow-indigo-500/25 bg-gradient-to-r from-indigo-600 to-purple-600 border-none font-bold"
                 isLoading={isSubmitting}
               >
-                Sign In to Dashboard
+                Sign In
               </Button>
             </div>
           </form>

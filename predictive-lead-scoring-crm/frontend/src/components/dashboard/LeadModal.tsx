@@ -1,8 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Modal from '../common/Modal';
 import Button from '../common/Button';
 import { Lead } from '../../data/dashboardData';
-import { Sparkles, Mail, Building, Flame } from 'lucide-react';
+import { Sparkles, Mail, Building, Flame, ExternalLink } from 'lucide-react';
 
 interface LeadModalProps {
   lead: Lead | null;
@@ -11,6 +12,7 @@ interface LeadModalProps {
 }
 
 export const LeadModal: React.FC<LeadModalProps> = ({ lead, isOpen, onClose }) => {
+  const navigate = useNavigate();
   if (!lead) return null;
 
   const scoreFactors = [
@@ -85,23 +87,36 @@ export const LeadModal: React.FC<LeadModalProps> = ({ lead, isOpen, onClose }) =
         </div>
 
         {/* Outreach Actions */}
-        <div className="pt-2 flex items-center justify-end space-x-3 border-t border-slate-800">
-          <Button variant="outline" size="sm" onClick={onClose} className="text-xs font-bold border-slate-700">
-            Close
+        <div className="pt-2 flex items-center justify-between border-t border-slate-800">
+          <Button
+            variant="outline"
+            size="sm"
+            leftIcon={<ExternalLink className="w-3.5 h-3.5" />}
+            onClick={() => {
+              onClose();
+              navigate('/leads');
+            }}
+            className="text-xs font-bold border-slate-700 text-slate-300"
+          >
+            All Leads
           </Button>
 
-          <Button
-            variant="primary"
-            size="sm"
-            leftIcon={<Mail className="w-3.5 h-3.5" />}
-            onClick={() => {
-              alert(`Initiating email sequence to ${lead.email}...`);
-              onClose();
-            }}
-            className="text-xs font-bold bg-gradient-to-r from-indigo-600 to-purple-600 border-none"
-          >
-            Send Outreach Email
-          </Button>
+          <div className="flex items-center space-x-2">
+            <a
+              href={`mailto:${lead.email}?subject=Sales Inquiry - ${lead.company}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Button
+                variant="primary"
+                size="sm"
+                leftIcon={<Mail className="w-3.5 h-3.5" />}
+                className="text-xs font-bold bg-gradient-to-r from-indigo-600 to-purple-600 border-none text-white"
+              >
+                Send Outreach Email
+              </Button>
+            </a>
+          </div>
         </div>
       </div>
     </Modal>
