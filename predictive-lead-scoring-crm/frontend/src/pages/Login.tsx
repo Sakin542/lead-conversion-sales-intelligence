@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Mail, Lock, CheckCircle2, Eye, EyeOff } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Mail, Lock, CheckCircle2, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import { LoginFormData, FormErrors } from '../types/auth';
+import { useAuth } from '../context/AuthContext';
 
 export const Login: React.FC = () => {
+  const navigate = useNavigate();
+  const { login, isAuthenticated } = useAuth();
+
   const [formData, setFormData] = useState<LoginFormData>({
     email: '',
     password: '',
@@ -16,8 +20,15 @@ export const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
+  const [apiError, setApiError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const validate = (): boolean => {
     const newErrors: FormErrors = {};
@@ -30,8 +41,6 @@ export const Login: React.FC = () => {
 
     if (!formData.password) {
       newErrors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
     }
 
     setErrors(newErrors);
@@ -45,11 +54,15 @@ export const Login: React.FC = () => {
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: '' }));
     }
+    if (apiError) {
+      setApiError(null);
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSuccessMessage(null);
+    setApiError(null);
 
     if (!validate()) {
       return;
@@ -57,10 +70,23 @@ export const Login: React.FC = () => {
 
     setIsSubmitting(true);
 
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      await login(formData.email, formData.password);
       setSuccessMessage('Signed in successfully.');
-    }, 600);
+      navigate('/dashboard', { replace: true });
+    } catch (err: any) {
+      if (err.data?.errors) {
+        const fieldErrors: FormErrors = {};
+        Object.keys(err.data.errors).forEach((key) => {
+          fieldErrors[key] = err.data.errors[key][0];
+        });
+        setErrors(fieldErrors);
+      } else {
+        setApiError(err.data?.message || err.message || 'Invalid credentials');
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -86,6 +112,13 @@ export const Login: React.FC = () => {
             <div className="p-3.5 bg-emerald-950/60 border border-emerald-800 rounded-lg flex items-center space-x-2.5 text-emerald-400 text-sm">
               <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
               <span>{successMessage}</span>
+            </div>
+          )}
+
+          {apiError && (
+            <div className="p-3.5 bg-rose-950/60 border border-rose-800 rounded-lg flex items-center space-x-2.5 text-rose-400 text-sm">
+              <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />
+              <span>{apiError}</span>
             </div>
           )}
 
