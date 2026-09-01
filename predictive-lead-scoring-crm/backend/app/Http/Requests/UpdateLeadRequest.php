@@ -23,14 +23,14 @@ class UpdateLeadRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'first_name' => ['sometimes', 'required', 'string', 'max:255'],
-            'last_name' => ['sometimes', 'required', 'string', 'max:255'],
-            'email' => ['sometimes', 'required', 'string', 'email', 'max:255'],
+            'first_name' => ['sometimes', 'string', 'max:255'],
+            'last_name' => ['sometimes', 'string', 'max:255'],
+            'email' => ['sometimes', 'string', 'email', 'max:255'],
             'phone' => ['nullable', 'string', 'max:50'],
-            'company' => ['sometimes', 'required', 'string', 'max:255'],
+            'company' => ['sometimes', 'string', 'max:255'],
             'job_title' => ['nullable', 'string', 'max:255'],
             'source' => ['nullable', 'string', 'max:255'],
-            'status' => ['nullable', Rule::in([
+            'status' => ['sometimes', Rule::in([
                 'new',
                 'contacted',
                 'qualified',
@@ -43,7 +43,8 @@ class UpdateLeadRequest extends FormRequest
             'company_size' => ['nullable', 'string', 'max:255'],
             'estimated_value' => ['nullable', 'numeric', 'min:0'],
             'notes' => ['nullable', 'string'],
+            'assigned_to' => ['nullable', 'exists:users,id'],
+            'score' => ['nullable', 'integer', 'min:0', 'max:100'],
         ];
     }
 }
-

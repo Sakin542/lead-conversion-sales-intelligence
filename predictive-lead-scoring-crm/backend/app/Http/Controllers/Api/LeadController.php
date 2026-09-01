@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\HotLeadDetected;
+use App\Events\LeadAssigned;
+use App\Events\LeadScoreUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreLeadRequest;
 use App\Http\Requests\UpdateLeadRequest;
 use App\Models\Lead;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -16,7 +20,11 @@ class LeadController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $query = $request->user()->leads();
+        $userId = $request->user()->id;
+        $query = Lead::where(function ($q) use ($userId) {
+            $q->where('user_id', $userId)
+              ->orWhere('assigned_to', $userId);
+        });
 
         // Search
         if ($search = $request->query('search')) {
@@ -51,6 +59,7 @@ class LeadController extends Controller
             'email',
             'company',
             'status',
+            'score',
             'estimated_value',
             'created_at',
             'updated_at',
@@ -95,6 +104,13 @@ class LeadController extends Controller
 
         $lead = $request->user()->leads()->create($data);
 
+        if (!empty($data['assigned_to'])) {
+            $salesRep = User::find($data['assigned_to']);
+            if ($salesRep) {
+                event(new LeadAssigned($lead, $salesRep));
+            }
+        }
+
         return response()->json([
             'success' => true,
             'message' => 'Lead created successfully',
@@ -107,7 +123,11 @@ class LeadController extends Controller
      */
     public function show(Request $request, string $id): JsonResponse
     {
-        $lead = $request->user()->leads()->with('activities')->find($id);
+        $userId = $request->user()->id;
+        $lead = Lead::where(function ($q) use ($userId) {
+            $q->where('user_id', $userId)
+              ->orWhere('assigned_to', $userId);
+        })->with(['activities', 'followUps'])->find($id);
 
         if (!$lead) {
             return response()->json([
@@ -128,7 +148,11 @@ class LeadController extends Controller
      */
     public function update(UpdateLeadRequest $request, string $id): JsonResponse
     {
-        $lead = $request->user()->leads()->find($id);
+        $userId = $request->user()->id;
+        $lead = Lead::where(function ($q) use ($userId) {
+            $q->where('user_id', $userId)
+              ->orWhere('assigned_to', $userId);
+        })->find($id);
 
         if (!$lead) {
             return response()->json([
@@ -137,7 +161,18 @@ class LeadController extends Controller
             ], 404);
         }
 
+        $oldAssignedTo = $lead->assigned_to;
         $lead->update($request->validated());
+
+        if (array_key_exists('assigned_to', $request->validated())) {
+            $newAssignedTo = $request->validated()['assigned_to'];
+            if ($newAssignedTo && $newAssignedTo !== $oldAssignedTo) {
+                $salesRep = User::find($newAssignedTo);
+                if ($salesRep) {
+                    event(new LeadAssigned($lead, $salesRep));
+                }
+            }
+        }
 
         return response()->json([
             'success' => true,
@@ -147,11 +182,59 @@ class LeadController extends Controller
     }
 
     /**
+     * Update lead score (Triggered by ML Engine or API).
+     */
+    public function updateScore(Request $request, string $id): JsonResponse
+    {
+        $validated = $request->validate([
+            'score' => ['required', 'integer', 'min:0', 'max:100'],
+        ]);
+
+        $userId = $request->user()->id;
+        $lead = Lead::where(function ($q) use ($userId) {
+            $q->where('user_id', $userId)
+              ->orWhere('assigned_to', $userId);
+        })->find($id);
+
+        if (!$lead) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Lead not found',
+            ], 404);
+        }
+
+        $previousScore = $lead->score ?? 0;
+        $newScore = (int) $validated['score'];
+
+        $lead->score = $newScore;
+        $lead->save();
+
+        // 1. Dispatch score update event
+        event(new LeadScoreUpdated($lead, $previousScore, $newScore));
+
+        // 2. Dispatch hot lead event if threshold crossed
+        $hotThreshold = (int) env('HOT_LEAD_SCORE_THRESHOLD', 80);
+        if ($newScore >= $hotThreshold && !$lead->hot_notified) {
+            event(new HotLeadDetected($lead));
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Lead score updated successfully',
+            'data' => $lead,
+        ]);
+    }
+
+    /**
      * Remove the specified lead from storage.
      */
     public function destroy(Request $request, string $id): JsonResponse
     {
-        $lead = $request->user()->leads()->find($id);
+        $userId = $request->user()->id;
+        $lead = Lead::where(function ($q) use ($userId) {
+            $q->where('user_id', $userId)
+              ->orWhere('assigned_to', $userId);
+        })->find($id);
 
         if (!$lead) {
             return response()->json([
@@ -168,4 +251,3 @@ class LeadController extends Controller
         ]);
     }
 }
-

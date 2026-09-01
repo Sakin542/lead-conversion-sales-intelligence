@@ -9,6 +9,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string, passwordConfirmation: string) => Promise<void>;
   logout: () => Promise<void>;
+  deleteAccount: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -79,6 +80,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const deleteAccount = async (): Promise<void> => {
+    try {
+      await authApi.deleteAccount();
+    } catch {
+      removeToken();
+    } finally {
+      setUser(null);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -88,6 +99,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         login,
         register,
         logout,
+        deleteAccount,
       }}
     >
       {children}

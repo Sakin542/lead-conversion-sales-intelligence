@@ -13,6 +13,7 @@ import Analytics from '../pages/Analytics';
 import Campaigns from '../pages/Campaigns';
 import Settings from '../pages/Settings';
 import ForgotPassword from '../pages/ForgotPassword';
+import ResetPassword from '../pages/ResetPassword';
 import ProtectedRoute from './ProtectedRoute';
 
 export const AppRoutes: React.FC = () => {
@@ -102,8 +103,7 @@ export const AppRoutes: React.FC = () => {
         }
       />
       <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/verify-code" element={<ForgotPassword />} />
-      <Route path="/reset-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

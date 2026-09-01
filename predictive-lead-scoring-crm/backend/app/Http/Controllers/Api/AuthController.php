@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\UserRegistered;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
@@ -26,6 +27,9 @@ class AuthController extends Controller
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
+        // Dispatch UserRegistered event to queue WelcomeUserNotification
+        event(new UserRegistered($user));
+
         return response()->json([
             'success' => true,
             'message' => 'Registration successful',
@@ -48,7 +52,7 @@ class AuthController extends Controller
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json([
                 'success' => false,
-                'message' => 'Invalid credentials',
+                'message' => 'Invalid email or password',
             ], 401);
         }
 
@@ -100,5 +104,23 @@ class AuthController extends Controller
             ],
         ], 200);
     }
-}
 
+    /**
+     * Delete the authenticated user account and all associated data.
+     */
+    public function deleteAccount(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        // Revoke all tokens for the user
+        $user->tokens()->delete();
+
+        // Delete user account
+        $user->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Account deleted successfully',
+        ], 200);
+    }
+}

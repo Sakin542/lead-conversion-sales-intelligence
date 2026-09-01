@@ -35,26 +35,34 @@ export const Register: React.FC = () => {
   const validate = (): boolean => {
     const newErrors: FormErrors = {};
 
-    if (!formData.name.trim()) {
-      newErrors.name = 'Full name is required';
+    const trimmedName = formData.name.trim();
+    if (!trimmedName) {
+      newErrors.name = 'Please enter a valid full name.';
+    } else if (trimmedName.length < 2) {
+      newErrors.name = 'Please enter a valid name (at least 2 characters).';
     }
 
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email address is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
+    const trimmedEmail = formData.email.trim();
+    if (!trimmedEmail) {
+      newErrors.email = 'Please enter a valid email address.';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+      newErrors.email = 'Please enter a valid email address.';
+    }
+
+    if (formData.company && formData.company.trim().length > 0 && formData.company.trim().length < 2) {
+      newErrors.company = 'Please enter a valid company name.';
     }
 
     if (!formData.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = 'Password is required.';
     } else if (formData.password.length < 8) {
-      newErrors.password = 'Password must be at least 8 characters';
+      newErrors.password = 'Password must be at least 8 characters.';
     }
 
     if (!formData.passwordConfirmation) {
-      newErrors.passwordConfirmation = 'Please confirm your password';
+      newErrors.passwordConfirmation = 'Please confirm your password.';
     } else if (formData.password !== formData.passwordConfirmation) {
-      newErrors.passwordConfirmation = 'Passwords do not match';
+      newErrors.passwordConfirmation = 'Passwords do not match.';
     }
 
     setErrors(newErrors);

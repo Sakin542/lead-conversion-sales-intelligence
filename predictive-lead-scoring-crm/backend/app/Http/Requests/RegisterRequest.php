@@ -22,9 +22,25 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'min:2', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'company' => ['nullable', 'string', 'min:2', 'max:255'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ];
+    }
+
+    /**
+     * Get custom messages for validator errors.
+     */
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Please enter a valid full name.',
+            'name.min' => 'Please enter a valid full name (at least 2 characters).',
+            'email.required' => 'Please enter a valid email address.',
+            'email.email' => 'Please enter a valid email address.',
+            'email.unique' => 'This email address is already registered. Please sign in instead.',
+            'company.min' => 'Please enter a valid company name (at least 2 characters).',
         ];
     }
 }

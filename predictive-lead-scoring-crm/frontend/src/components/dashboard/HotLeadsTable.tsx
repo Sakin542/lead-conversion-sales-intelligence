@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Card from '../common/Card';
 import { topHotLeads, Lead } from '../../data/dashboardData';
 import { Flame, ExternalLink, Sparkles } from 'lucide-react';
@@ -65,10 +66,10 @@ export const HotLeadsTable: React.FC = () => {
             <p className="text-xs text-slate-400">High intent prospects requiring priority outreach</p>
           </div>
 
-          <button className="text-xs font-bold text-indigo-400 hover:text-indigo-300 flex items-center space-x-1">
+          <Link to="/leads" className="text-xs font-bold text-indigo-400 hover:text-indigo-300 flex items-center space-x-1">
             <span>View All Leads</span>
             <ExternalLink className="w-3.5 h-3.5" />
-          </button>
+          </Link>
         </div>
 
         {/* Table Container */}

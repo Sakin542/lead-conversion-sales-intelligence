@@ -27,6 +27,17 @@ export interface RegisterFormData {
   passwordConfirmation: string;
 }
 
+export interface ForgotPasswordFormData {
+  email: string;
+}
+
+export interface ForgotPasswordResponse {
+  success: boolean;
+  message?: string;
+  errors?: Record<string, string[]>;
+}
+
 export interface FormErrors {
   [key: string]: string;
 }
+
