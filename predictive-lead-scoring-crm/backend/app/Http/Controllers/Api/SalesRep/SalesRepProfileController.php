@@ -53,22 +53,25 @@ class SalesRepProfileController extends Controller
         $user = $request->user();
 
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['sometimes', 'nullable', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:50'],
             'current_password' => ['nullable', 'string'],
             'new_password' => ['nullable', 'string', 'min:6'],
         ]);
 
-        $user->name = $request->name;
-        if ($request->phone) {
+        if ($request->filled('name')) {
+            $user->name = $request->name;
+        }
+
+        if ($request->has('phone')) {
             $user->phone = $request->phone;
         }
 
-        if ($request->new_password) {
+        if ($request->filled('new_password')) {
             if (!$request->current_password || !Hash::check($request->current_password, $user->password)) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Current password verification failed.',
+                    'message' => 'Current password verification failed. Please check your current password.',
                 ], 422);
             }
             $user->password = Hash::make($request->new_password);

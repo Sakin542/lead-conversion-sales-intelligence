@@ -38,6 +38,8 @@ import ManagerGoals from '../pages/manager/ManagerGoals';
 import RevenueForecast from '../pages/manager/RevenueForecast';
 import ManagerReports from '../pages/manager/ManagerReports';
 import ManagerNotifications from '../pages/manager/ManagerNotifications';
+import ManagerProfile from '../pages/manager/ManagerProfile';
+import ManagerSettings from '../pages/manager/ManagerSettings';
 
 // Sales Representative Dedicated Imports
 import SalesRepDashboard from '../pages/sales-rep/SalesRepDashboard';
@@ -52,6 +54,7 @@ import SalesRepAnalytics from '../pages/sales-rep/SalesRepAnalytics';
 import SalesRepGoals from '../pages/sales-rep/SalesRepGoals';
 import SalesRepNotifications from '../pages/sales-rep/SalesRepNotifications';
 import SalesRepProfile from '../pages/sales-rep/SalesRepProfile';
+import SalesRepSettings from '../pages/sales-rep/SalesRepSettings';
 
 import ContactSales from '../pages/ContactSales';
 
@@ -244,6 +247,22 @@ export const AppRoutes: React.FC = () => {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/manager/profile"
+        element={
+          <ProtectedRoute allowedRoles={['ADMIN', 'SALES_MANAGER']}>
+            <ManagerProfile />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/manager/settings"
+        element={
+          <ProtectedRoute allowedRoles={['ADMIN', 'SALES_MANAGER']}>
+            <ManagerSettings />
+          </ProtectedRoute>
+        }
+      />
       {/* Sales Representative Dedicated Routes */}
       <Route
         path="/sales-rep/dashboard"
@@ -338,6 +357,14 @@ export const AppRoutes: React.FC = () => {
         element={
           <ProtectedRoute allowedRoles={['ADMIN', 'SALES_MANAGER', 'SALES_REP']}>
             <SalesRepProfile />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/sales-rep/settings"
+        element={
+          <ProtectedRoute allowedRoles={['ADMIN', 'SALES_MANAGER', 'SALES_REP']}>
+            <SalesRepSettings />
           </ProtectedRoute>
         }
       />

@@ -48,6 +48,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const toggleCollapsed = onToggleCollapse || (() => setInternalCollapsed(!internalCollapsed));
 
   const isManagerOrAdmin = user?.role === 'ADMIN' || user?.role === 'SALES_MANAGER';
+  const isManager = user?.role === 'SALES_MANAGER';
   const isSalesRep = user?.role === 'SALES_REP';
 
   const navItems = isSalesRep
@@ -84,7 +85,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
       ];
 
   const bottomItems = isSalesRep
-    ? []
+    ? [{ name: 'Settings', path: '/sales-rep/settings', icon: Settings }]
+    : isManager
+    ? [{ name: 'Settings', path: '/manager/settings', icon: Settings }]
     : [{ name: 'Settings', path: '/settings', icon: Settings }];
 
 
