@@ -124,21 +124,24 @@ export const Pipeline: React.FC = () => {
           </div>
 
           <div className="flex items-center space-x-3">
-            <button
+            <Button
+              variant="outline"
+              size="sm"
               onClick={fetchPipelineData}
-              className="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition-colors"
-              title="Refresh Pipeline"
+              className="border-slate-800 text-slate-300 hover:bg-slate-900"
+              leftIcon={<RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />}
             >
-              <RefreshCw className="w-4 h-4" />
-            </button>
+              Refresh
+            </Button>
 
             <Button
               variant="primary"
+              size="sm"
               onClick={() => handleOpenAddDeal()}
-              className="flex items-center space-x-2 shrink-0 shadow-lg shadow-indigo-600/20"
+              leftIcon={<Plus className="w-4 h-4" />}
+              className="bg-indigo-600 hover:bg-indigo-500 border-none font-bold shadow-lg shadow-indigo-600/20"
             >
-              <Plus className="w-4 h-4" />
-              <span>Create Deal</span>
+              Create Deal
             </Button>
           </div>
         </div>

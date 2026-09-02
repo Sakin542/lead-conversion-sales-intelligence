@@ -5,6 +5,9 @@ import LeadStatusBadge from './LeadStatusBadge';
 
 interface LeadTableProps {
   leads: Lead[];
+  selectedLeadIds?: number[];
+  onToggleSelect?: (id: number) => void;
+  onSelectAll?: () => void;
   onView: (lead: Lead) => void;
   onEdit: (lead: Lead) => void;
   onDelete: (lead: Lead) => void;
@@ -12,10 +15,15 @@ interface LeadTableProps {
 
 export const LeadTable: React.FC<LeadTableProps> = ({
   leads,
+  selectedLeadIds = [],
+  onToggleSelect,
+  onSelectAll,
   onView,
   onEdit,
   onDelete,
 }) => {
+  const allSelected = leads.length > 0 && selectedLeadIds.length === leads.length;
+
   const formatCurrency = (val?: number | string | null) => {
     if (val === null || val === undefined || val === '') return '$0.00';
     const num = typeof val === 'string' ? parseFloat(val) : val;
@@ -45,6 +53,16 @@ export const LeadTable: React.FC<LeadTableProps> = ({
       <table className="w-full text-left text-xs text-slate-300">
         <thead>
           <tr className="border-b border-slate-800 text-slate-400 font-semibold uppercase text-[11px] tracking-wider bg-slate-950/40">
+            {onToggleSelect && (
+              <th className="py-3.5 px-3 w-10 text-center">
+                <input
+                  type="checkbox"
+                  checked={allSelected}
+                  onChange={onSelectAll}
+                  className="rounded border-slate-700 bg-slate-900 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+                />
+              </th>
+            )}
             <th className="py-3.5 px-4">Lead</th>
             <th className="py-3.5 px-4">Company</th>
             <th className="py-3.5 px-4">Source</th>
@@ -55,9 +73,21 @@ export const LeadTable: React.FC<LeadTableProps> = ({
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-800/60">
-          {leads.map((lead) => (
-            <tr key={lead.id} className="hover:bg-slate-800/40 transition-colors group">
-              {/* Lead Name & Email */}
+          {leads.map((lead) => {
+            const isSelected = selectedLeadIds.includes(lead.id);
+            return (
+              <tr key={lead.id} className={`hover:bg-slate-800/40 transition-colors group ${isSelected ? 'bg-indigo-950/20' : ''}`}>
+                {onToggleSelect && (
+                  <td className="py-3.5 px-3 text-center">
+                    <input
+                      type="checkbox"
+                      checked={isSelected}
+                      onChange={() => onToggleSelect(lead.id)}
+                      className="rounded border-slate-700 bg-slate-900 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+                    />
+                  </td>
+                )}
+                {/* Lead Name & Email */}
               <td className="py-3.5 px-4 font-medium text-white">
                 <div className="flex items-center space-x-3">
                   <div className="w-9 h-9 rounded-full bg-slate-800 border border-slate-700 text-indigo-400 font-bold flex items-center justify-center text-xs shrink-0 group-hover:border-indigo-500/50 transition-colors">
@@ -134,7 +164,8 @@ export const LeadTable: React.FC<LeadTableProps> = ({
                 </div>
               </td>
             </tr>
-          ))}
+          );
+        })}
         </tbody>
       </table>
     </div>

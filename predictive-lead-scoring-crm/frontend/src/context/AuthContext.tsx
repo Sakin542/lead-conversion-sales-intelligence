@@ -7,9 +7,9 @@ interface AuthContextType {
   isAuthenticated: boolean;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string, passwordConfirmation: string) => Promise<void>;
   logout: () => Promise<void>;
   deleteAccount: () => Promise<void>;
+  acceptInvitation: (email: string, token: string, password: string, passwordConfirmation: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -52,15 +52,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const register = async (
-    name: string,
+  const acceptInvitation = async (
     email: string,
+    token: string,
     password: string,
     passwordConfirmation: string
   ): Promise<void> => {
-    const response = await authApi.register({
-      name,
+    const response = await authApi.acceptInvitation({
       email,
+      token,
       password,
       password_confirmation: passwordConfirmation,
     });
@@ -97,9 +97,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isAuthenticated: !!user,
         loading,
         login,
-        register,
         logout,
         deleteAccount,
+        acceptInvitation,
       }}
     >
       {children}
@@ -116,4 +116,3 @@ export const useAuth = (): AuthContextType => {
 };
 
 export default AuthContext;
-

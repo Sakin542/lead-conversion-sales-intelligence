@@ -2,61 +2,36 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Events\UserRegistered;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
-use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    /**
-     * Register a new user and generate access token.
-     */
-    public function register(RegisterRequest $request): JsonResponse
-    {
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        // Dispatch UserRegistered event to queue WelcomeUserNotification
-        event(new UserRegistered($user));
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Registration successful',
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'created_at' => $user->created_at,
-                'updated_at' => $user->updated_at,
-            ],
-            'token' => $token,
-        ], 201);
-    }
-
     /**
      * Authenticate user credentials and generate access token.
      */
     public function login(LoginRequest $request): JsonResponse
     {
-        if (!Auth::attempt($request->only('email', 'password'))) {
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user || !Auth::attempt($request->only('email', 'password'))) {
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid email or password',
             ], 401);
         }
 
-        $user = User::where('email', $request->email)->firstOrFail();
+        if (!$user->is_active) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Your account is inactive or pending invitation setup.',
+            ], 403);
+        }
+
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
@@ -66,6 +41,8 @@ class AuthController extends Controller
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
+                'role' => $user->role,
+                'is_active' => $user->is_active,
                 'created_at' => $user->created_at,
                 'updated_at' => $user->updated_at,
             ],
@@ -99,6 +76,8 @@ class AuthController extends Controller
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
+                'role' => $user->role,
+                'is_active' => $user->is_active,
                 'created_at' => $user->created_at,
                 'updated_at' => $user->updated_at,
             ],

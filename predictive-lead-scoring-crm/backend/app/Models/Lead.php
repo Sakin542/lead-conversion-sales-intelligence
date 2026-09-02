@@ -65,6 +65,14 @@ class Lead extends Model
     }
 
     /**
+     * Alias for assignedToUser.
+     */
+    public function assignedTo(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'assigned_to');
+    }
+
+    /**
      * Get the assigned sales rep or fallback to lead owner.
      */
     public function getAssignedSalesRepresentative(): ?User
