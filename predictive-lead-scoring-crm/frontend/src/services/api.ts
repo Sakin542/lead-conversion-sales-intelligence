@@ -530,4 +530,31 @@ export const notificationApi = {
   },
 };
 
+export const publicApi = {
+  submitLead: async (payload: {
+    name?: string;
+    first_name?: string;
+    last_name?: string;
+    email: string;
+    phone?: string;
+    company?: string;
+    industry?: string;
+    interested_in?: string;
+    budget?: number;
+    estimated_value?: number;
+    revenue?: number;
+    company_size?: string;
+    job_title?: string;
+    country?: string;
+    website?: string;
+    preferred_contact_method?: string;
+    message?: string;
+  }): Promise<{ success: boolean; message: string }> => {
+    return apiRequest<{ success: boolean; message: string }>('/public/leads', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+  },
+};
+
 export default authApi;

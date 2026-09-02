@@ -52,10 +52,13 @@ import SalesRepGoals from '../pages/sales-rep/SalesRepGoals';
 import SalesRepNotifications from '../pages/sales-rep/SalesRepNotifications';
 import SalesRepProfile from '../pages/sales-rep/SalesRepProfile';
 
+import ContactSales from '../pages/ContactSales';
+
 export const AppRoutes: React.FC = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/contact-sales" element={<ContactSales />} />
       <Route path="/login" element={<Login />} />
       <Route path="/accept-invitation" element={<AcceptInvitation />} />
 
