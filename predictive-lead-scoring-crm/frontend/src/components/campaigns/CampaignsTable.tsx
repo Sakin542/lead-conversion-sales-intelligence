@@ -67,8 +67,8 @@ export const CampaignsTable: React.FC<CampaignsTableProps> = ({ campaigns }) => 
         <span className="text-xs text-slate-400 font-mono">{campaigns.length} total</span>
       </div>
 
-      <div className="overflow-x-auto custom-scrollbar">
-        <table className="w-full text-left text-xs text-slate-300">
+      <div className="w-full min-w-0 overflow-x-auto custom-scrollbar">
+        <table className="w-full min-w-[700px] text-left text-xs text-slate-300">
           <thead>
             <tr className="border-b border-slate-800 text-slate-400 font-semibold uppercase text-[11px] tracking-wider">
               <th className="py-3 px-4">Campaign</th>

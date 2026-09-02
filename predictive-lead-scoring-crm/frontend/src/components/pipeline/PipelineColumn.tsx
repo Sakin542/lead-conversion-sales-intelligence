@@ -58,7 +58,7 @@ export const PipelineColumn: React.FC<PipelineColumnProps> = ({
 
   return (
     <div
-      className={`w-80 shrink-0 bg-slate-950/80 border border-slate-800/90 rounded-2xl p-4 space-y-3.5 flex flex-col min-h-[550px] border-t-4 ${getStageHeaderColor(
+      className={`w-72 sm:w-80 shrink-0 bg-slate-950/80 border border-slate-800/90 rounded-2xl p-3.5 sm:p-4 space-y-3.5 flex flex-col min-h-[350px] sm:min-h-[480px] border-t-4 ${getStageHeaderColor(
         stage.slug
       )} shadow-lg backdrop-blur-sm`}
     >
@@ -87,7 +87,7 @@ export const PipelineColumn: React.FC<PipelineColumnProps> = ({
       </div>
 
       {/* Deals List Container */}
-      <div className="space-y-3 flex-1 overflow-y-auto max-h-[calc(100vh-270px)] min-h-[400px] custom-scrollbar pr-1">
+      <div className="space-y-3 flex-1 overflow-y-auto max-h-[calc(100vh-270px)] min-h-[200px] custom-scrollbar pr-1">
         {deals.length === 0 ? (
           <div className="p-6 text-center border border-dashed border-slate-800/80 rounded-xl bg-slate-900/30 space-y-1">
             <p className="text-xs text-slate-500 font-semibold">No deals in stage</p>

@@ -4,77 +4,85 @@ import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
-import { salesRepApi } from '../../services/api';
-import { Bell, RefreshCw, CheckCircle2, Flame, Sparkles, Mail, Clock } from 'lucide-react';
+import { useNotifications } from '../../context/NotificationProvider';
+import { useNavigate } from 'react-router-dom';
+import {
+  Bell,
+  RefreshCw,
+  CheckCircle2,
+  Flame,
+  Sparkles,
+  Mail,
+  Clock,
+  Trash2,
+  ArrowUpRight,
+  AlertTriangle,
+} from 'lucide-react';
 
 export const SalesRepNotifications: React.FC = () => {
-  const [notifications, setNotifications] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const {
+    notifications,
+    unreadCount,
+    loading,
+    fetchNotifications,
+    markRead,
+    markAllRead,
+    deleteNotification,
+    connectionStatus,
+  } = useNotifications();
 
-  const fetchNotifications = async () => {
-    setLoading(true);
-    try {
-      const res = await salesRepApi.getNotifications();
-      if (res && res.success && Array.isArray(res.notifications)) {
-        setNotifications(res.notifications);
-      } else {
-        setNotifications([]);
-      }
-    } catch (e) {
-      console.error(e);
-      setNotifications([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [activeTab, setActiveTab] = useState<string>('all');
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchNotifications();
-  }, []);
+    fetchNotifications({ type: activeTab });
+  }, [activeTab, fetchNotifications]);
 
-  const handleMarkRead = async (id: string) => {
-    try {
-      const res = await salesRepApi.markNotificationRead(id);
-      if (res && res.success) {
-        setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)));
-      }
-    } catch (err: any) {
-      console.error(err);
-    }
-  };
-
-  const handleMarkAllRead = () => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
-  };
-
-  const unreadCount = notifications.filter((n) => !n.read).length;
-
-  const getNotificationIcon = (type?: string, title?: string) => {
-    const combined = `${type || ''} ${title || ''}`.toUpperCase();
-    if (combined.includes('HOT') || combined.includes('PRIORITY')) {
-      return <Flame className="w-4 h-4 text-amber-400" />;
+  const getNotificationIcon = (type?: string, priority?: string) => {
+    const combined = (type || '').toUpperCase();
+    if (combined.includes('HOT') || priority === 'CRITICAL') {
+      return <Flame className="w-5 h-5 text-amber-400" />;
     }
     if (combined.includes('EMAIL') || combined.includes('MESSAGE')) {
-      return <Mail className="w-4 h-4 text-purple-400" />;
+      return <Mail className="w-5 h-5 text-purple-400" />;
     }
-    if (combined.includes('FOLLOW') || combined.includes('DUE') || combined.includes('SCHEDULE')) {
-      return <Clock className="w-4 h-4 text-cyan-400" />;
+    if (combined.includes('FOLLOW')) {
+      return <Clock className="w-5 h-5 text-cyan-400" />;
     }
-    return <Sparkles className="w-4 h-4 text-indigo-400" />;
+    if (combined.includes('DEAL') || combined.includes('WON')) {
+      return <CheckCircle2 className="w-5 h-5 text-emerald-400" />;
+    }
+    if (combined.includes('ALERT') || combined.includes('FAIL')) {
+      return <AlertTriangle className="w-5 h-5 text-rose-400" />;
+    }
+    return <Sparkles className="w-5 h-5 text-indigo-400" />;
   };
+
+  const tabs = [
+    { id: 'all', label: 'All Notifications' },
+    { id: 'unread', label: 'Unread' },
+    { id: 'leads', label: 'My Lead Alerts' },
+    { id: 'followups', label: 'Follow-ups' },
+    { id: 'pipeline', label: 'Pipeline' },
+    { id: 'ai', label: 'AI Alerts' },
+  ];
 
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        {/* Header with Standardized Actions */}
+        {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-800 pb-5">
           <div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3 font-heading">
               <Bell className="w-7 h-7 text-indigo-400" />
               <span>Personal Notifications</span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1">
-              Lead assignments, HOT lead alerts, follow-up reminders, and manager updates.
+            <p className="text-xs sm:text-sm text-slate-400 mt-1 flex items-center gap-2">
+              <span>Lead assignments, HOT lead alerts, scheduled follow-up reminders, and pipeline updates.</span>
+              <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-900 border border-slate-800 text-emerald-400">
+                <span className={`w-1.5 h-1.5 rounded-full ${connectionStatus === 'connected' ? 'bg-emerald-400 animate-pulse' : 'bg-slate-500'}`} />
+                <span>{connectionStatus === 'connected' ? 'Live Socket' : 'Reconnecting'}</span>
+              </span>
             </p>
           </div>
 
@@ -82,7 +90,7 @@ export const SalesRepNotifications: React.FC = () => {
             <Button
               variant="outline"
               size="sm"
-              onClick={fetchNotifications}
+              onClick={() => fetchNotifications({ type: activeTab })}
               className="border-slate-800 text-slate-300 hover:bg-slate-800"
               leftIcon={<RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />}
             >
@@ -92,7 +100,7 @@ export const SalesRepNotifications: React.FC = () => {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={handleMarkAllRead}
+                onClick={markAllRead}
                 className="border-indigo-800/80 text-indigo-300 hover:bg-indigo-950/40"
                 leftIcon={<CheckCircle2 className="w-4 h-4 text-emerald-400" />}
               >
@@ -102,76 +110,124 @@ export const SalesRepNotifications: React.FC = () => {
           </div>
         </div>
 
-        {/* Standardized Summary KPI Boxes */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <Card className="p-4 bg-slate-900/90 border-slate-800 space-y-1">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Total Notifications</span>
-            <p className="text-2xl font-black text-white">{notifications.length}</p>
-          </Card>
-          <Card className="p-4 bg-slate-900/90 border-slate-800 space-y-1">
-            <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wider block">Unread Notices</span>
-            <p className="text-2xl font-black text-amber-400">{unreadCount}</p>
-          </Card>
-          <Card className="p-4 bg-slate-900/90 border-slate-800 space-y-1">
-            <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-wider block">System Status</span>
-            <p className="text-2xl font-black text-emerald-400">Active</p>
-          </Card>
+        {/* Filter Navigation Tabs */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none border-b border-slate-800/80">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+                activeTab === tab.id
+                  ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
         </div>
 
-        {/* Main Notification Stream Card */}
-        <Card className="p-5 bg-slate-900/80 border-slate-800 space-y-4">
-          {loading ? (
-            <div className="py-14 flex justify-center">
-              <LoadingSpinner size="lg" />
-            </div>
-          ) : notifications.length === 0 ? (
-            <div className="py-12 text-center space-y-2">
-              <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto opacity-80" />
-              <p className="text-sm font-bold text-slate-300">All Caught Up!</p>
-              <p className="text-xs text-slate-500">You have no pending unread notifications at this time.</p>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {notifications.map((n) => (
-                <div
+        {/* Notifications List */}
+        {loading && notifications.length === 0 ? (
+          <div className="py-16 text-center">
+            <LoadingSpinner size="lg" />
+          </div>
+        ) : notifications.length === 0 ? (
+          <Card className="p-12 text-center border-slate-800/80 bg-slate-900/30">
+            <Bell className="w-12 h-12 text-slate-600 mx-auto mb-3 opacity-60" />
+            <h3 className="text-base font-bold text-white">No Notifications Available</h3>
+            <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
+              You currently have no unread or persistent notifications matching this filter.
+            </p>
+          </Card>
+        ) : (
+          <div className="space-y-3">
+            {notifications.map((n) => {
+              const isUnread = !n.is_read && !n.read;
+
+              return (
+                <Card
                   key={n.id}
-                  className={`p-4 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all ${
-                    n.read
-                      ? 'bg-slate-950/60 border-slate-800/60 opacity-75'
-                      : 'bg-slate-950 border-slate-800 shadow-md shadow-slate-950/40'
+                  className={`p-4 transition-all duration-200 border ${
+                    isUnread
+                      ? 'bg-slate-900/90 border-indigo-500/40 shadow-lg shadow-indigo-950/20 ring-1 ring-indigo-500/20'
+                      : 'bg-slate-950/40 border-slate-800/80 hover:bg-slate-900/40'
                   }`}
                 >
-                  <div className="flex items-start space-x-3.5">
-                    <div className="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center shrink-0 mt-0.5">
-                      {getNotificationIcon(n.type, n.title)}
-                    </div>
-                    <div className="space-y-1">
-                      <div className="flex items-center space-x-2.5 flex-wrap gap-y-1">
-                        <Badge variant={n.type?.includes('HOT') ? 'warning' : 'primary'} size="sm">
-                          {n.title || n.type || 'Notice'}
-                        </Badge>
-                        <span className="text-[10px] text-slate-500 font-medium">{n.created_at}</span>
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-start space-x-3.5">
+                      <div className="p-2 rounded-xl bg-slate-900 border border-slate-800 shrink-0 mt-0.5">
+                        {getNotificationIcon(n.type, n.priority)}
                       </div>
-                      <p className="text-xs text-slate-200 leading-relaxed">{n.message}</p>
+
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2.5 flex-wrap">
+                          <h3 className={`text-sm font-bold ${isUnread ? 'text-white' : 'text-slate-300'}`}>
+                            {n.title}
+                          </h3>
+
+                          <Badge
+                            variant={n.priority === 'CRITICAL' || n.type?.includes('HOT') ? 'danger' : 'primary'}
+                            size="sm"
+                          >
+                            {n.type}
+                          </Badge>
+
+                          {isUnread && (
+                            <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
+                          )}
+                        </div>
+
+                        <p className="text-xs text-slate-300 leading-relaxed">
+                          {n.message}
+                        </p>
+
+                        <span className="text-[10px] text-slate-500 inline-block font-mono">
+                          {n.formatted_time || n.created_at}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center space-x-2 shrink-0">
+                      {n.action_url && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            if (isUnread) markRead(n.id);
+                            navigate(n.action_url!);
+                          }}
+                          className="text-xs font-bold text-indigo-400 hover:text-indigo-300"
+                          rightIcon={<ArrowUpRight className="w-3.5 h-3.5" />}
+                        >
+                          View
+                        </Button>
+                      )}
+
+                      {isUnread && (
+                        <button
+                          onClick={() => markRead(n.id)}
+                          className="p-1.5 text-slate-400 hover:text-emerald-400 hover:bg-slate-800 rounded-lg transition-colors"
+                          title="Mark Read"
+                        >
+                          <CheckCircle2 className="w-4 h-4" />
+                        </button>
+                      )}
+
+                      <button
+                        onClick={() => deleteNotification(n.id)}
+                        className="p-1.5 text-slate-500 hover:text-rose-400 hover:bg-slate-800 rounded-lg transition-colors"
+                        title="Delete"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     </div>
                   </div>
-
-                  {!n.read && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleMarkRead(n.id)}
-                      className="text-xs border-indigo-800 text-indigo-300 hover:bg-indigo-950/40 shrink-0 self-end sm:self-center"
-                      leftIcon={<CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />}
-                    >
-                      Mark Read
-                    </Button>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-        </Card>
+                </Card>
+              );
+            })}
+          </div>
+        )}
       </div>
     </DashboardLayout>
   );

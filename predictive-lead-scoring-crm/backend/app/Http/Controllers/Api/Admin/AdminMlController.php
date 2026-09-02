@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AuditLog;
 use App\Models\Lead;
 use App\Models\MlModel;
+use App\Services\NotificationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -83,6 +84,18 @@ class AdminMlController extends Controller
             (string) $targetModel->id,
             ['name' => $targetModel->name, 'version' => $targetModel->version],
             $request->ip()
+        );
+
+        NotificationService::notifyRole(
+            'ADMIN',
+            'ML_MODEL_UPDATED',
+            '🧠 ML Model Activated',
+            "Model \"{$targetModel->name}\" ({$targetModel->version}) activated for production.",
+            'Model',
+            (string) $targetModel->id,
+            ['name' => $targetModel->name, 'version' => $targetModel->version],
+            'HIGH',
+            "ml-active:{$targetModel->id}"
         );
 
         return response()->json([
@@ -211,6 +224,18 @@ class AdminMlController extends Controller
             (string) $newModel->id,
             ['algorithm' => $request->algorithm, 'version' => $newModel->version],
             $request->ip()
+        );
+
+        NotificationService::notifyRole(
+            'ADMIN',
+            'ML_MODEL_TRAINING_COMPLETED',
+            '⚙️ ML Model Training Completed',
+            "Model \"{$newModel->name}\" ({$newModel->version}) trained with F1 Score {$newModel->f1_score}.",
+            'Model',
+            (string) $newModel->id,
+            ['algorithm' => $request->algorithm, 'version' => $newModel->version, 'f1_score' => $newModel->f1_score],
+            'NORMAL',
+            "ml-train:{$newModel->id}"
         );
 
         return response()->json([

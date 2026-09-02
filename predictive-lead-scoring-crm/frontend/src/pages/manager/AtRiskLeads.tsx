@@ -151,8 +151,8 @@ export const AtRiskLeads: React.FC = () => {
 
         {/* At Risk Leads Table */}
         <Card className="p-5 bg-slate-900/80 border-slate-800 space-y-4">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs text-slate-300">
+          <div className="w-full min-w-0 overflow-x-auto custom-scrollbar">
+            <table className="w-full min-w-[700px] text-left text-xs text-slate-300">
               <thead className="bg-slate-950 text-slate-400 font-semibold uppercase tracking-wider border-b border-slate-800">
                 <tr>
                   <th className="px-4 py-3">Lead & Company</th>

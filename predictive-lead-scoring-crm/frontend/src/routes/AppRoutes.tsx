@@ -37,6 +37,7 @@ import AtRiskLeads from '../pages/manager/AtRiskLeads';
 import ManagerGoals from '../pages/manager/ManagerGoals';
 import RevenueForecast from '../pages/manager/RevenueForecast';
 import ManagerReports from '../pages/manager/ManagerReports';
+import ManagerNotifications from '../pages/manager/ManagerNotifications';
 
 // Sales Representative Dedicated Imports
 import SalesRepDashboard from '../pages/sales-rep/SalesRepDashboard';
@@ -232,6 +233,14 @@ export const AppRoutes: React.FC = () => {
         element={
           <ProtectedRoute allowedRoles={['ADMIN', 'SALES_MANAGER']}>
             <ManagerReports />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/manager/notifications"
+        element={
+          <ProtectedRoute allowedRoles={['ADMIN', 'SALES_MANAGER']}>
+            <ManagerNotifications />
           </ProtectedRoute>
         }
       />

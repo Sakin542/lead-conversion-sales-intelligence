@@ -23,12 +23,22 @@ import { useAuth } from '../../context/AuthContext';
 interface AdminSidebarProps {
   mobileOpen?: boolean;
   onMobileClose?: () => void;
+  collapsed?: boolean;
+  onToggleCollapse?: () => void;
 }
 
-export const AdminSidebar: React.FC<AdminSidebarProps> = ({ mobileOpen = false, onMobileClose }) => {
+export const AdminSidebar: React.FC<AdminSidebarProps> = ({
+  mobileOpen = false,
+  onMobileClose,
+  collapsed: controlledCollapsed,
+  onToggleCollapse,
+}) => {
   const location = useLocation();
   const { logout } = useAuth();
-  const [collapsed, setCollapsed] = useState(false);
+  const [internalCollapsed, setInternalCollapsed] = useState(false);
+
+  const collapsed = controlledCollapsed !== undefined ? controlledCollapsed : internalCollapsed;
+  const toggleCollapsed = onToggleCollapse || (() => setInternalCollapsed(!internalCollapsed));
 
   const navItems = [
     { name: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
@@ -76,7 +86,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ mobileOpen = false, 
           </div>
 
           <button
-            onClick={() => setCollapsed(!collapsed)}
+            onClick={toggleCollapsed}
             className="hidden lg:flex items-center justify-center w-7 h-7 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-900 transition-colors"
             title={collapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
           >

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Lead;
 use App\Models\NotificationPreference;
 use App\Models\User;
+use App\Services\NotificationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -200,32 +201,22 @@ class PublicLeadController extends Controller
     private function notifyInternalTeam(Lead $lead, int $score): void
     {
         try {
-            if (!Schema::hasTable('notifications')) {
-                return;
-            }
-
-            $adminsAndManagers = User::whereIn('role', ['ADMIN', 'SALES_MANAGER'])->get();
+            $type = $score >= 80 ? 'HOT_LEAD_DETECTED' : 'NEW_LEAD';
             $title = $score >= 80 ? "🔥 HOT Website Lead Captured" : "🌐 New Website Lead Inquiry";
             $message = "{$lead->first_name} {$lead->last_name} from {$lead->company} submitted a web inquiry. AI Score: {$score}/100.";
+            $priority = $score >= 80 ? 'HIGH' : 'NORMAL';
 
-            foreach ($adminsAndManagers as $user) {
-                try {
-                    $user->notifications()->create([
-                        'id' => (string) Str::uuid(),
-                        'type' => 'PUBLIC_LEAD_SUBMISSION',
-                        'data' => [
-                            'type' => 'PUBLIC_LEAD_SUBMISSION',
-                            'lead_id' => $lead->id,
-                            'title' => $title,
-                            'message' => $message,
-                            'score' => $score,
-                        ],
-                        'read_at' => null,
-                    ]);
-                } catch (\Throwable $ex) {
-                    // Continue creating remaining notifications
-                }
-            }
+            NotificationService::notifyRole(
+                ['ADMIN', 'SALES_MANAGER'],
+                $type,
+                $title,
+                $message,
+                'Lead',
+                (string) $lead->id,
+                ['score' => $score, 'lead_id' => $lead->id, 'company' => $lead->company],
+                $priority,
+                "public-lead:{$lead->id}"
+            );
         } catch (\Throwable $e) {
             Log::warning('Internal team notification error: ' . $e->getMessage());
         }

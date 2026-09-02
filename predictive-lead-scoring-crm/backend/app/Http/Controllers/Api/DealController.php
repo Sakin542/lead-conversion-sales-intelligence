@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateDealRequest;
 use App\Http\Requests\UpdateDealStageRequest;
 use App\Models\Deal;
 use App\Models\PipelineStage;
+use App\Services\NotificationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -103,6 +104,31 @@ class DealController extends Controller
         $deal = $request->user()->deals()->create($data);
         $deal->load(['lead:id,first_name,last_name,email,company', 'pipelineStage']);
 
+        // Real-Time Notification for Deal Creation
+        NotificationService::createNotification(
+            $request->user(),
+            'DEAL_CREATED',
+            '💼 New Deal Created',
+            "Deal \"{$deal->title}\" valued at \${$deal->value} created.",
+            'Deal',
+            (string) $deal->id,
+            ['deal_id' => $deal->id, 'value' => $deal->value],
+            'NORMAL',
+            "deal-created:{$deal->id}"
+        );
+
+        NotificationService::notifyRole(
+            ['SALES_MANAGER', 'ADMIN'],
+            'DEAL_CREATED',
+            '💼 New Deal Created',
+            "Deal \"{$deal->title}\" (\${$deal->value}) created by {$request->user()->name}.",
+            'Deal',
+            (string) $deal->id,
+            ['deal_id' => $deal->id, 'value' => $deal->value, 'owner' => $request->user()->name],
+            'NORMAL',
+            "deal-created:{$deal->id}:mgmt"
+        );
+
         return response()->json([
             'success' => true,
             'message' => 'Deal created successfully',
@@ -169,8 +195,53 @@ class DealController extends Controller
             ], 404);
         }
 
-        $deal->update(['pipeline_stage_id' => $request->validated('pipeline_stage_id')]);
+        $newStageId = $request->validated('pipeline_stage_id');
+        $deal->update(['pipeline_stage_id' => $newStageId]);
         $deal->load(['lead:id,first_name,last_name,email,company', 'pipelineStage']);
+
+        $stageSlug = strtolower($deal->pipelineStage?->slug ?? '');
+        $stageName = $deal->pipelineStage?->name ?? 'Updated Stage';
+
+        $notifType = 'DEAL_STAGE_CHANGED';
+        $priority = 'NORMAL';
+        $title = "📊 Deal Moved: {$stageName}";
+        $message = "Deal \"{$deal->title}\" moved to stage {$stageName}.";
+
+        if ($stageSlug === 'won') {
+            $notifType = 'DEAL_WON';
+            $priority = 'HIGH';
+            $title = '🎉 Deal Won!';
+            $message = "Deal \"{$deal->title}\" (\${$deal->value}) has been WON!";
+        } elseif ($stageSlug === 'lost') {
+            $notifType = 'DEAL_LOST';
+            $priority = 'HIGH';
+            $title = '❌ Deal Closed as Lost';
+            $message = "Deal \"{$deal->title}\" (\${$deal->value}) was marked as Lost.";
+        }
+
+        NotificationService::createNotification(
+            $request->user(),
+            $notifType,
+            $title,
+            $message,
+            'Deal',
+            (string) $deal->id,
+            ['deal_id' => $deal->id, 'stage' => $stageName],
+            $priority,
+            "deal-stage:{$deal->id}:{$newStageId}"
+        );
+
+        NotificationService::notifyRole(
+            ['SALES_MANAGER'],
+            $notifType,
+            $title,
+            "{$request->user()->name} updated deal \"{$deal->title}\" to {$stageName}.",
+            'Deal',
+            (string) $deal->id,
+            ['deal_id' => $deal->id, 'stage' => $stageName, 'rep' => $request->user()->name],
+            $priority,
+            "deal-stage:{$deal->id}:{$newStageId}:mgmt"
+        );
 
         return response()->json([
             'success' => true,

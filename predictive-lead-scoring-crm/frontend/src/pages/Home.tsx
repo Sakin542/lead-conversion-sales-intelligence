@@ -639,8 +639,9 @@ export const Home: React.FC = () => {
             </p>
           </div>
 
-          <div className="bg-slate-900/90 rounded-2xl border border-slate-800 overflow-hidden shadow-xl">
-            <div className="grid grid-cols-12 bg-black text-white p-4 font-bold text-xs sm:text-sm uppercase tracking-wider">
+          <div className="bg-slate-900/90 rounded-2xl border border-slate-800 overflow-hidden shadow-xl w-full min-w-0 overflow-x-auto custom-scrollbar">
+            <div className="min-w-[550px]">
+              <div className="grid grid-cols-12 bg-black text-white p-4 font-bold text-xs sm:text-sm uppercase tracking-wider">
               <div className="col-span-4">Capability</div>
               <div className="col-span-4 text-slate-400">Traditional CRM</div>
               <div className="col-span-4 text-indigo-400">PredictiveCRM</div>
@@ -681,7 +682,8 @@ export const Home: React.FC = () => {
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
       {/* How It Works Section */}
       <section id="how-it-works" className="py-16 lg:py-24 bg-slate-900/60 border-t border-slate-800/80">

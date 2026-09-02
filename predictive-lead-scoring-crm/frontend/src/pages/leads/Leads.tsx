@@ -5,7 +5,7 @@ import LeadTable from '../../components/leads/LeadTable';
 import LeadFilters from '../../components/leads/LeadFilters';
 import { Lead, LeadFormData } from '../../types/lead';
 import leadService from '../../services/leadService';
-import { managerApi, adminApi } from '../../services/api';
+import { managerApi, userManagementApi } from '../../services/api';
 import Button from '../../components/common/Button';
 import Modal from '../../components/common/Modal';
 import Select from '../../components/common/Select';
@@ -78,7 +78,7 @@ export const Leads: React.FC = () => {
   useEffect(() => {
     fetchLeads();
     if (isManagerOrAdmin) {
-      adminApi.getUsers().then((res) => {
+      userManagementApi.getUsers().then((res) => {
         if (res.success) setSalesReps(res.users);
       }).catch(() => {});
     }

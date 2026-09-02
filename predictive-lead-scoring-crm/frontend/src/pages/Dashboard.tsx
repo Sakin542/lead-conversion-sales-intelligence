@@ -79,13 +79,13 @@ export const Dashboard: React.FC = () => {
       </div>
 
       {/* Interactive Timeframe Filter Bar */}
-      <div className="flex items-center justify-between bg-slate-900/60 border border-slate-800 rounded-2xl p-2.5 px-4 shadow-sm">
-        <div className="flex items-center space-x-2 text-xs font-semibold text-slate-400">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900/60 border border-slate-800 rounded-2xl p-2.5 px-4 shadow-sm min-w-0">
+        <div className="flex items-center space-x-2 text-xs font-semibold text-slate-400 shrink-0">
           <Filter className="w-3.5 h-3.5 text-indigo-400" />
           <span>Period Filter:</span>
         </div>
 
-        <div className="flex items-center space-x-1">
+        <div className="flex items-center space-x-1 overflow-x-auto custom-scrollbar w-full sm:w-auto pb-1 sm:pb-0 min-w-0">
           {[
             { id: '7d', label: 'Last 7 Days' },
             { id: '30d', label: 'Last 30 Days' },

@@ -171,8 +171,8 @@ export const UserManagement: React.FC = () => {
 
         {/* User Table */}
         <div className="bg-slate-900/80 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm text-slate-300">
+          <div className="w-full min-w-0 overflow-x-auto custom-scrollbar">
+            <table className="w-full min-w-[650px] text-left text-sm text-slate-300">
               <thead className="bg-slate-950/60 text-slate-400 text-xs font-semibold uppercase tracking-wider border-b border-slate-800">
                 <tr>
                   <th className="px-6 py-4">User</th>

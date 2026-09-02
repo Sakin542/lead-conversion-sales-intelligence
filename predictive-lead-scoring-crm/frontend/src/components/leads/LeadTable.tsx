@@ -49,8 +49,8 @@ export const LeadTable: React.FC<LeadTableProps> = ({
   };
 
   return (
-    <div className="overflow-x-auto custom-scrollbar border border-slate-800/80 rounded-xl bg-slate-900/60">
-      <table className="w-full text-left text-xs text-slate-300">
+    <div className="w-full min-w-0 overflow-x-auto custom-scrollbar border border-slate-800/80 rounded-xl bg-slate-900/60">
+      <table className="w-full min-w-[750px] text-left text-xs text-slate-300">
         <thead>
           <tr className="border-b border-slate-800 text-slate-400 font-semibold uppercase text-[11px] tracking-wider bg-slate-950/40">
             {onToggleSelect && (
