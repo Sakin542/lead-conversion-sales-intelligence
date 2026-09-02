@@ -101,8 +101,27 @@ class LeadController extends Controller
         if (empty($data['status'])) {
             $data['status'] = 'new';
         }
+        if (empty($data['source'])) {
+            $data['source'] = 'MANUAL_ENTRY';
+        }
+        $data['created_by'] = $request->user()->id;
+
+        // Auto-calculate initial AI score if missing
+        if (!isset($data['score']) || $data['score'] === null) {
+            $data['score'] = $this->calculateInitialScore($data);
+        }
 
         $lead = $request->user()->leads()->create($data);
+
+        // Dispatch events
+        $hotThreshold = (int) env('HOT_LEAD_SCORE_THRESHOLD', 80);
+        if ($lead->score >= $hotThreshold) {
+            try {
+                event(new HotLeadDetected($lead, $lead->score));
+            } catch (\Throwable $e) {
+                // Event listener issue ignored
+            }
+        }
 
         if (!empty($data['assigned_to'])) {
             $salesRep = User::find($data['assigned_to']);
@@ -249,5 +268,29 @@ class LeadController extends Controller
             'success' => true,
             'message' => 'Lead deleted successfully',
         ]);
+    }
+
+    /**
+     * Helper to compute initial heuristic AI Lead Score (0-100).
+     */
+    private function calculateInitialScore(array $data): int
+    {
+        $score = 40; // Base score for internal entry
+
+        $value = (float) ($data['estimated_value'] ?? ($data['budget'] ?? 0));
+        if ($value >= 50000) {
+            $score += 30;
+        } elseif ($value >= 10000) {
+            $score += 20;
+        } elseif ($value >= 1000) {
+            $score += 10;
+        }
+
+        $industry = strtolower($data['industry'] ?? '');
+        if (in_array($industry, ['saas', 'software', 'finance', 'technology', 'enterprise', 'healthcare'])) {
+            $score += 15;
+        }
+
+        return (int) min(99, max(10, $score));
     }
 }

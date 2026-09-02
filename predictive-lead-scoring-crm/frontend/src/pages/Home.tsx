@@ -147,7 +147,7 @@ export const Home: React.FC = () => {
               </p>
 
               <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                <Link to="/login" className="w-full sm:w-auto">
+                <Link to="/contact-sales" className="w-full sm:w-auto">
                   <Button
                     variant="primary"
                     size="lg"

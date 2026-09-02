@@ -87,6 +87,15 @@ export const Navbar: React.FC = () => {
 
           {/* Desktop Action Buttons */}
           <div className="hidden md:flex items-center space-x-3">
+            <Link to="/contact-sales">
+              <Button
+                variant="outline"
+                size="sm"
+                className="font-semibold text-indigo-300 border-indigo-800/80 hover:bg-indigo-950/60"
+              >
+                Contact Sales
+              </Button>
+            </Link>
             <Link to="/login">
               <Button
                 variant="primary"

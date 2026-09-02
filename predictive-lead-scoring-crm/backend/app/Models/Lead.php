@@ -19,6 +19,7 @@ class Lead extends Model
     protected $fillable = [
         'user_id',
         'assigned_to',
+        'created_by',
         'first_name',
         'last_name',
         'email',
@@ -30,7 +31,13 @@ class Lead extends Model
         'industry',
         'company_size',
         'estimated_value',
+        'budget',
+        'country',
+        'website',
+        'interested_in',
+        'preferred_contact_method',
         'notes',
+        'message',
         'score',
         'last_notified_score',
         'hot_notified',
@@ -43,6 +50,7 @@ class Lead extends Model
      */
     protected $casts = [
         'estimated_value' => 'decimal:2',
+        'budget' => 'decimal:2',
         'score' => 'integer',
         'last_notified_score' => 'integer',
         'hot_notified' => 'boolean',
@@ -54,6 +62,14 @@ class Lead extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the user that created the lead (null for public website submissions).
+     */
+    public function createdBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 
     /**

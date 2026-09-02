@@ -32,9 +32,13 @@ use App\Http\Controllers\Api\SalesRep\SalesRepNotificationController;
 use App\Http\Controllers\Api\SalesRep\SalesRepPipelineController;
 use App\Http\Controllers\Api\SalesRep\SalesRepProfileController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\PublicLeadController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/health', [HealthController::class, 'index']);
+
+// Public Lead Capture Endpoint (Unauthenticated B2B Visitor Inquiry)
+Route::post('/public/leads', [PublicLeadController::class, 'store'])->middleware('throttle:10,1');
 
 // Public Authentication & Password Reset Routes
 Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword']);
