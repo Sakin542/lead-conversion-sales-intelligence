@@ -509,7 +509,7 @@ export const salesRepApi = {
     return apiRequest('/sales-rep/profile', { method: 'GET' });
   },
 
-  updateProfile: async (payload: { name: string; phone?: string; current_password?: string; new_password?: string }): Promise<{ success: boolean; message: string; user: any }> => {
+  updateProfile: async (payload: { name?: string; phone?: string; current_password?: string; new_password?: string }): Promise<{ success: boolean; message: string; user: any }> => {
     return apiRequest('/sales-rep/profile', {
       method: 'PUT',
       body: JSON.stringify(payload),

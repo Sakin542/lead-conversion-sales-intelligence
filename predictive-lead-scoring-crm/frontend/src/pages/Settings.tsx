@@ -29,7 +29,7 @@ import {
 
 export const Settings: React.FC = () => {
   const navigate = useNavigate();
-  const { user, deleteAccount } = useAuth();
+  const { user, deleteAccount, updateUser } = useAuth();
   const [activeTab, setActiveTab] = useState<'profile' | 'scoring' | 'notifications' | 'api' | 'security'>('profile');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDeletingAccount, setIsDeletingAccount] = useState(false);
@@ -38,20 +38,36 @@ export const Settings: React.FC = () => {
   const [successToast, setSuccessToast] = useState<string | null>(null);
   const [errorToast, setErrorToast] = useState<string | null>(null);
 
-  // Form states
-  const [profileData, setProfileData] = useState({
-    name: user?.name || 'Alex Morgan',
-    email: user?.email || 'alex@predictivecrm.com',
-    title: 'Sales Manager',
-    phone: '+1 (555) 234-5678',
-    company: 'Predictive Sales Inc.',
+  // Form states initialized with user state and localStorage fallbacks
+  const [profileData, setProfileData] = useState(() => {
+    const saved = localStorage.getItem('user_profile_data');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {}
+    }
+    return {
+      name: user?.name || 'Alex Morgan',
+      email: user?.email || 'alex@predictivecrm.com',
+      title: 'Sales Manager',
+      phone: '+1 (555) 234-5678',
+      company: 'Predictive Sales Inc.',
+    };
   });
 
-  const [scoringData, setScoringData] = useState({
-    hotThreshold: 80,
-    warmThreshold: 60,
-    mediumThreshold: 40,
-    autoAssign: true,
+  const [scoringData, setScoringData] = useState(() => {
+    const saved = localStorage.getItem('crm_scoring_rules');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {}
+    }
+    return {
+      hotThreshold: 80,
+      warmThreshold: 60,
+      mediumThreshold: 40,
+      autoAssign: true,
+    };
   });
 
   const [notifications, setNotifications] = useState({
@@ -132,6 +148,8 @@ export const Settings: React.FC = () => {
       showError('Please enter a valid Email Address.');
       return;
     }
+    updateUser({ name: profileData.name, email: profileData.email });
+    localStorage.setItem('user_profile_data', JSON.stringify(profileData));
     showSuccess('Profile information updated successfully.');
   };
 
@@ -145,6 +163,7 @@ export const Settings: React.FC = () => {
       showError('Warm Lead score cutoff must be greater than Medium Lead score cutoff.');
       return;
     }
+    localStorage.setItem('crm_scoring_rules', JSON.stringify(scoringData));
     showSuccess('AI Lead Scoring thresholds & automation rules saved.');
   };
 

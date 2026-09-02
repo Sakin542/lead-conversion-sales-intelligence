@@ -10,6 +10,7 @@ interface AuthContextType {
   logout: () => Promise<void>;
   deleteAccount: () => Promise<void>;
   acceptInvitation: (email: string, token: string, password: string, passwordConfirmation: string) => Promise<void>;
+  updateUser: (updatedFields: Partial<User>) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -43,6 +44,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     initAuth();
   }, []);
+
+  const updateUser = (updatedFields: Partial<User>) => {
+    setUser((prev) => (prev ? { ...prev, ...updatedFields } : null));
+  };
 
   const login = async (email: string, password: string): Promise<void> => {
     const response = await authApi.login({ email, password });
@@ -100,6 +105,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         logout,
         deleteAccount,
         acceptInvitation,
+        updateUser,
       }}
     >
       {children}
@@ -118,6 +124,7 @@ export const useAuth = (): AuthContextType => {
       logout: async () => {},
       deleteAccount: async () => {},
       acceptInvitation: async () => {},
+      updateUser: () => {},
     };
   }
   return context;
