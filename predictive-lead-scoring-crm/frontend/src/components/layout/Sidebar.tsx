@@ -30,12 +30,22 @@ import { useAuth } from '../../context/AuthContext';
 interface SidebarProps {
   mobileOpen?: boolean;
   onMobileClose?: () => void;
+  collapsed?: boolean;
+  onToggleCollapse?: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ mobileOpen = false, onMobileClose }) => {
+export const Sidebar: React.FC<SidebarProps> = ({
+  mobileOpen = false,
+  onMobileClose,
+  collapsed: controlledCollapsed,
+  onToggleCollapse,
+}) => {
   const location = useLocation();
   const { user, logout } = useAuth();
-  const [collapsed, setCollapsed] = useState(false);
+  const [internalCollapsed, setInternalCollapsed] = useState(false);
+
+  const collapsed = controlledCollapsed !== undefined ? controlledCollapsed : internalCollapsed;
+  const toggleCollapsed = onToggleCollapse || (() => setInternalCollapsed(!internalCollapsed));
 
   const isManagerOrAdmin = user?.role === 'ADMIN' || user?.role === 'SALES_MANAGER';
   const isSalesRep = user?.role === 'SALES_REP';
@@ -111,7 +121,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ mobileOpen = false, onMobileCl
 
           {/* Desktop Collapse Toggle */}
           <button
-            onClick={() => setCollapsed(!collapsed)}
+            onClick={toggleCollapsed}
             className="hidden lg:flex items-center justify-center w-7 h-7 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-900 transition-colors"
             title={collapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
           >

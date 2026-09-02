@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import AdminLayout from '../../components/admin/AdminLayout';
+import DashboardLayout from '../../components/layout/DashboardLayout';
 import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
@@ -8,21 +8,19 @@ import { useNotifications } from '../../context/NotificationProvider';
 import { useNavigate } from 'react-router-dom';
 import {
   Bell,
-  CheckCheck,
-  Trash2,
   RefreshCw,
-  Flame,
-  Clock,
   CheckCircle2,
-  AlertTriangle,
+  Flame,
   Sparkles,
-  Search,
+  Users,
+  Clock,
+  Trash2,
   ArrowUpRight,
-  ShieldAlert,
-  Cpu,
+  AlertTriangle,
+  TrendingUp,
 } from 'lucide-react';
 
-export const AdminNotifications: React.FC = () => {
+export const ManagerNotifications: React.FC = () => {
   const {
     notifications,
     unreadCount,
@@ -34,64 +32,57 @@ export const AdminNotifications: React.FC = () => {
     connectionStatus,
   } = useNotifications();
 
-  const [activeCategory, setActiveCategory] = useState<string>('all');
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [activeTab, setActiveTab] = useState<string>('all');
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchNotifications({ type: activeCategory, search: searchTerm });
-  }, [activeCategory, fetchNotifications]);
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    fetchNotifications({ type: activeCategory, search: searchTerm });
-  };
+    fetchNotifications({ type: activeTab });
+  }, [activeTab, fetchNotifications]);
 
   const getIcon = (type?: string, priority?: string) => {
     const combined = (type || '').toUpperCase();
     if (combined.includes('HOT') || priority === 'CRITICAL') {
       return <Flame className="w-5 h-5 text-amber-400" />;
     }
+    if (combined.includes('ASSIGN') || combined.includes('TEAM')) {
+      return <Users className="w-5 h-5 text-indigo-400" />;
+    }
     if (combined.includes('FOLLOW')) {
       return <Clock className="w-5 h-5 text-cyan-400" />;
     }
     if (combined.includes('DEAL') || combined.includes('WON')) {
-      return <CheckCircle2 className="w-5 h-5 text-emerald-400" />;
+      return <TrendingUp className="w-5 h-5 text-emerald-400" />;
     }
     if (combined.includes('ALERT') || combined.includes('FAIL')) {
       return <AlertTriangle className="w-5 h-5 text-rose-400" />;
     }
-    if (combined.includes('ML') || combined.includes('AI')) {
-      return <Cpu className="w-5 h-5 text-purple-400" />;
-    }
     return <Sparkles className="w-5 h-5 text-indigo-400" />;
   };
 
-  const categories = [
-    { id: 'all', label: 'All Events' },
+  const tabs = [
+    { id: 'all', label: 'Team Notifications' },
     { id: 'unread', label: 'Unread' },
-    { id: 'leads', label: 'Lead Alerts' },
+    { id: 'leads', label: 'Lead Inquiries' },
     { id: 'followups', label: 'Follow-ups' },
-    { id: 'pipeline', label: 'Pipeline' },
-    { id: 'ai', label: 'AI / ML' },
-    { id: 'system', label: 'System' },
+    { id: 'pipeline', label: 'Pipeline Deals' },
+    { id: 'ai', label: 'AI Score Alerts' },
   ];
 
   return (
-    <AdminLayout>
+    <DashboardLayout>
       <div className="space-y-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-800 pb-5">
           <div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3 font-heading">
-              <ShieldAlert className="w-7 h-7 text-indigo-400" />
-              <span>Admin Notification Control Center</span>
+              <Users className="w-7 h-7 text-indigo-400" />
+              <span>Sales Manager Notification Center</span>
             </h1>
             <p className="text-xs sm:text-sm text-slate-400 mt-1 flex items-center gap-2">
-              <span>System-wide security, ML engine, user events, and high-value prospect alerts.</span>
+              <span>Team performance, incoming lead inquiries, assignment alerts, and deal milestones.</span>
               <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-900 border border-slate-800 text-emerald-400">
                 <span className={`w-1.5 h-1.5 rounded-full ${connectionStatus === 'connected' ? 'bg-emerald-400 animate-pulse' : 'bg-slate-500'}`} />
-                <span>{connectionStatus === 'connected' ? 'Socket Live' : 'Offline Sync'}</span>
+                <span>{connectionStatus === 'connected' ? 'Socket Active' : 'Connecting'}</span>
               </span>
             </p>
           </div>
@@ -100,11 +91,11 @@ export const AdminNotifications: React.FC = () => {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => fetchNotifications({ type: activeCategory, search: searchTerm })}
+              onClick={() => fetchNotifications({ type: activeTab })}
               className="border-slate-800 text-slate-300 hover:bg-slate-800"
               leftIcon={<RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />}
             >
-              Sync
+              Refresh
             </Button>
             {unreadCount > 0 && (
               <Button
@@ -112,7 +103,7 @@ export const AdminNotifications: React.FC = () => {
                 size="sm"
                 onClick={markAllRead}
                 className="border-indigo-800/80 text-indigo-300 hover:bg-indigo-950/40"
-                leftIcon={<CheckCheck className="w-4 h-4 text-emerald-400" />}
+                leftIcon={<CheckCircle2 className="w-4 h-4 text-emerald-400" />}
               >
                 Mark All Read
               </Button>
@@ -120,36 +111,21 @@ export const AdminNotifications: React.FC = () => {
           </div>
         </div>
 
-        {/* Search & Filter Toolbar */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900/60 p-3.5 rounded-2xl border border-slate-800">
-          {/* Category Tabs */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
-                  activeCategory === cat.id
-                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
-                }`}
-              >
-                {cat.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Search Input */}
-          <form onSubmit={handleSearch} className="relative w-full md:w-64">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              placeholder="Search notifications..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-slate-950 text-xs text-slate-200 placeholder-slate-500 rounded-xl pl-9 pr-3 py-1.5 border border-slate-800 focus:outline-none focus:border-indigo-500"
-            />
-          </form>
+        {/* Filter Navigation Tabs */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none border-b border-slate-800/80">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+                activeTab === tab.id
+                  ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
         </div>
 
         {/* Notifications List */}
@@ -160,9 +136,9 @@ export const AdminNotifications: React.FC = () => {
         ) : notifications.length === 0 ? (
           <Card className="p-12 text-center border-slate-800/80 bg-slate-900/30">
             <Bell className="w-12 h-12 text-slate-600 mx-auto mb-3 opacity-60" />
-            <h3 className="text-base font-bold text-white">No System Notifications Found</h3>
+            <h3 className="text-base font-bold text-white">No Team Notifications</h3>
             <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
-              There are currently no persistent system events matching your active filter.
+              There are no notifications matching your active manager filter.
             </p>
           </Card>
         ) : (
@@ -191,7 +167,10 @@ export const AdminNotifications: React.FC = () => {
                             {n.title}
                           </h3>
 
-                          <Badge variant={n.priority === 'CRITICAL' || n.priority === 'HIGH' ? 'danger' : 'neutral'} size="sm">
+                          <Badge
+                            variant={n.priority === 'CRITICAL' || n.type?.includes('HOT') ? 'danger' : 'primary'}
+                            size="sm"
+                          >
                             {n.type}
                           </Badge>
 
@@ -222,7 +201,7 @@ export const AdminNotifications: React.FC = () => {
                           className="text-xs font-bold text-indigo-400 hover:text-indigo-300"
                           rightIcon={<ArrowUpRight className="w-3.5 h-3.5" />}
                         >
-                          Inspect
+                          View
                         </Button>
                       )}
 
@@ -230,9 +209,9 @@ export const AdminNotifications: React.FC = () => {
                         <button
                           onClick={() => markRead(n.id)}
                           className="p-1.5 text-slate-400 hover:text-emerald-400 hover:bg-slate-800 rounded-lg transition-colors"
-                          title="Mark as Read"
+                          title="Mark Read"
                         >
-                          <CheckCheck className="w-4 h-4" />
+                          <CheckCircle2 className="w-4 h-4" />
                         </button>
                       )}
 
@@ -251,8 +230,8 @@ export const AdminNotifications: React.FC = () => {
           </div>
         )}
       </div>
-    </AdminLayout>
+    </DashboardLayout>
   );
 };
 
-export default AdminNotifications;
+export default ManagerNotifications;

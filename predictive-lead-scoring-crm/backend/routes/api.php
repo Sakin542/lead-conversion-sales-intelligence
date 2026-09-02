@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\Manager\ManagerForecastController;
 use App\Http\Controllers\Api\Manager\ManagerGoalController;
 use App\Http\Controllers\Api\Manager\ManagerReportController;
 use App\Http\Controllers\Api\NotificationPreferenceController;
+use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\PasswordResetController;
 use App\Http\Controllers\Api\SalesRep\SalesRepActivityController;
 use App\Http\Controllers\Api\SalesRep\SalesRepAnalyticsController;
@@ -103,6 +104,13 @@ Route::middleware('auth:sanctum')->group(function () {
     // Notification Preference Settings Routes
     Route::get('/notification-settings', [NotificationPreferenceController::class, 'show']);
     Route::put('/notification-settings', [NotificationPreferenceController::class, 'update']);
+
+    // Core Real-Time Notification System Routes
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount']);
+    Route::patch('/notifications/{id}/read', [NotificationController::class, 'markRead']);
+    Route::patch('/notifications/read-all', [NotificationController::class, 'markAllRead']);
+    Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
 
     // Sales Follow-Up Routes
     Route::get('/follow-ups', [FollowUpController::class, 'index']);

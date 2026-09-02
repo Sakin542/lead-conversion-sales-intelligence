@@ -10,6 +10,7 @@ use App\Http\Requests\StoreLeadRequest;
 use App\Http\Requests\UpdateLeadRequest;
 use App\Models\Lead;
 use App\Models\User;
+use App\Services\NotificationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -129,6 +130,19 @@ class LeadController extends Controller
                 event(new LeadAssigned($lead, $salesRep));
             }
         }
+
+        // Trigger internal team notification for new lead
+        NotificationService::notifyRole(
+            ['ADMIN', 'SALES_MANAGER'],
+            'NEW_LEAD',
+            '📌 New Lead Created',
+            "Lead \"{$lead->first_name} {$lead->last_name}\" from {$lead->company} was created.",
+            'Lead',
+            (string) $lead->id,
+            ['lead_id' => $lead->id, 'created_by' => $request->user()->name],
+            'NORMAL',
+            "lead-created:{$lead->id}"
+        );
 
         return response()->json([
             'success' => true,

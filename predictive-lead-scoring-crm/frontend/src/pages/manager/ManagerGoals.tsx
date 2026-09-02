@@ -7,7 +7,7 @@ import Select from '../../components/common/Select';
 import Modal from '../../components/common/Modal';
 import Badge from '../../components/common/Badge';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
-import { managerApi, adminApi } from '../../services/api';
+import { managerApi, userManagementApi } from '../../services/api';
 import { User } from '../../types/auth';
 import { Target, Plus, Trash2, RefreshCw } from 'lucide-react';
 
@@ -42,7 +42,7 @@ export const ManagerGoals: React.FC = () => {
     try {
       const [gRes, uRes] = await Promise.all([
         managerApi.getGoals(),
-        adminApi.getUsers(),
+        userManagementApi.getUsers(),
       ]);
 
       if (gRes.success) {
@@ -190,8 +190,8 @@ export const ManagerGoals: React.FC = () => {
         <Card className="p-5 bg-slate-900/80 border-slate-800 space-y-4">
           <h3 className="text-sm font-bold text-white">Active Goals & Targets Directory</h3>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs text-slate-300">
+          <div className="w-full min-w-0 overflow-x-auto custom-scrollbar">
+            <table className="w-full min-w-[650px] text-left text-xs text-slate-300">
               <thead className="bg-slate-950 text-slate-400 font-semibold uppercase tracking-wider border-b border-slate-800">
                 <tr>
                   <th className="px-4 py-3">Assignee / Title</th>

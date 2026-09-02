@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Events\SalesFollowUpDue;
 use App\Notifications\SalesFollowUpReminderNotification;
+use App\Services\NotificationService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class SendSalesFollowUpReminderListener implements ShouldQueue
@@ -20,10 +21,21 @@ class SendSalesFollowUpReminderListener implements ShouldQueue
         $prefs = $salesRep->getOrDefaultsNotificationPreference();
         if ($prefs->follow_up_enabled) {
             $salesRep->notify(new SalesFollowUpReminderNotification($followUp, $salesRep));
-
-            $followUp->reminder_sent = true;
-            $followUp->save();
         }
+
+        NotificationService::createNotification(
+            $salesRep,
+            'FOLLOW_UP_DUE',
+            '⏰ Follow-up Due',
+            "Scheduled follow-up for lead \"{$followUp->lead?->first_name} {$followUp->lead?->last_name}\" is due today.",
+            'FollowUp',
+            (string) $followUp->id,
+            ['follow_up_id' => $followUp->id, 'due_date' => $followUp->due_date],
+            'HIGH',
+            "followup:{$followUp->id}:due"
+        );
+
+        $followUp->reminder_sent = true;
+        $followUp->save();
     }
 }
-

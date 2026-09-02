@@ -236,7 +236,7 @@ export const AdminDashboard: React.FC = () => {
             <LoadingSpinner size="lg" />
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             <Card className="p-4 bg-slate-900/90 border-slate-800 space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Users</span>
@@ -365,7 +365,7 @@ export const AdminDashboard: React.FC = () => {
               </button>
             </div>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
             <div className="flex items-center justify-between p-2.5 bg-slate-950 rounded-xl border border-slate-800">
               <span className="font-bold text-slate-300">API Server</span>
               <span className="font-black text-emerald-400 flex items-center gap-1">● Operational</span>
@@ -496,8 +496,8 @@ export const AdminDashboard: React.FC = () => {
             </Button>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs text-slate-300">
+          <div className="w-full min-w-0 overflow-x-auto custom-scrollbar">
+            <table className="w-full min-w-[640px] text-left text-xs text-slate-300">
               <thead className="bg-slate-950 text-slate-400 font-semibold uppercase tracking-wider border-b border-slate-800">
                 <tr>
                   <th className="px-4 py-3">Sales Representative</th>

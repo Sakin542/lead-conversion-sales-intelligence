@@ -72,6 +72,8 @@ export const authApi = {
       return await apiRequest<AuthResponse>('/auth/logout', {
         method: 'POST',
       });
+    } catch {
+      return { success: true, message: 'Logged out' } as AuthResponse;
     } finally {
       removeToken();
     }
@@ -516,6 +518,27 @@ export const salesRepApi = {
 };
 
 export const notificationApi = {
+  getNotifications: async (params?: { type?: string; search?: string; page?: number; per_page?: number }): Promise<{ success: boolean; notifications: any[]; unread_count: number; pagination?: any }> => {
+    const query = params ? new URLSearchParams(params as any).toString() : '';
+    return apiRequest(`/notifications?${query}`, { method: 'GET' });
+  },
+
+  getUnreadCount: async (): Promise<{ success: boolean; unread_count: number }> => {
+    return apiRequest('/notifications/unread-count', { method: 'GET' });
+  },
+
+  markRead: async (id: string): Promise<{ success: boolean; message: string; unread_count: number }> => {
+    return apiRequest(`/notifications/${id}/read`, { method: 'PATCH' });
+  },
+
+  markAllRead: async (): Promise<{ success: boolean; message: string; unread_count: number }> => {
+    return apiRequest('/notifications/read-all', { method: 'PATCH' });
+  },
+
+  deleteNotification: async (id: string): Promise<{ success: boolean; message: string; unread_count: number }> => {
+    return apiRequest(`/notifications/${id}`, { method: 'DELETE' });
+  },
+
   getPreferences: async (): Promise<{ success: boolean; preferences: any }> => {
     return apiRequest<{ success: boolean; preferences: any }>('/notification-settings', {
       method: 'GET',

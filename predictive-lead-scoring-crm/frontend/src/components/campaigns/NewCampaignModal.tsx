@@ -60,7 +60,7 @@ export const NewCampaignModal: React.FC<NewCampaignModalProps> = ({
           required
         />
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <Select
             label="Marketing Channel"
             value={formData.channel}
@@ -85,7 +85,7 @@ export const NewCampaignModal: React.FC<NewCampaignModalProps> = ({
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <Input
             label="Start Date"
             type="date"

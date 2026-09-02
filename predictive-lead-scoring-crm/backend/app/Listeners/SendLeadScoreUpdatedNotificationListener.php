@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Events\LeadScoreUpdated;
 use App\Notifications\LeadScoreUpdatedNotification;
+use App\Services\NotificationService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class SendLeadScoreUpdatedNotificationListener implements ShouldQueue
@@ -22,10 +23,8 @@ class SendLeadScoreUpdatedNotificationListener implements ShouldQueue
             return;
         }
 
-        $threshold = (int) env('LEAD_SCORE_EMAIL_CHANGE_THRESHOLD', 10);
         $diff = abs($event->newScore - $event->previousScore);
-
-        if ($diff >= $threshold) {
+        if ($diff >= 15) {
             $salesRep->notify(new LeadScoreUpdatedNotification(
                 $lead,
                 $salesRep,
@@ -33,9 +32,20 @@ class SendLeadScoreUpdatedNotificationListener implements ShouldQueue
                 $event->newScore
             ));
 
+            NotificationService::createNotification(
+                $salesRep,
+                'AI_SCORE_UPDATED',
+                '⚡ Lead AI Score Updated',
+                "Lead \"{$lead->first_name} {$lead->last_name}\" score changed from {$event->previousScore} to {$event->newScore}.",
+                'Lead',
+                (string) $lead->id,
+                ['previous_score' => $event->previousScore, 'new_score' => $event->newScore],
+                $event->newScore >= 80 ? 'HIGH' : 'NORMAL',
+                "score-update:{$lead->id}:{$event->newScore}"
+            );
+
             $lead->last_notified_score = $event->newScore;
             $lead->save();
         }
     }
 }
-

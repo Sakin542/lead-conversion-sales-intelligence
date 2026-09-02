@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Bell, Menu, User, Settings, LogOut, ChevronDown } from 'lucide-react';
+import { Search, Menu, User, Settings, LogOut, ChevronDown } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { NotificationBell } from '../notifications/NotificationBell';
 
 interface TopNavbarProps {
   onMobileMenuToggle?: () => void;
@@ -10,9 +11,7 @@ interface TopNavbarProps {
 export const TopNavbar: React.FC<TopNavbarProps> = ({ onMobileMenuToggle }) => {
   const { user, logout } = useAuth();
   const [profileOpen, setProfileOpen] = useState(false);
-  const [notificationsOpen, setNotificationsOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
-  const notifRef = useRef<HTMLDivElement>(null);
 
   // Close dropdowns on outside click
   useEffect(() => {
@@ -20,19 +19,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({ onMobileMenuToggle }) => {
       if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
         setProfileOpen(false);
       }
-      if (notifRef.current && !notifRef.current.contains(event.target as Node)) {
-        setNotificationsOpen(false);
-      }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-
-  const notifications = [
-    { id: 1, title: 'High-score lead registered', time: '10m ago', unread: true },
-    { id: 2, title: 'Q3 Pipeline target reached 80%', time: '1h ago', unread: true },
-    { id: 3, title: 'Weekly sales forecast report ready', time: '3h ago', unread: false },
-  ];
 
   const getInitials = (name?: string) => {
     if (!name) return 'AM';
@@ -47,17 +37,17 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({ onMobileMenuToggle }) => {
   return (
     <header className="h-16 bg-slate-950/80 border-b border-slate-800/80 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between px-4 sm:px-6 lg:px-8">
       {/* Left: Mobile Menu Toggle & Search Bar */}
-      <div className="flex items-center space-x-3 flex-1 max-w-xl">
+      <div className="flex items-center space-x-2 sm:space-x-3 flex-1 max-w-xl min-w-0">
         <button
           onClick={onMobileMenuToggle}
-          className="lg:hidden p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-900 transition-colors"
+          className="lg:hidden p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-900 transition-colors shrink-0"
           aria-label="Toggle Navigation Menu"
         >
           <Menu className="w-5 h-5" />
         </button>
 
         {/* Global Search Bar */}
-        <div className="relative w-full">
+        <div className="relative w-full min-w-0">
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
@@ -74,41 +64,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({ onMobileMenuToggle }) => {
 
       {/* Right: Notifications & Profile */}
       <div className="flex items-center space-x-3 sm:space-x-4">
-        {/* Notification Bell */}
-        <div className="relative" ref={notifRef}>
-          <button
-            onClick={() => setNotificationsOpen(!notificationsOpen)}
-            className="relative p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-900 transition-colors"
-            aria-label="Notifications"
-          >
-            <Bell className="w-5 h-5" />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-indigo-500 rounded-full ring-2 ring-slate-950 animate-pulse" />
-          </button>
-
-          {/* Notifications Dropdown */}
-          {notificationsOpen && (
-            <div className="absolute right-0 mt-2 w-80 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-4 z-50 space-y-3">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-                <h3 className="text-sm font-bold text-white">Notifications</h3>
-                <span className="text-xs text-indigo-400 font-medium">3 New</span>
-              </div>
-              <div className="space-y-2">
-                {notifications.map((item) => (
-                  <div
-                    key={item.id}
-                    className="p-2.5 rounded-xl hover:bg-slate-800/60 transition-colors flex items-start space-x-2.5 cursor-pointer text-xs"
-                  >
-                    <div className="w-2 h-2 rounded-full bg-indigo-500 mt-1.5 shrink-0" />
-                    <div className="flex-1 space-y-0.5">
-                      <p className="text-slate-200 font-medium leading-snug">{item.title}</p>
-                      <span className="text-[10px] text-slate-400">{item.time}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
+        {/* Real-Time Notification Bell & Dropdown */}
+        <NotificationBell />
 
         <div className="h-6 w-px bg-slate-800/80" />
 
