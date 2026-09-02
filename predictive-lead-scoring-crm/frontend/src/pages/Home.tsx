@@ -147,7 +147,7 @@ export const Home: React.FC = () => {
               </p>
 
               <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                <Link to="/register" className="w-full sm:w-auto">
+                <Link to="/login" className="w-full sm:w-auto">
                   <Button
                     variant="primary"
                     size="lg"
@@ -517,7 +517,7 @@ export const Home: React.FC = () => {
                 </p>
 
                 <div className="pt-3 relative z-10">
-                  <Link to="/register">
+                  <Link to="/login">
                     <Button variant="primary" size="sm" className="w-full justify-center font-bold bg-gradient-to-r from-indigo-600 to-purple-600 border-none">
                       Score Your Real Leads Now
                     </Button>
@@ -773,7 +773,7 @@ export const Home: React.FC = () => {
             </p>
           </div>
           <div className="pt-2">
-            <Link to="/register">
+            <Link to="/login">
               <Button
                 variant="primary"
                 size="lg"

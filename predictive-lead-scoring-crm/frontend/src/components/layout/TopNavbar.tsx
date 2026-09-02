@@ -122,8 +122,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({ onMobileMenuToggle }) => {
               {getInitials(user?.name)}
             </div>
             <div className="hidden md:block text-left">
-              <p className="text-sm font-bold text-white leading-none">{user?.name || 'Alex Morgan'}</p>
-              <p className="text-xs text-slate-400 leading-none mt-1">Sales Manager</p>
+              <p className="text-sm font-bold text-white leading-none">{user?.name || 'CRM User'}</p>
+              <p className="text-xs text-slate-400 leading-none mt-1">{user?.role ? user.role.replace('_', ' ') : 'CRM User'}</p>
             </div>
             <ChevronDown className="w-4 h-4 text-slate-400 hidden md:block" />
           </button>

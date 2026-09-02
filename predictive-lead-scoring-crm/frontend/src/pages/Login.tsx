@@ -10,7 +10,7 @@ import { useAuth } from '../context/AuthContext';
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
-  const { login, isAuthenticated } = useAuth();
+  const { login, isAuthenticated, user } = useAuth();
 
   const [formData, setFormData] = useState<LoginFormData>({
     email: '',
@@ -25,10 +25,18 @@ export const Login: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/dashboard', { replace: true });
+    if (isAuthenticated && user) {
+      if (user.role === 'ADMIN') {
+        navigate('/admin/dashboard', { replace: true });
+      } else if (user.role === 'SALES_MANAGER') {
+        navigate('/manager/dashboard', { replace: true });
+      } else if (user.role === 'SALES_REP') {
+        navigate('/sales-rep/dashboard', { replace: true });
+      } else {
+        navigate('/dashboard', { replace: true });
+      }
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, user, navigate]);
 
   const validate = (): boolean => {
     const newErrors: FormErrors = {};
@@ -73,7 +81,6 @@ export const Login: React.FC = () => {
     try {
       await login(formData.email, formData.password);
       setSuccessMessage('Signed in successfully.');
-      navigate('/dashboard', { replace: true });
     } catch (err: any) {
       if (err.data?.errors) {
         const fieldErrors: FormErrors = {};
@@ -187,12 +194,6 @@ export const Login: React.FC = () => {
             </div>
           </form>
 
-          <div className="border-t border-slate-800 pt-4 text-center text-xs text-slate-400">
-            Don't have an account yet?{' '}
-            <Link to="/register" className="font-bold text-indigo-400 hover:text-indigo-300">
-              Register Free Account
-            </Link>
-          </div>
         </div>
       </main>
 

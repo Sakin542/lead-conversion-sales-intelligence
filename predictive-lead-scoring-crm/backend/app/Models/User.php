@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -16,6 +17,10 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
 
+    public const ROLE_ADMIN = 'ADMIN';
+    public const ROLE_SALES_MANAGER = 'SALES_MANAGER';
+    public const ROLE_SALES_REP = 'SALES_REP';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -25,6 +30,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'is_active',
+        'invitation_token',
+        'invitation_expires_at',
+        'invited_by',
     ];
 
     /**
@@ -35,6 +45,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'invitation_token',
     ];
 
     /**
@@ -47,7 +58,63 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => 'boolean',
+            'invitation_expires_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Check if user is Admin.
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === self::ROLE_ADMIN;
+    }
+
+    /**
+     * Check if user is Sales Manager.
+     */
+    public function isSalesManager(): bool
+    {
+        return $this->role === self::ROLE_SALES_MANAGER;
+    }
+
+    /**
+     * Check if user is Sales Representative.
+     */
+    public function isSalesRep(): bool
+    {
+        return $this->role === self::ROLE_SALES_REP;
+    }
+
+    /**
+     * Check if user has one of the given roles.
+     *
+     * @param string|array<string> $roles
+     */
+    public function hasRole(string|array $roles): bool
+    {
+        if (is_array($roles)) {
+            return in_array($this->role, $roles, true);
+        }
+
+        return $this->role === $roles;
+    }
+
+    /**
+     * Get the user who invited this user.
+     */
+    public function inviter(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'invited_by');
+    }
+
+    /**
+     * Get users invited by this user.
+     */
+    public function invitedUsers(): HasMany
+    {
+        return $this->hasMany(User::class, 'invited_by');
     }
 
     /**

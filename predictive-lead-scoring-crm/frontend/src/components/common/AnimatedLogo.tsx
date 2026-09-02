@@ -6,38 +6,41 @@ interface AnimatedLogoProps {
   size?: 'sm' | 'md' | 'lg';
   showTagline?: boolean;
   className?: string;
+  collapsed?: boolean;
 }
 
 export const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
   size = 'md',
   showTagline = true,
   className = '',
+  collapsed = false,
 }) => {
   const sizeClasses = {
     sm: {
-      box: 'w-8 h-8 rounded-lg',
-      icon: 'w-4 h-4',
-      text: 'text-base',
+      box: 'w-7 h-7 rounded-lg',
+      icon: 'w-3.5 h-3.5',
+      text: 'text-sm font-black',
       tagline: 'text-[9px]',
     },
     md: {
-      box: 'w-10 h-10 rounded-xl',
-      icon: 'w-5 h-5',
-      text: 'text-lg sm:text-xl',
+      box: 'w-9 h-9 rounded-xl',
+      icon: 'w-4.5 h-4.5',
+      text: 'text-base sm:text-lg font-black',
       tagline: 'text-[10px]',
     },
     lg: {
-      box: 'w-12 h-12 rounded-2xl',
+      box: 'w-11 h-11 rounded-2xl',
       icon: 'w-6 h-6',
-      text: 'text-2xl',
+      text: 'text-xl sm:text-2xl font-black',
       tagline: 'text-xs',
     },
   };
 
   const currentSize = sizeClasses[size];
+  const gapClass = size === 'sm' ? 'space-x-2' : 'space-x-3';
 
   return (
-    <Link to="/" className={`inline-flex items-center space-x-3 group ${className}`}>
+    <Link to="/" className={`inline-flex items-center ${gapClass} group shrink-0 ${className}`}>
       {/* Animated Glowing Icon Box */}
       <div className="relative flex items-center justify-center">
         {/* Animated Rotating Gradient Ring */}
@@ -51,16 +54,18 @@ export const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
       </div>
 
       {/* Brand Text */}
-      <div className="flex flex-col">
-        <span className={`font-display font-black tracking-tight text-white leading-tight ${currentSize.text}`}>
-          Predictive<span className="gradient-text-animated">CRM</span>
-        </span>
-        {showTagline && (
-          <span className={`font-heading text-slate-400 font-bold tracking-widest uppercase ${currentSize.tagline}`}>
-            AI Sales Intelligence
+      {!collapsed && (
+        <div className="flex flex-col">
+          <span className={`font-display font-black tracking-tight text-white leading-tight ${currentSize.text}`}>
+            Predictive<span className="gradient-text-animated">CRM</span>
           </span>
-        )}
-      </div>
+          {showTagline && (
+            <span className={`font-heading text-slate-400 font-bold tracking-widest uppercase ${currentSize.tagline}`}>
+              AI Sales Intelligence
+            </span>
+          )}
+        </div>
+      )}
     </Link>
   );
 };

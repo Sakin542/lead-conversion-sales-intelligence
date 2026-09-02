@@ -12,6 +12,17 @@ import {
   ChevronLeft,
   ChevronRight,
   X,
+  UserCheck,
+  Bot,
+  ShieldAlert,
+  Target,
+  TrendingUp,
+  FileSpreadsheet,
+  Flame,
+  Calendar,
+  Mail,
+  Bell,
+  User,
 } from 'lucide-react';
 import AnimatedLogo from '../common/AnimatedLogo';
 import { useAuth } from '../../context/AuthContext';
@@ -23,21 +34,49 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ mobileOpen = false, onMobileClose }) => {
   const location = useLocation();
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
 
-  const navItems = [
-    { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
-    { name: 'Leads', path: '/leads', icon: Users },
-    { name: 'Pipeline', path: '/pipeline', icon: GitCommitHorizontal },
-    { name: 'Activities', path: '/activities', icon: Activity },
-    { name: 'Analytics', path: '/analytics', icon: BarChart3 },
-    { name: 'Campaigns', path: '/campaigns', icon: Megaphone },
-  ];
+  const isManagerOrAdmin = user?.role === 'ADMIN' || user?.role === 'SALES_MANAGER';
+  const isSalesRep = user?.role === 'SALES_REP';
 
-  const bottomItems = [
-    { name: 'Settings', path: '/settings', icon: Settings },
-  ];
+  const navItems = isSalesRep
+    ? [
+        { name: 'Dashboard', path: '/sales-rep/dashboard', icon: LayoutDashboard },
+        { name: 'My Leads', path: '/sales-rep/leads', icon: Users },
+        { name: 'Priority Leads', path: '/sales-rep/priority-leads', icon: Flame },
+        { name: 'Sales Pipeline', path: '/sales-rep/pipeline', icon: GitCommitHorizontal },
+        { name: 'Activities', path: '/sales-rep/activities', icon: Activity },
+        { name: 'Follow-ups', path: '/sales-rep/follow-ups', icon: Calendar },
+        { name: 'Emails', path: '/sales-rep/emails', icon: Mail },
+        { name: 'My Analytics', path: '/sales-rep/analytics', icon: BarChart3 },
+        { name: 'My Goals', path: '/sales-rep/goals', icon: Target },
+        { name: 'Notifications', path: '/sales-rep/notifications', icon: Bell },
+        { name: 'Profile', path: '/sales-rep/profile', icon: User },
+      ]
+    : [
+        { name: 'Dashboard', path: user?.role === 'ADMIN' ? '/admin/dashboard' : user?.role === 'SALES_MANAGER' ? '/manager/dashboard' : '/dashboard', icon: LayoutDashboard },
+        ...(isManagerOrAdmin
+          ? [
+              { name: 'User Management', path: '/users', icon: UserCheck },
+              { name: 'AI Assignment', path: '/manager/ai-assignment', icon: Bot },
+              { name: 'At-Risk Leads', path: '/manager/at-risk-leads', icon: ShieldAlert },
+              { name: 'Team Goals', path: '/manager/goals', icon: Target },
+              { name: 'Revenue Forecast', path: '/manager/revenue-forecast', icon: TrendingUp },
+              { name: 'Manager Reports', path: '/manager/reports', icon: FileSpreadsheet },
+            ]
+          : []),
+        { name: 'Leads', path: '/leads', icon: Users },
+        { name: 'Pipeline', path: '/pipeline', icon: GitCommitHorizontal },
+        { name: 'Activities', path: '/activities', icon: Activity },
+        { name: 'Analytics', path: '/analytics', icon: BarChart3 },
+        { name: 'Campaigns', path: '/campaigns', icon: Megaphone },
+      ];
+
+  const bottomItems = isSalesRep
+    ? []
+    : [{ name: 'Settings', path: '/settings', icon: Settings }];
+
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -60,9 +99,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ mobileOpen = false, onMobileCl
         }`}
       >
         {/* Header / Logo */}
-        <div className="h-16 flex items-center justify-between px-4 border-b border-slate-800/80 shrink-0">
-          <div className="overflow-hidden">
-            <AnimatedLogo size={collapsed ? 'sm' : 'md'} showTagline={!collapsed} />
+        <div className="h-16 flex items-center justify-between px-3.5 border-b border-slate-800/80 shrink-0">
+          <div className="flex items-center space-x-1.5 min-w-0">
+            <AnimatedLogo size="sm" showTagline={false} collapsed={collapsed} />
+            {!collapsed && user?.role === 'SALES_MANAGER' && (
+              <span className="px-1.5 py-0.5 text-[9px] font-black bg-indigo-950 text-indigo-400 border border-indigo-800/80 rounded uppercase tracking-wider shrink-0">
+                MANAGER
+              </span>
+            )}
           </div>
 
           {/* Desktop Collapse Toggle */}
@@ -152,4 +196,3 @@ export const Sidebar: React.FC<SidebarProps> = ({ mobileOpen = false, onMobileCl
 };
 
 export default Sidebar;
-

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ShieldCheck, Zap, Mail, ArrowRight, CheckCircle2, X, FileText, Lock, Building } from 'lucide-react';
 import Button from '../common/Button';
-import AnimatedLogo from '../common/AnimatedLogo';
 
 interface FooterProps {
   variant?: 'default' | 'auth';
@@ -165,8 +164,6 @@ export const Footer: React.FC<FooterProps> = ({ variant = 'default', className =
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12">
           {/* Brand & Newsletter Column */}
           <div className="md:col-span-5 space-y-6">
-            <AnimatedLogo size="lg" showTagline={true} />
-
             <p className="text-sm text-slate-300 max-w-sm leading-relaxed">
               Empowering high-velocity revenue teams with Machine Learning lead scoring, intent tracking, and automated sales pipeline intelligence.
             </p>
@@ -284,9 +281,6 @@ export const Footer: React.FC<FooterProps> = ({ variant = 'default', className =
             <div className="space-y-2 pt-1">
               <Link to="/login" className="block text-sm text-slate-300 hover:text-white transition-colors">
                 Sign In to CRM Dashboard
-              </Link>
-              <Link to="/register" className="block text-sm text-indigo-400 font-bold hover:text-indigo-300 transition-colors">
-                Create Free Account →
               </Link>
             </div>
 

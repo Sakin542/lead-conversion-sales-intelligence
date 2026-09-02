@@ -89,21 +89,12 @@ export const Navbar: React.FC = () => {
           <div className="hidden md:flex items-center space-x-3">
             <Link to="/login">
               <Button
-                variant={location.pathname === '/login' ? 'secondary' : 'ghost'}
-                size="sm"
-                className="font-semibold text-slate-200"
-              >
-                Sign In
-              </Button>
-            </Link>
-            <Link to="/register">
-              <Button
                 variant="primary"
                 size="sm"
                 className="font-semibold shadow-md shadow-indigo-500/25 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 border-none"
                 rightIcon={<ChevronRight className="w-4 h-4" />}
               >
-                Get Started
+                Sign In
               </Button>
             </Link>
           </div>
@@ -171,13 +162,8 @@ export const Navbar: React.FC = () => {
 
           <div className="pt-3 border-t border-slate-800 flex flex-col space-y-2">
             <Link to="/login" onClick={() => setIsMenuOpen(false)} className="w-full">
-              <Button variant="outline" className="w-full justify-center font-semibold text-slate-200 border-slate-700">
-                Sign In
-              </Button>
-            </Link>
-            <Link to="/register" onClick={() => setIsMenuOpen(false)} className="w-full">
               <Button variant="primary" className="w-full justify-center font-semibold shadow-md shadow-indigo-500/25 bg-gradient-to-r from-indigo-600 to-purple-600 border-none">
-                Create Free Account
+                Sign In
               </Button>
             </Link>
           </div>

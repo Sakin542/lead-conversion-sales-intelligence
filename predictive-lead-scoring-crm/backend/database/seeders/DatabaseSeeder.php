@@ -15,15 +15,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call(PipelineStageSeeder::class);
+        $this->call([
+            PipelineStageSeeder::class,
+            AdminSeeder::class,
+        ]);
 
-        // Create test user if doesn't exist
+        // Create default test user if doesn't exist
         if (!User::where('email', 'test@example.com')->exists()) {
             User::factory()->create([
                 'name' => 'Test User',
                 'email' => 'test@example.com',
+                'role' => User::ROLE_SALES_REP,
+                'is_active' => true,
             ]);
         }
     }
-
 }

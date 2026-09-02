@@ -4,7 +4,7 @@ import Button from '../common/Button';
 import Input from '../common/Input';
 import { Deal, DealFormData, PipelineStage } from '../../types/pipeline';
 import { Lead } from '../../types/lead';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, Plus } from 'lucide-react';
 
 interface DealModalProps {
   isOpen: boolean;
@@ -234,6 +234,7 @@ export const DealModal: React.FC<DealModalProps> = ({
           <Button
             type="button"
             variant="secondary"
+            size="sm"
             onClick={onClose}
             disabled={isSubmitting}
             className="min-w-[100px]"
@@ -243,8 +244,10 @@ export const DealModal: React.FC<DealModalProps> = ({
           <Button
             type="submit"
             variant="primary"
+            size="sm"
             isLoading={isSubmitting}
-            className="min-w-[130px]"
+            leftIcon={!editingDeal ? <Plus className="w-4 h-4" /> : undefined}
+            className="bg-indigo-600 hover:bg-indigo-500 border-none font-bold min-w-[130px]"
           >
             {editingDeal ? 'Save Changes' : 'Create Deal'}
           </Button>
