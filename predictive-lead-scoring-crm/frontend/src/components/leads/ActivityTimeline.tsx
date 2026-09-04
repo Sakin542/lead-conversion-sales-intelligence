@@ -125,7 +125,7 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <Activity className="w-5 h-5 text-indigo-400" />
+          <Activity className="w-5 h-5 text-purple-400" />
           <h3 className="text-base font-bold text-white tracking-tight">Activity Timeline</h3>
         </div>
 
@@ -133,7 +133,7 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
           variant="primary"
           size="sm"
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center space-x-1.5"
+          className="flex items-center space-x-1.5 bg-white text-black hover:bg-zinc-200 border-none font-semibold"
         >
           <Plus className="w-4 h-4" />
           <span>Add Activity</span>
@@ -142,15 +142,15 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
 
       {/* Timeline List */}
       {activities.length === 0 ? (
-        <div className="p-8 text-center bg-slate-900/40 border border-slate-800/80 rounded-xl space-y-2">
-          <Clock className="w-8 h-8 text-slate-600 mx-auto" />
-          <p className="text-sm font-medium text-slate-300">No activity recorded yet</p>
-          <p className="text-xs text-slate-500">
+        <div className="p-8 text-center bg-[#0A0A0A] border border-[#222222] rounded-xl space-y-2">
+          <Clock className="w-8 h-8 text-zinc-600 mx-auto" />
+          <p className="text-sm font-medium text-zinc-300">No activity recorded yet</p>
+          <p className="text-xs text-zinc-500">
             Log sales calls, emails, or meetings to track lead engagement.
           </p>
         </div>
       ) : (
-        <div className="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-800">
+        <div className="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-[#222222]">
           {activities.map((activity) => {
             const config = ACTIVITY_TYPE_CONFIG[activity.type] || ACTIVITY_TYPE_CONFIG.call;
             const IconComponent = config.icon;
@@ -159,31 +159,31 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
               <div key={activity.id} className="relative group">
                 {/* Icon Dot */}
                 <div
-                  className={`absolute -left-6 top-0.5 w-5 h-5 rounded-full border ${config.bgClass} flex items-center justify-center bg-slate-950 z-10`}
+                  className={`absolute -left-6 top-0.5 w-5 h-5 rounded-full border ${config.bgClass} flex items-center justify-center bg-[#0A0A0A] z-10`}
                 >
                   <IconComponent className={`w-3 h-3 ${config.colorClass}`} />
                 </div>
 
                 {/* Activity Card */}
-                <div className="p-3.5 bg-slate-900/60 border border-slate-800/80 rounded-xl space-y-1 hover:border-slate-700/80 transition-colors">
+                <div className="p-3.5 bg-[#0A0A0A] border border-[#222222] rounded-xl space-y-1 hover:border-zinc-700 transition-colors">
                   <div className="flex items-center justify-between">
                     <span
                       className={`text-xs font-semibold px-2 py-0.5 rounded border ${config.bgClass} ${config.colorClass}`}
                     >
                       {config.label}
                     </span>
-                    <span className="text-[11px] text-slate-400 font-medium">
+                    <span className="text-[11px] text-zinc-400 font-medium">
                       {formatTimestamp(activity.occurred_at || activity.created_at)}
                     </span>
                   </div>
 
-                  <p className="text-xs text-slate-200 leading-relaxed pt-1">{activity.description}</p>
+                  <p className="text-xs text-zinc-200 leading-relaxed pt-1">{activity.description}</p>
 
                   {onDeleteActivity && (
                     <div className="flex justify-end pt-1">
                       <button
                         onClick={() => onDeleteActivity(activity.id)}
-                        className="text-[11px] text-slate-500 hover:text-rose-400 transition-colors flex items-center space-x-1"
+                        className="text-[11px] text-zinc-500 hover:text-rose-400 transition-colors flex items-center space-x-1"
                       >
                         <Trash2 className="w-3 h-3" />
                         <span>Delete</span>
@@ -205,19 +205,19 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
       >
         <form onSubmit={handleAddSubmit} className="space-y-4">
           {error && (
-            <div className="p-3 bg-rose-950/80 border border-rose-800 rounded-xl text-rose-300 text-xs">
+            <div className="p-3 bg-rose-950/40 border border-rose-800/60 rounded-xl text-rose-300 text-xs">
               {error}
             </div>
           )}
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+            <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
               Activity Type
             </label>
             <select
               value={newType}
               onChange={(e) => setNewType(e.target.value as ActivityType)}
-              className="w-full px-3.5 py-2.5 min-h-[42px] bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-200 focus:outline-none focus:border-indigo-500 transition-colors"
+              className="w-full px-3.5 py-2.5 min-h-[42px] bg-[#0A0A0A] border border-[#222222] rounded-xl text-sm text-zinc-200 focus:outline-none focus:border-zinc-500 transition-colors"
             >
               {Object.entries(ACTIVITY_TYPE_CONFIG).map(([typeKey, cfg]) => (
                 <option key={typeKey} value={typeKey}>
@@ -228,7 +228,7 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+            <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
               Description <span className="text-rose-400">*</span>
             </label>
             <textarea
@@ -236,18 +236,18 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
               onChange={(e) => setDescription(e.target.value)}
               rows={3}
               placeholder="e.g. Conducted 30-min discovery call. Interested in Enterprise pricing."
-              className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-200 focus:outline-none focus:border-indigo-500 transition-colors custom-scrollbar"
+              className="w-full px-3.5 py-2.5 bg-[#0A0A0A] border border-[#222222] rounded-xl text-sm text-zinc-200 focus:outline-none focus:border-zinc-500 transition-colors custom-scrollbar"
               required
             />
           </div>
 
-          <div className="flex items-center justify-end space-x-3 pt-3 border-t border-slate-800">
+          <div className="flex items-center justify-end space-x-3 pt-3 border-t border-[#222222]">
             <Button
               type="button"
               variant="secondary"
               onClick={() => setIsModalOpen(false)}
               disabled={isSubmitting}
-              className="min-w-[100px]"
+              className="min-w-[100px] border-[#222222] text-zinc-300 hover:bg-[#151515]"
             >
               Cancel
             </Button>
@@ -255,7 +255,7 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
               type="submit"
               variant="primary"
               isLoading={isSubmitting}
-              className="min-w-[130px]"
+              className="min-w-[130px] bg-white text-black hover:bg-zinc-200 border-none font-semibold"
             >
               Log Activity
             </Button>

@@ -70,13 +70,13 @@ export const AtRiskLeads: React.FC = () => {
     <DashboardLayout>
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-800 pb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-[#2A2A2E] pb-5">
           <div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
-              <ShieldAlert className="w-7 h-7 text-amber-400" />
+              <ShieldAlert className="w-7 h-7 text-[#FF7A00]" />
               <span>Stale & At-Risk Lead Detection</span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1">
+            <p className="text-xs sm:text-sm text-zinc-400 mt-1">
               Automated system detection for inactive prospects, stuck pipeline deals, and missed follow-ups.
             </p>
           </div>
@@ -85,7 +85,7 @@ export const AtRiskLeads: React.FC = () => {
             variant="outline"
             size="sm"
             onClick={fetchAtRiskLeads}
-            className="border-slate-800 text-slate-300 hover:bg-slate-900"
+            className="border-[#2A2A2E] text-zinc-300 hover:bg-[#29292C] hover:text-white"
             leftIcon={<RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />}
           >
             Rescan System Risk
@@ -95,31 +95,31 @@ export const AtRiskLeads: React.FC = () => {
         {/* Risk Level Summary Cards */}
         {summary && (
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <Card className="p-4 bg-slate-900/90 border-slate-800 space-y-1">
+            <Card className="p-4 bg-[#171718] border-[#2A2A2E] space-y-1 shadow-lg">
               <span className="text-[10px] font-bold text-rose-400 uppercase">Critical Risks</span>
               <p className="text-2xl font-black text-rose-400">{summary.critical_count || 0}</p>
             </Card>
 
-            <Card className="p-4 bg-slate-900/90 border-slate-800 space-y-1">
+            <Card className="p-4 bg-[#171718] border-[#2A2A2E] space-y-1 shadow-lg">
               <span className="text-[10px] font-bold text-amber-400 uppercase">High Risks</span>
               <p className="text-2xl font-black text-amber-400">{summary.high_count || 0}</p>
             </Card>
 
-            <Card className="p-4 bg-slate-900/90 border-slate-800 space-y-1">
-              <span className="text-[10px] font-bold text-indigo-400 uppercase">Medium Risks</span>
-              <p className="text-2xl font-black text-indigo-400">{summary.medium_count || 0}</p>
+            <Card className="p-4 bg-[#171718] border-[#2A2A2E] space-y-1 shadow-lg">
+              <span className="text-[10px] font-bold text-[#FF7A00] uppercase">Medium Risks</span>
+              <p className="text-2xl font-black text-[#FF7A00]">{summary.medium_count || 0}</p>
             </Card>
 
-            <Card className="p-4 bg-slate-900/90 border-slate-800 space-y-1">
-              <span className="text-[10px] font-bold text-slate-400 uppercase">Total At-Risk</span>
+            <Card className="p-4 bg-[#171718] border-[#2A2A2E] space-y-1 shadow-lg">
+              <span className="text-[10px] font-bold text-zinc-400 uppercase">Total At-Risk</span>
               <p className="text-2xl font-black text-white">{summary.total_at_risk || 0}</p>
             </Card>
           </div>
         )}
 
         {/* Filters */}
-        <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 shadow-xl flex flex-wrap gap-4">
-          <div className="w-48">
+        <div className="bg-[#171718] border border-[#2A2A2E] rounded-2xl p-4 shadow-xl flex flex-wrap gap-4">
+          <div className="w-52">
             <Select
               value={riskFilter}
               onChange={(e) => setRiskFilter(e.target.value)}
@@ -133,7 +133,7 @@ export const AtRiskLeads: React.FC = () => {
             />
           </div>
 
-          <div className="w-48">
+          <div className="w-52">
             <Select
               value={stageFilter}
               onChange={(e) => setStageFilter(e.target.value)}
@@ -150,10 +150,10 @@ export const AtRiskLeads: React.FC = () => {
         </div>
 
         {/* At Risk Leads Table */}
-        <Card className="p-5 bg-slate-900/80 border-slate-800 space-y-4">
+        <Card className="p-5 bg-[#171718] border-[#2A2A2E] space-y-4 rounded-2xl shadow-xl">
           <div className="w-full min-w-0 overflow-x-auto custom-scrollbar">
-            <table className="w-full min-w-[700px] text-left text-xs text-slate-300">
-              <thead className="bg-slate-950 text-slate-400 font-semibold uppercase tracking-wider border-b border-slate-800">
+            <table className="w-full min-w-[700px] text-left text-xs text-zinc-300">
+              <thead className="bg-[#111113] text-zinc-400 font-semibold uppercase tracking-wider border-b border-[#2A2A2E]">
                 <tr>
                   <th className="px-4 py-3">Lead & Company</th>
                   <th className="px-4 py-3">Risk Level</th>
@@ -164,25 +164,25 @@ export const AtRiskLeads: React.FC = () => {
                   <th className="px-4 py-3 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800">
+              <tbody className="divide-y divide-[#2A2A2E]">
                 {loading ? (
                   <tr>
-                    <td colSpan={7} className="px-4 py-8 text-center text-slate-500">
+                    <td colSpan={7} className="px-4 py-8 text-center text-zinc-500">
                       <LoadingSpinner size="md" />
                     </td>
                   </tr>
                 ) : atRiskLeads.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="px-4 py-8 text-center text-slate-500">
+                    <td colSpan={7} className="px-4 py-8 text-center text-zinc-500">
                       No at-risk leads detected matching current filters.
                     </td>
                   </tr>
                 ) : (
                   atRiskLeads.map((item) => (
-                    <tr key={item.id} className="hover:bg-slate-800/40">
+                    <tr key={item.id} className="hover:bg-[#1C1C1E] transition-colors">
                       <td className="px-4 py-3 font-bold text-white">
                         {item.lead_name}
-                        <span className="block text-[11px] text-slate-400 font-normal">{item.company}</span>
+                        <span className="block text-[11px] text-zinc-400 font-normal">{item.company}</span>
                       </td>
                       <td className="px-4 py-3">
                         {getRiskBadge(item.risk_level)}
@@ -190,22 +190,22 @@ export const AtRiskLeads: React.FC = () => {
                       <td className="px-4 py-3 font-bold text-amber-400">
                         {item.days_inactive} Days
                       </td>
-                      <td className="px-4 py-3 uppercase font-bold text-slate-300">
+                      <td className="px-4 py-3 uppercase font-bold text-zinc-300">
                         {item.pipeline_stage}
                       </td>
-                      <td className="px-4 py-3 font-medium text-slate-200">
+                      <td className="px-4 py-3 font-medium text-zinc-200">
                         {item.assigned_rep}
                       </td>
                       <td className="px-4 py-3 max-w-xs">
-                        <p className="font-semibold text-slate-200">{item.risk_reason}</p>
-                        <p className="text-[10px] text-indigo-400 mt-0.5">Recommended: {item.recommended_action}</p>
+                        <p className="font-semibold text-zinc-200">{item.risk_reason}</p>
+                        <p className="text-[10px] text-[#FF7A00] font-medium mt-0.5">Recommended: {item.recommended_action}</p>
                       </td>
                       <td className="px-4 py-3 text-right space-x-1.5">
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => navigate(`/leads/${item.id}`)}
-                          className="text-[11px] py-1 border-slate-800 text-slate-300"
+                          className="text-[11px] py-1 border-[#2A2A2E] text-zinc-300 hover:bg-[#29292C]"
                         >
                           View Lead
                         </Button>
@@ -213,7 +213,7 @@ export const AtRiskLeads: React.FC = () => {
                           variant="primary"
                           size="sm"
                           onClick={() => handleResolveRisk(item.id)}
-                          className="text-[11px] py-1 bg-emerald-600 border-none font-bold"
+                          className="text-[11px] py-1 bg-emerald-600 hover:bg-emerald-500 border-none font-bold text-white"
                         >
                           Resolve
                         </Button>

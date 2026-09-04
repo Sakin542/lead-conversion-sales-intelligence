@@ -35,13 +35,13 @@ export const SalesRepAnalytics: React.FC = () => {
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-800 pb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-[#2A2A2E] pb-5">
           <div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
-              <TrendingUp className="w-7 h-7 text-indigo-400" />
+              <TrendingUp className="w-7 h-7 text-[#FF7A00]" />
               <span>Personal Performance Analytics</span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1">
+            <p className="text-xs sm:text-sm text-zinc-400 mt-1">
               Personal conversion trends, revenue won, lead temperature breakdown, and activity metrics.
             </p>
           </div>
@@ -53,8 +53,8 @@ export const SalesRepAnalytics: React.FC = () => {
                 onClick={() => setDateRange(range)}
                 className={`px-3 py-1.5 text-xs font-bold rounded-xl transition-colors ${
                   dateRange === range
-                    ? 'bg-indigo-600 text-white'
-                    : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
+                    ? 'bg-[#FF7A00] text-white font-bold'
+                    : 'bg-[#111113] text-zinc-400 hover:text-white border border-[#2A2A2E]'
                 }`}
               >
                 {range.toUpperCase()}
@@ -71,74 +71,74 @@ export const SalesRepAnalytics: React.FC = () => {
           <>
             {/* Metrics Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              <Card className="p-4 bg-slate-900/90 border-slate-800 flex flex-col justify-between h-full space-y-1">
-                <span className="text-xs font-bold text-slate-400 uppercase">Total Leads</span>
+              <Card className="p-4 bg-[#171718] border-[#2A2A2E] flex flex-col justify-between h-full space-y-1">
+                <span className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Total Leads</span>
                 <div>
                   <p className="text-2xl font-black text-white">{metrics.total_leads || 0}</p>
-                  <p className="text-[11px] text-slate-500 mt-0.5">In Selected Period</p>
+                  <p className="text-[11px] text-zinc-500 mt-0.5">In Selected Period</p>
                 </div>
               </Card>
 
-              <Card className="p-4 bg-slate-900/90 border-slate-800 flex flex-col justify-between h-full space-y-1">
-                <span className="text-xs font-bold text-slate-400 uppercase">Conversion Rate</span>
+              <Card className="p-4 bg-[#171718] border-[#2A2A2E] flex flex-col justify-between h-full space-y-1">
+                <span className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Conversion Rate</span>
                 <div>
                   <p className="text-2xl font-black text-emerald-400">{metrics.conversion_rate || '0%'}</p>
-                  <p className="text-[11px] text-slate-500 mt-0.5">Lead to Win Ratio</p>
+                  <p className="text-[11px] text-zinc-500 mt-0.5">Lead to Win Ratio</p>
                 </div>
               </Card>
 
-              <Card className="p-4 bg-slate-900/90 border-slate-800 flex flex-col justify-between h-full space-y-1">
-                <span className="text-xs font-bold text-slate-400 uppercase">Revenue Closed</span>
+              <Card className="p-4 bg-[#171718] border-[#2A2A2E] flex flex-col justify-between h-full space-y-1">
+                <span className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Revenue Closed</span>
                 <div>
                   <p className="text-2xl font-black text-emerald-400">${(metrics.revenue || 0).toLocaleString()}</p>
-                  <p className="text-[11px] text-slate-500 mt-0.5">Closed Sales Revenue</p>
+                  <p className="text-[11px] text-zinc-500 mt-0.5">Closed Sales Revenue</p>
                 </div>
               </Card>
 
-              <Card className="p-4 bg-slate-900/90 border-slate-800 flex flex-col justify-between h-full space-y-1">
-                <span className="text-xs font-bold text-slate-400 uppercase">Follow-ups Completed</span>
+              <Card className="p-4 bg-[#171718] border-[#2A2A2E] flex flex-col justify-between h-full space-y-1">
+                <span className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Follow-ups Completed</span>
                 <div>
-                  <p className="text-2xl font-black text-cyan-400">{metrics.followups_completed || 0}</p>
-                  <p className="text-[11px] text-slate-500 mt-0.5">Completed Tasks</p>
+                  <p className="text-2xl font-black text-[#FF7A00]">{metrics.followups_completed || 0}</p>
+                  <p className="text-[11px] text-zinc-500 mt-0.5">Completed Tasks</p>
                 </div>
               </Card>
             </div>
 
             {/* Temperature Breakdown & Source Distribution */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card className="p-5 bg-slate-900/80 border-slate-800 flex flex-col justify-between h-full space-y-4">
+              <Card className="p-5 bg-[#171718] border-[#2A2A2E] flex flex-col justify-between h-full space-y-4">
                 <div>
-                  <h3 className="text-xs font-extrabold text-slate-400 uppercase tracking-wider border-b border-slate-800 pb-2 mb-4">
+                  <h3 className="text-xs font-extrabold text-zinc-400 uppercase tracking-wider border-b border-[#2A2A2E] pb-2 mb-4">
                     Lead Temperature Distribution
                   </h3>
 
                   <div className="grid grid-cols-3 gap-3">
-                    <div className="p-4 bg-slate-950 rounded-xl border border-slate-800 text-center">
-                      <span className="text-[11px] font-bold text-amber-400 uppercase block">HOT</span>
+                    <div className="p-4 bg-[#111113] rounded-xl border border-[#2A2A2E] text-center">
+                      <span className="text-[11px] font-bold text-[#FF7A00] uppercase block">HOT</span>
                       <p className="text-2xl font-black text-white">{tempDist.hot || 0}</p>
                     </div>
-                    <div className="p-4 bg-slate-950 rounded-xl border border-slate-800 text-center">
-                      <span className="text-[11px] font-bold text-indigo-400 uppercase block">WARM</span>
+                    <div className="p-4 bg-[#111113] rounded-xl border border-[#2A2A2E] text-center">
+                      <span className="text-[11px] font-bold text-amber-400 uppercase block">WARM</span>
                       <p className="text-2xl font-black text-white">{tempDist.warm || 0}</p>
                     </div>
-                    <div className="p-4 bg-slate-950 rounded-xl border border-slate-800 text-center">
-                      <span className="text-[11px] font-bold text-slate-400 uppercase block">COLD</span>
+                    <div className="p-4 bg-[#111113] rounded-xl border border-[#2A2A2E] text-center">
+                      <span className="text-[11px] font-bold text-zinc-400 uppercase block">COLD</span>
                       <p className="text-2xl font-black text-white">{tempDist.cold || 0}</p>
                     </div>
                   </div>
                 </div>
               </Card>
 
-              <Card className="p-5 bg-slate-900/80 border-slate-800 flex flex-col justify-between h-full space-y-4">
+              <Card className="p-5 bg-[#171718] border-[#2A2A2E] flex flex-col justify-between h-full space-y-4">
                 <div>
-                  <h3 className="text-xs font-extrabold text-slate-400 uppercase tracking-wider border-b border-slate-800 pb-2 mb-4">
+                  <h3 className="text-xs font-extrabold text-zinc-400 uppercase tracking-wider border-b border-[#2A2A2E] pb-2 mb-4">
                     Lead Source Distribution
                   </h3>
 
                   <div className="space-y-2">
                     {data?.source_breakdown?.map((sb: any) => (
-                      <div key={sb.source} className="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between">
-                        <span className="text-xs font-bold text-slate-200">{sb.source}</span>
+                      <div key={sb.source} className="p-3 bg-[#111113] rounded-xl border border-[#2A2A2E] flex items-center justify-between">
+                        <span className="text-xs font-bold text-zinc-200">{sb.source}</span>
                         <Badge variant="primary" size="sm">{sb.count} leads</Badge>
                       </div>
                     ))}

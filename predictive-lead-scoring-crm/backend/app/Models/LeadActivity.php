@@ -17,8 +17,12 @@ class LeadActivity extends Model
      */
     protected $fillable = [
         'lead_id',
+        'user_id',
         'type',
+        'activity_type',
         'description',
+        'outcome',
+        'notes',
         'metadata',
         'occurred_at',
     ];
@@ -40,5 +44,12 @@ class LeadActivity extends Model
     {
         return $this->belongsTo(Lead::class);
     }
-}
 
+    /**
+     * Get the user who logged the activity.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+}

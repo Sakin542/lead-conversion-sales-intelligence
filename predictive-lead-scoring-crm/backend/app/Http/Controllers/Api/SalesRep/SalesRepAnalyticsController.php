@@ -62,7 +62,7 @@ class SalesRepAnalyticsController extends Controller
 
         $conversionRate = $totalLeads > 0 ? round(($convertedLeads / $totalLeads) * 100, 1) : 0;
 
-        $revenue = (float) (clone $dealQuery)->where('stage', 'won')->sum('value');
+        $revenue = (float) (clone $dealQuery)->whereHas('pipelineStage', fn($q) => $q->where('slug', 'won'))->sum('value');
         if ($revenue == 0) {
             $revenue = (float) (clone $leadQuery)->whereIn('status', ['won', 'converted'])->sum('estimated_value');
         }

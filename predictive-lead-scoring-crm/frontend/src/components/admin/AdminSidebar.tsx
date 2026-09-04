@@ -61,25 +61,25 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
       {/* Mobile Backdrop */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 z-40 bg-slate-950/80 backdrop-blur-sm lg:hidden transition-opacity duration-300"
+          className="fixed inset-0 z-40 bg-black/80 backdrop-blur-sm lg:hidden transition-opacity duration-300"
           onClick={onMobileClose}
         />
       )}
 
       {/* Admin Sidebar Container */}
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 flex flex-col bg-slate-950 border-r border-indigo-950/80 transition-all duration-300 ease-in-out ${
+        className={`fixed top-0 bottom-0 left-0 z-50 flex flex-col bg-[#101011] border-r border-[#222225] transition-all duration-300 ease-in-out ${
           collapsed ? 'w-20' : 'w-64'
         } ${
           mobileOpen ? 'translate-x-0 w-64' : '-translate-x-full lg:translate-x-0'
         }`}
       >
         {/* Header / Admin Badge */}
-        <div className="h-16 flex items-center justify-between px-3.5 border-b border-indigo-950/80 shrink-0">
+        <div className="h-16 flex items-center justify-between px-3.5 border-b border-[#222225] shrink-0">
           <div className="flex items-center space-x-1.5 min-w-0">
             <AnimatedLogo size="sm" showTagline={false} collapsed={collapsed} />
             {!collapsed && (
-              <span className="px-1.5 py-0.5 text-[9px] font-black bg-indigo-950 text-indigo-400 border border-indigo-800/80 rounded uppercase tracking-wider shrink-0">
+              <span className="px-1.5 py-0.5 text-[9px] font-semibold bg-[#1C1C1E] text-[#FF7A00] border border-[#FF7A00]/20 rounded uppercase tracking-wider shrink-0">
                 ADMIN
               </span>
             )}
@@ -87,7 +87,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
 
           <button
             onClick={toggleCollapsed}
-            className="hidden lg:flex items-center justify-center w-7 h-7 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-900 transition-colors"
+            className="hidden lg:flex items-center justify-center w-7 h-7 rounded-lg text-[#A1A1AA] hover:text-white hover:bg-[#1C1C1E] transition-colors"
             title={collapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
           >
             {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
@@ -95,14 +95,14 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
 
           <button
             onClick={onMobileClose}
-            className="lg:hidden flex items-center justify-center w-8 h-8 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-900"
+            className="lg:hidden flex items-center justify-center w-8 h-8 rounded-lg text-[#A1A1AA] hover:text-white hover:bg-[#1C1C1E]"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Navigation Tree */}
-        <div className="flex-1 py-4 px-3 space-y-1 overflow-y-auto custom-scrollbar">
+        <div className="flex-1 py-3 px-3 space-y-1 overflow-y-auto custom-scrollbar">
           {navItems.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.path);
@@ -112,16 +112,19 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
                 key={item.name}
                 to={item.path}
                 onClick={onMobileClose}
-                className={`group flex items-center px-3 py-2.5 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-150 ${
+                className={`group flex items-center px-3 py-2.5 rounded-lg font-medium text-sm transition-all duration-150 relative ${
                   active
-                    ? 'bg-indigo-600/20 text-indigo-400 border border-indigo-500/40 shadow-md shadow-indigo-500/10'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/80'
+                    ? 'bg-[#29292C] text-white border border-[#2A2A2E] shadow-sm'
+                    : 'text-[#A1A1AA] hover:text-white hover:bg-[#1C1C1E]'
                 }`}
                 title={collapsed ? item.name : undefined}
               >
+                {active && (
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-[#FF7A00] rounded-r-full" />
+                )}
                 <Icon
-                  className={`w-5 h-5 shrink-0 transition-colors ${
-                    active ? 'text-indigo-400' : 'text-slate-400 group-hover:text-slate-200'
+                  className={`w-4.5 h-4.5 shrink-0 transition-colors ${
+                    active ? 'text-[#FF7A00]' : 'text-[#A1A1AA] group-hover:text-white'
                   }`}
                 />
                 {!collapsed && <span className="ml-3 truncate">{item.name}</span>}
@@ -131,13 +134,13 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
         </div>
 
         {/* Footer Logout */}
-        <div className="p-3 border-t border-indigo-950/80 shrink-0">
+        <div className="p-3 border-t border-[#222222] shrink-0">
           <button
             onClick={logout}
-            className="w-full group flex items-center px-3 py-2.5 rounded-xl font-semibold text-xs sm:text-sm text-rose-400 hover:bg-rose-950/30 transition-all duration-150"
+            className="w-full group flex items-center px-3 py-2.5 rounded-lg font-medium text-sm text-zinc-400 hover:text-rose-400 hover:bg-rose-950/20 transition-all duration-150"
             title={collapsed ? 'Logout' : undefined}
           >
-            <LogOut className="w-5 h-5 shrink-0 text-rose-400" />
+            <LogOut className="w-4.5 h-4.5 shrink-0 text-zinc-400 group-hover:text-rose-400" />
             {!collapsed && <span className="ml-3 truncate">Logout Admin</span>}
           </button>
         </div>
@@ -147,4 +150,3 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
 };
 
 export default AdminSidebar;
-

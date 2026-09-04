@@ -12,20 +12,20 @@ export const LeadActivitySummary: React.FC = () => {
   };
 
   return (
-    <Card className="bg-slate-900/60 border-slate-800/80 p-6 space-y-4">
+    <Card className="p-6 space-y-4">
       <div className="space-y-1">
         <h3 className="text-base font-bold text-white tracking-tight">Lead Activity Summary</h3>
-        <p className="text-xs text-slate-400">30-day engagement metrics</p>
+        <p className="text-xs text-zinc-400">30-day engagement metrics</p>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         {leadActivitySummary.map((item) => (
-          <div key={item.title} className="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800/60 space-y-1">
+          <div key={item.title} className="p-3.5 rounded-xl bg-[#0A0A0A] border border-[#222222] space-y-1">
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-semibold text-slate-400">{item.title}</span>
+              <span className="text-[11px] font-semibold text-zinc-400">{item.title}</span>
               {getIcon(item.title)}
             </div>
-            <p className="text-xl font-extrabold text-white">{item.count}</p>
+            <p className="text-xl font-bold text-white">{item.count}</p>
             <span className="text-[10px] font-bold text-emerald-400">{item.change} vs last mo.</span>
           </div>
         ))}

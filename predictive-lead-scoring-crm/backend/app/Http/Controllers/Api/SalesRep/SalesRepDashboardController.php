@@ -32,19 +32,19 @@ class SalesRepDashboardController extends Controller
             ->whereDate('scheduled_at', now()->toDateString())
             ->count();
 
-        $dealsWonCount = Deal::where('user_id', $userId)->where('stage', 'won')->count();
+        $dealsWonCount = Deal::where('user_id', $userId)->whereHas('pipelineStage', fn($q) => $q->where('slug', 'won'))->count();
         if ($dealsWonCount == 0) {
             $dealsWonCount = Lead::where('assigned_to', $userId)->whereIn('status', ['won', 'converted'])->count();
         }
 
         $conversionRate = $myLeadsCount > 0 ? round(($dealsWonCount / $myLeadsCount) * 100, 1) : 0;
 
-        $revenue = (float) Deal::where('user_id', $userId)->where('stage', 'won')->sum('value');
+        $revenue = (float) Deal::where('user_id', $userId)->whereHas('pipelineStage', fn($q) => $q->where('slug', 'won'))->sum('value');
         if ($revenue == 0) {
             $revenue = (float) Lead::where('assigned_to', $userId)->whereIn('status', ['won', 'converted'])->sum('estimated_value');
         }
 
-        $pipelineValue = (float) Deal::where('user_id', $userId)->whereNotIn('stage', ['won', 'lost'])->sum('value');
+        $pipelineValue = (float) Deal::where('user_id', $userId)->whereHas('pipelineStage', fn($q) => $q->whereNotIn('slug', ['won', 'lost']))->sum('value');
         if ($pipelineValue == 0) {
             $pipelineValue = (float) Lead::where('assigned_to', $userId)->whereNotIn('status', ['won', 'lost', 'converted'])->sum('estimated_value');
         }

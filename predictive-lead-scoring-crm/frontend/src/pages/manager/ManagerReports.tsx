@@ -46,13 +46,13 @@ export const ManagerReports: React.FC = () => {
     <DashboardLayout>
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-800 pb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-[#2A2A2E] pb-5">
           <div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
-              <BarChart3 className="w-7 h-7 text-indigo-400" />
+              <BarChart3 className="w-7 h-7 text-[#FF7A00]" />
               <span>Manager Reports Center</span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1">
+            <p className="text-xs sm:text-sm text-zinc-400 mt-1">
               Generate team performance, conversion rates, channel sources, revenue forecasts, and AI engine reports.
             </p>
           </div>
@@ -62,16 +62,16 @@ export const ManagerReports: React.FC = () => {
               variant="outline"
               size="sm"
               onClick={handlePrint}
-              className="border-slate-800 text-slate-300 hover:bg-slate-900"
+              className="border-[#2A2A2E] text-zinc-300 hover:bg-[#29292C] hover:text-white"
               leftIcon={<Printer className="w-4 h-4" />}
             >
               Print Report
             </Button>
             <Button
-              variant="primary"
+              variant="ai"
               size="sm"
               onClick={handleExportCsv}
-              className="bg-emerald-600 hover:bg-emerald-500 border-none font-bold"
+              className="font-bold text-xs"
               leftIcon={<Download className="w-4 h-4" />}
             >
               Export Report CSV
@@ -80,8 +80,8 @@ export const ManagerReports: React.FC = () => {
         </div>
 
         {/* Report Type Selector */}
-        <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 shadow-xl flex items-end space-x-4">
-          <div className="w-64">
+        <div className="bg-[#171718] border border-[#2A2A2E] rounded-xl p-4 shadow-xl flex flex-wrap items-end gap-4">
+          <div className="w-72">
             <Select
               label="Select Report Type"
               value={reportType}
@@ -100,7 +100,7 @@ export const ManagerReports: React.FC = () => {
             variant="outline"
             size="sm"
             onClick={fetchReport}
-            className="border-slate-800 text-slate-300 hover:bg-slate-900"
+            className="border-[#2A2A2E] text-zinc-300 hover:bg-[#29292C] hover:text-white"
             leftIcon={<RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />}
           >
             Refresh Report
@@ -113,20 +113,20 @@ export const ManagerReports: React.FC = () => {
             <LoadingSpinner size="lg" />
           </div>
         ) : (
-          <Card className="p-6 bg-slate-900/80 border-slate-800 space-y-6">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+          <Card className="p-6 bg-[#171718] border-[#2A2A2E] space-y-6 rounded-2xl shadow-xl">
+            <div className="flex items-center justify-between border-b border-[#2A2A2E] pb-4">
               <div>
                 <h2 className="text-lg font-extrabold text-white capitalize">{reportType.replace('_', ' ')} Report</h2>
-                <p className="text-xs text-slate-400">Generated on {generatedAt}</p>
+                <p className="text-xs text-zinc-400">Generated on {generatedAt}</p>
               </div>
               <Badge variant="primary" size="md">System Verified Data</Badge>
             </div>
 
             {/* Team Performance Report */}
             {reportType === 'team_performance' && Array.isArray(reportData) && (
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs text-slate-300">
-                  <thead className="bg-slate-950 text-slate-400 font-semibold uppercase tracking-wider border-b border-slate-800">
+              <div className="overflow-x-auto custom-scrollbar">
+                <table className="w-full text-left text-xs text-zinc-300 min-w-[650px]">
+                  <thead className="bg-[#111113] text-zinc-400 font-semibold uppercase tracking-wider border-b border-[#2A2A2E]">
                     <tr>
                       <th className="px-4 py-3">Sales Representative</th>
                       <th className="px-4 py-3">Total Assigned Leads</th>
@@ -135,17 +135,17 @@ export const ManagerReports: React.FC = () => {
                       <th className="px-4 py-3 text-right">Revenue Generated</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800">
+                  <tbody className="divide-y divide-[#2A2A2E]">
                     {reportData.map((row: any, idx: number) => (
-                      <tr key={idx} className="hover:bg-slate-800/40">
-                        <td className="px-4 py-3 font-bold text-white">
+                      <tr key={idx} className="hover:bg-[#1C1C1E] transition-colors">
+                        <td className="px-4 py-3 font-semibold text-white">
                           {row.rep_name}
-                          <span className="block text-[10px] text-slate-400 font-normal">{row.email}</span>
+                          <span className="block text-[10px] text-zinc-400 font-normal">{row.email}</span>
                         </td>
-                        <td className="px-4 py-3 font-bold text-slate-200">{row.total_leads}</td>
-                        <td className="px-4 py-3 font-bold text-emerald-400">{row.converted_leads}</td>
-                        <td className="px-4 py-3 font-bold text-indigo-400">{row.conversion_rate}</td>
-                        <td className="px-4 py-3 font-bold text-right text-emerald-400">${row.revenue.toLocaleString()}</td>
+                        <td className="px-4 py-3 font-semibold text-zinc-200">{row.total_leads}</td>
+                        <td className="px-4 py-3 font-semibold text-emerald-400">{row.converted_leads}</td>
+                        <td className="px-4 py-3 font-semibold text-[#FF7A00]">{row.conversion_rate}</td>
+                        <td className="px-4 py-3 font-semibold text-right text-emerald-400">${row.revenue.toLocaleString()}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -157,19 +157,19 @@ export const ManagerReports: React.FC = () => {
             {reportType === 'lead_conversion' && (
               <div className="space-y-4">
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                  <div className="p-4 bg-slate-950 border border-slate-800 rounded-xl">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase">Total Leads</span>
+                  <div className="p-4 bg-[#111113] border border-[#2A2A2E] rounded-xl">
+                    <span className="text-[10px] font-bold text-zinc-400 uppercase">Total Leads</span>
                     <p className="text-xl font-black text-white">{reportData.total_leads || 0}</p>
                   </div>
-                  <div className="p-4 bg-slate-950 border border-slate-800 rounded-xl">
-                    <span className="text-[10px] font-bold text-indigo-400 uppercase">Qualified</span>
-                    <p className="text-xl font-black text-indigo-400">{reportData.qualified_leads || 0}</p>
+                  <div className="p-4 bg-[#111113] border border-[#2A2A2E] rounded-xl">
+                    <span className="text-[10px] font-bold text-[#FF7A00] uppercase">Qualified</span>
+                    <p className="text-xl font-black text-[#FF7A00]">{reportData.qualified_leads || 0}</p>
                   </div>
-                  <div className="p-4 bg-slate-950 border border-slate-800 rounded-xl">
+                  <div className="p-4 bg-[#111113] border border-[#2A2A2E] rounded-xl">
                     <span className="text-[10px] font-bold text-emerald-400 uppercase">Won / Converted</span>
                     <p className="text-xl font-black text-emerald-400">{reportData.won_leads || 0}</p>
                   </div>
-                  <div className="p-4 bg-slate-950 border border-slate-800 rounded-xl">
+                  <div className="p-4 bg-[#111113] border border-[#2A2A2E] rounded-xl">
                     <span className="text-[10px] font-bold text-emerald-400 uppercase">Conversion Rate</span>
                     <p className="text-xl font-black text-emerald-400">{reportData.conversion_rate || 0}</p>
                   </div>
@@ -179,9 +179,9 @@ export const ManagerReports: React.FC = () => {
 
             {/* Lead Source Report */}
             {reportType === 'lead_source' && Array.isArray(reportData) && (
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs text-slate-300">
-                  <thead className="bg-slate-950 text-slate-400 font-semibold uppercase tracking-wider border-b border-slate-800">
+              <div className="overflow-x-auto custom-scrollbar">
+                <table className="w-full text-left text-xs text-zinc-300 min-w-[650px]">
+                  <thead className="bg-[#111113] text-zinc-400 font-semibold uppercase tracking-wider border-b border-[#2A2A2E]">
                     <tr>
                       <th className="px-4 py-3">Acquisition Source</th>
                       <th className="px-4 py-3">Total Prospects</th>
@@ -190,14 +190,14 @@ export const ManagerReports: React.FC = () => {
                       <th className="px-4 py-3 text-right">Revenue Attributed</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800">
+                  <tbody className="divide-y divide-[#2A2A2E]">
                     {reportData.map((s: any, idx: number) => (
-                      <tr key={idx} className="hover:bg-slate-800/40">
-                        <td className="px-4 py-3 font-bold text-white uppercase">{s.source}</td>
-                        <td className="px-4 py-3 text-slate-200">{s.total_leads}</td>
-                        <td className="px-4 py-3 text-emerald-400 font-bold">{s.converted}</td>
-                        <td className="px-4 py-3 text-indigo-400 font-bold">{s.conversion_rate}</td>
-                        <td className="px-4 py-3 font-bold text-right text-emerald-400">${(s.revenue || 0).toLocaleString()}</td>
+                      <tr key={idx} className="hover:bg-[#1C1C1E] transition-colors">
+                        <td className="px-4 py-3 font-semibold text-white uppercase">{s.source}</td>
+                        <td className="px-4 py-3 text-zinc-200">{s.total_leads}</td>
+                        <td className="px-4 py-3 text-emerald-400 font-semibold">{s.converted}</td>
+                        <td className="px-4 py-3 text-[#FF7A00] font-semibold">{s.conversion_rate}</td>
+                        <td className="px-4 py-3 font-semibold text-right text-emerald-400">${(s.revenue || 0).toLocaleString()}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -207,8 +207,8 @@ export const ManagerReports: React.FC = () => {
 
             {/* Revenue & AI Reports */}
             {(reportType === 'revenue' || reportType === 'ai_performance') && (
-              <div className="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-2">
-                <pre className="text-xs font-mono text-indigo-300 overflow-x-auto">
+              <div className="p-4 bg-[#111113] border border-[#2A2A2E] rounded-xl space-y-2">
+                <pre className="text-xs font-mono text-[#FF7A00] overflow-x-auto">
                   {JSON.stringify(reportData, null, 2)}
                 </pre>
               </div>

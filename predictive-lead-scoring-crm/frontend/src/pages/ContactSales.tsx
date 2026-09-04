@@ -116,44 +116,45 @@ export const ContactSales: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 relative overflow-hidden">
+    <div className="min-h-screen flex flex-col bg-[#0B0B0D] text-zinc-100 relative overflow-hidden">
       <Navbar />
 
-      {/* Background Neon Orbs */}
-      <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[700px] h-[450px] bg-gradient-to-tr from-indigo-950/40 via-purple-950/30 to-cyan-950/30 rounded-full blur-3xl pointer-events-none -z-10" />
+      {/* Background Ambient Glow Orbs */}
+      <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[700px] h-[450px] bg-gradient-to-tr from-[#FF7A00]/15 via-[#FF8C1A]/10 to-transparent rounded-full blur-3xl pointer-events-none -z-10 animate-pulse-slow" />
+      <div className="absolute top-96 -right-24 w-[350px] h-[350px] bg-[#FF7A00]/10 rounded-full blur-3xl pointer-events-none -z-10 animate-blob" />
 
-      <main className="flex-1 py-12 lg:py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto w-full">
+      <main className="flex-1 py-12 lg:py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto w-full animate-fade-in">
         {/* Header Section */}
-        <div className="text-center space-y-3 mb-10">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-indigo-950/80 border border-indigo-800/80 text-indigo-300 text-xs font-bold shadow-2xs">
-            <Sparkles className="w-3.5 h-3.5 text-indigo-400 animate-pulse" />
-            <span>Connect With Our Sales Intelligence Team</span>
+        <div className="text-center space-y-3 mb-10 animate-slide-up">
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#101011] border border-[#222225] text-zinc-300 text-xs font-semibold shadow-sm hover:border-[#FF7A00]/40 transition-colors">
+            <Sparkles className="w-3.5 h-3.5 text-[#FF7A00] animate-pulse" />
+            <span className="gradient-text-animated font-medium">Connect With Our Sales Intelligence Team</span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight font-heading">
-            Get Started with <span className="gradient-text-animated">PredictiveCRM</span>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
+            Get Started with <span className="gradient-text-ai text-shadow-glow">PredictiveCRM</span>
           </h1>
 
-          <p className="text-sm sm:text-base text-slate-400 max-w-xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-base text-[#A1A1AA] max-w-xl mx-auto leading-relaxed">
             Tell us about your business goals and requirements. Our enterprise team will evaluate your needs and get in touch shortly.
           </p>
         </div>
 
         {/* Form Container Card */}
-        <Card className="p-6 sm:p-8 bg-slate-900/90 border-slate-800/90 shadow-2xl space-y-6 relative overflow-hidden">
+        <Card className="p-6 sm:p-8 bg-[#171718] border border-[#2A2A2E] hover:border-[#383838] shadow-2xl space-y-6 relative overflow-hidden rounded-xl animate-scale-in transition-all duration-300">
           {successMessage ? (
             <div className="py-12 text-center space-y-4 animate-fadeIn">
-              <div className="w-16 h-16 rounded-full bg-emerald-950 border border-emerald-800 text-emerald-400 flex items-center justify-center mx-auto shadow-lg shadow-emerald-950/50">
+              <div className="w-16 h-16 rounded-full bg-[#151515] border border-[#222222] text-emerald-400 flex items-center justify-center mx-auto shadow-lg">
                 <CheckCircle2 className="w-8 h-8" />
               </div>
               <h2 className="text-2xl font-extrabold text-white font-heading">Inquiry Submitted Successfully</h2>
-              <p className="text-sm text-slate-300 max-w-md mx-auto leading-relaxed">{successMessage}</p>
+              <p className="text-sm text-zinc-300 max-w-md mx-auto leading-relaxed">{successMessage}</p>
               <div className="pt-4">
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => setSuccessMessage(null)}
-                  className="border-slate-800 text-indigo-400 hover:bg-slate-800 font-bold"
+                  className="border-[#222222] text-zinc-300 hover:bg-[#151515] hover:text-white font-semibold"
                 >
                   Submit Another Inquiry
                 </Button>
@@ -162,7 +163,7 @@ export const ContactSales: React.FC = () => {
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6">
               {errorMessage && (
-                <div className="p-4 bg-rose-950/80 border border-rose-800 rounded-xl flex items-center space-x-3 text-rose-300 text-xs font-semibold">
+                <div className="p-4 bg-rose-950/40 border border-rose-800/60 rounded-xl flex items-center space-x-3 text-rose-300 text-xs font-semibold">
                   <AlertCircle className="w-5 h-5 shrink-0" />
                   <span>{errorMessage}</span>
                 </div>
@@ -170,8 +171,8 @@ export const ContactSales: React.FC = () => {
 
               {/* Basic Contact Info Grid */}
               <div className="space-y-4">
-                <h3 className="text-xs font-extrabold text-slate-400 uppercase tracking-wider border-b border-slate-800/80 pb-2 flex items-center gap-2">
-                  <User className="w-4 h-4 text-indigo-400" />
+                <h3 className="text-xs font-bold text-zinc-400 uppercase tracking-wider border-b border-[#222222] pb-2 flex items-center gap-2">
+                  <User className="w-4 h-4 text-purple-400" />
                   <span>Contact Information</span>
                 </h3>
 
@@ -206,14 +207,14 @@ export const ContactSales: React.FC = () => {
                   />
 
                   <div className="w-full space-y-1.5">
-                    <label className="block text-xs font-semibold text-slate-300 tracking-wide">
+                    <label className="block text-xs font-semibold text-zinc-300 tracking-wide">
                       Preferred Contact Method
                     </label>
                     <select
                       name="preferred_contact_method"
                       value={formData.preferred_contact_method}
                       onChange={handleChange}
-                      className="block w-full rounded-xl border border-slate-800 text-slate-100 text-sm bg-slate-950 min-h-[42px] px-3.5 py-2.5 focus:outline-none focus:border-indigo-500 transition-all"
+                      className="block w-full rounded-xl border border-[#222222] text-zinc-100 text-sm bg-[#0A0A0A] min-h-[42px] px-3.5 py-2.5 focus:outline-none focus:border-zinc-500 transition-all"
                     >
                       <option value="EMAIL">Email</option>
                       <option value="PHONE">Phone Call</option>
@@ -225,7 +226,7 @@ export const ContactSales: React.FC = () => {
 
               {/* Company & Firmographic Information Grid */}
               <div className="space-y-4 pt-2">
-                <h3 className="text-xs font-extrabold text-slate-400 uppercase tracking-wider border-b border-slate-800/80 pb-2 flex items-center gap-2">
+                <h3 className="text-xs font-bold text-zinc-400 uppercase tracking-wider border-b border-[#222222] pb-2 flex items-center gap-2">
                   <Building className="w-4 h-4 text-purple-400" />
                   <span>Company Details</span>
                 </h3>
@@ -250,14 +251,14 @@ export const ContactSales: React.FC = () => {
                   />
 
                   <div className="w-full space-y-1.5">
-                    <label className="block text-xs font-semibold text-slate-300 tracking-wide">
+                    <label className="block text-xs font-semibold text-zinc-300 tracking-wide">
                       Industry Classification
                     </label>
                     <select
                       name="industry"
                       value={formData.industry}
                       onChange={handleChange}
-                      className="block w-full rounded-xl border border-slate-800 text-slate-100 text-sm bg-slate-950 min-h-[42px] px-3.5 py-2.5 focus:outline-none focus:border-indigo-500 transition-all"
+                      className="block w-full rounded-xl border border-[#222222] text-zinc-100 text-sm bg-[#0A0A0A] min-h-[42px] px-3.5 py-2.5 focus:outline-none focus:border-zinc-500 transition-all"
                     >
                       <option value="">Select Industry</option>
                       <option value="SaaS">SaaS & Enterprise Software</option>
@@ -271,14 +272,14 @@ export const ContactSales: React.FC = () => {
                   </div>
 
                   <div className="w-full space-y-1.5">
-                    <label className="block text-xs font-semibold text-slate-300 tracking-wide">
+                    <label className="block text-xs font-semibold text-zinc-300 tracking-wide">
                       Company Size
                     </label>
                     <select
                       name="company_size"
                       value={formData.company_size}
                       onChange={handleChange}
-                      className="block w-full rounded-xl border border-slate-800 text-slate-100 text-sm bg-slate-950 min-h-[42px] px-3.5 py-2.5 focus:outline-none focus:border-indigo-500 transition-all"
+                      className="block w-full rounded-xl border border-[#222222] text-zinc-100 text-sm bg-[#0A0A0A] min-h-[42px] px-3.5 py-2.5 focus:outline-none focus:border-zinc-500 transition-all"
                     >
                       <option value="">Select Company Size</option>
                       <option value="1-10">1 - 10 Employees</option>
@@ -311,21 +312,21 @@ export const ContactSales: React.FC = () => {
 
               {/* Requirement & Budget Section */}
               <div className="space-y-4 pt-2">
-                <h3 className="text-xs font-extrabold text-slate-400 uppercase tracking-wider border-b border-slate-800/80 pb-2 flex items-center gap-2">
+                <h3 className="text-xs font-bold text-zinc-400 uppercase tracking-wider border-b border-[#222222] pb-2 flex items-center gap-2">
                   <DollarSign className="w-4 h-4 text-emerald-400" />
                   <span>Requirements & Budget</span>
                 </h3>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="w-full space-y-1.5">
-                    <label className="block text-xs font-semibold text-slate-300 tracking-wide">
+                    <label className="block text-xs font-semibold text-zinc-300 tracking-wide">
                       Interested Product / Service
                     </label>
                     <select
                       name="interested_in"
                       value={formData.interested_in}
                       onChange={handleChange}
-                      className="block w-full rounded-xl border border-slate-800 text-slate-100 text-sm bg-slate-950 min-h-[42px] px-3.5 py-2.5 focus:outline-none focus:border-indigo-500 transition-all"
+                      className="block w-full rounded-xl border border-[#222222] text-zinc-100 text-sm bg-[#0A0A0A] min-h-[42px] px-3.5 py-2.5 focus:outline-none focus:border-zinc-500 transition-all"
                     >
                       <option value="">Select Product / Service</option>
                       <option value="AI Predictive Lead Scoring Engine">AI Predictive Lead Scoring Engine</option>
@@ -347,7 +348,7 @@ export const ContactSales: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
+                  <label className="block text-xs font-bold text-zinc-300 uppercase tracking-wider mb-2">
                     Project Requirements / Additional Message
                   </label>
                   <textarea
@@ -356,14 +357,14 @@ export const ContactSales: React.FC = () => {
                     placeholder="Tell us about your team size, sales volume, and specific scoring requirements..."
                     value={formData.message}
                     onChange={handleChange}
-                    className="w-full bg-slate-950 text-sm text-slate-100 placeholder-slate-500 rounded-xl p-3.5 border border-slate-800 focus:outline-none focus:border-indigo-500 transition-all shadow-inner"
+                    className="w-full bg-[#0A0A0A] text-sm text-zinc-100 placeholder-zinc-500 rounded-xl p-3.5 border border-[#222222] focus:outline-none focus:border-zinc-500 transition-all custom-scrollbar"
                   />
                 </div>
               </div>
 
               {/* Submit Button */}
-              <div className="pt-4 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <p className="text-[11px] text-slate-500">
+              <div className="pt-4 border-t border-[#222222] flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p className="text-[11px] text-zinc-500">
                   By submitting this form, you agree to our Privacy Policy. Your inquiry is safe with us.
                 </p>
 
@@ -372,7 +373,7 @@ export const ContactSales: React.FC = () => {
                   size="lg"
                   type="submit"
                   isLoading={loading}
-                  className="w-full sm:w-auto px-8 font-bold bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-500 hover:to-purple-500 border-none shadow-xl shadow-indigo-500/20"
+                  className="w-full sm:w-auto px-8 font-semibold bg-white text-black hover:bg-zinc-200 border-none shadow-lg"
                   rightIcon={<Send className="w-4 h-4" />}
                 >
                   Submit Inquiry

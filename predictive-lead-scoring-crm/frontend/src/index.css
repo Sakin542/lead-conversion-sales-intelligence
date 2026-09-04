@@ -8,9 +8,9 @@
   }
 
   body {
-    font-family: 'Inter', sans-serif;
-    background-color: #030712; /* Deep Black/Slate-950 */
-    color: #f8fafc;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: #0B0B0D;
+    color: #ffffff;
     overflow-x: hidden;
     letter-spacing: -0.01em;
     width: 100%;
@@ -18,50 +18,95 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
     letter-spacing: -0.025em;
   }
 }
 
-/* Custom Stylish Animated Theme & Dark Glassmorphism Utilities */
+/* Minimal Premium Enterprise AI SaaS Utility Classes */
 @layer utilities {
   .font-heading {
-    font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
   }
 
   .font-display {
-    font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
   }
 
+  /* Clean White to Zinc Gradient Text with Subtle Orange AI Accent */
   .gradient-text-animated {
-    background: linear-gradient(135deg, #6366f1 0%, #22d3ee 35%, #a855f7 70%, #f43f5e 100%);
-    background-size: 250% 250%;
+    background: linear-gradient(135deg, #ffffff 0%, #e4e4e7 40%, #ff7a00 80%, #ff8c1a 100%);
+    background-size: 200% 200%;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    animation: gradientX 5s ease infinite;
+    animation: gradientX 8s ease infinite;
+  }
+
+  .gradient-text-ai {
+    background: linear-gradient(135deg, #ffffff 0%, #ff7a00 60%, #ff8c1a 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
   .gradient-text-gold {
-    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
   .text-shadow-glow {
-    text-shadow: 0 0 30px rgba(99, 102, 241, 0.5);
+    text-shadow: 0 0 24px rgba(255, 122, 0, 0.25);
   }
 
+  /* Minimal Dark Enterprise Card Style */
   .glass-card-dark {
-    background: rgba(15, 23, 42, 0.75);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: #171718;
+    border: 1px solid #2A2A2E;
+  }
+
+  .glass-card-elevated {
+    background: #1C1C1E;
+    border: 1px solid #2A2A2E;
   }
 
   .neon-border {
-    box-shadow: 0 0 25px rgba(99, 102, 241, 0.3);
+    border-color: rgba(255, 122, 0, 0.4);
+    box-shadow: 0 0 20px rgba(255, 122, 0, 0.15);
+  }
+
+  /* Animated Shimmer Badge */
+  .shimmer-badge {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.05) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 3s linear infinite;
+  }
+
+  /* Animated AI Glow Card */
+  .ai-glow-card {
+    background: #171718;
+    border: 1px solid #2A2A2E;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .ai-glow-card:hover {
+    border-color: rgba(255, 122, 0, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px -10px rgba(255, 122, 0, 0.15);
+  }
+
+  /* Subtle Dark Grid Overlay */
+  .animated-bg-grid {
+    background-size: 40px 40px;
+    background-image: 
+      linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  }
+
+  /* Animated Progress Bar Fill */
+  .animated-progress-fill {
+    transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   /* Responsive Table Container */
@@ -72,20 +117,21 @@
     -webkit-overflow-scrolling: touch;
   }
 
-  /* Custom styled scrollbars */
+  /* Custom Minimal Scrollbars */
   .custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
   }
   .custom-scrollbar::-webkit-scrollbar-track {
-    background: rgba(15, 23, 42, 0.6);
+    background: #111113;
     border-radius: 4px;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(99, 102, 241, 0.3);
+    background: #2A2A2E;
     border-radius: 4px;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: rgba(99, 102, 241, 0.6);
+    background: #383838;
   }
 }
+

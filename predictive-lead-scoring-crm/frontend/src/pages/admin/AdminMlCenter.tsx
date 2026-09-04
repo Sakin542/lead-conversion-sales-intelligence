@@ -103,13 +103,13 @@ export const AdminMlCenter: React.FC = () => {
     <AdminLayout>
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-indigo-950 pb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-[#222222] pb-5">
           <div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
-              <Bot className="w-7 h-7 text-emerald-400" />
+              <Bot className="w-7 h-7 text-purple-400" />
               <span>AI / ML Model Control Center</span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1">
+            <p className="text-xs sm:text-sm text-zinc-400 mt-1">
               Monitor production predictive models, evaluate metrics, compare algorithms, and run model retraining workflows.
             </p>
           </div>
@@ -118,7 +118,7 @@ export const AdminMlCenter: React.FC = () => {
             variant="outline"
             size="sm"
             onClick={fetchMlData}
-            className="border-slate-800 text-slate-300 hover:bg-slate-900"
+            className="border-[#222222] text-zinc-300 hover:bg-[#151515] hover:text-white"
             leftIcon={<RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />}
           >
             Refresh ML Engine
@@ -126,7 +126,7 @@ export const AdminMlCenter: React.FC = () => {
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex space-x-2 border-b border-slate-800 pb-2 text-xs font-bold overflow-x-auto custom-scrollbar">
+        <div className="flex space-x-2 border-b border-[#222222] pb-2 text-xs font-semibold overflow-x-auto custom-scrollbar">
           {[
             { id: 'overview', label: 'ML Overview' },
             { id: 'models', label: 'Model Version History' },
@@ -140,8 +140,8 @@ export const AdminMlCenter: React.FC = () => {
               onClick={() => setActiveTab(tab.id as any)}
               className={`px-4 py-2 rounded-xl transition-all ${
                 activeTab === tab.id
-                  ? 'bg-indigo-600/20 text-indigo-400 border border-indigo-500/40 shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
+                  ? 'bg-[#151515] text-white border border-[#333333] shadow-sm'
+                  : 'text-zinc-400 hover:text-zinc-200 hover:bg-[#111111]'
               }`}
             >
               {tab.label}
@@ -158,38 +158,38 @@ export const AdminMlCenter: React.FC = () => {
             {/* OVERVIEW TAB */}
             {activeTab === 'overview' && overview && (
               <div className="space-y-6">
-                <Card className="p-6 bg-gradient-to-r from-indigo-950 via-slate-900 to-slate-950 border-indigo-900/80 space-y-4">
+                <Card className="p-6 bg-[#111111] border-[#222222] space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Production Model Status</span>
+                    <span className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Production Model Status</span>
                     <Badge variant="success" size="md">Production Active</Badge>
                   </div>
 
                   <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 rounded-2xl bg-indigo-600/20 border border-indigo-500/40 text-indigo-400 flex items-center justify-center font-bold">
+                    <div className="w-12 h-12 rounded-2xl bg-[#151515] border border-[#222222] text-purple-400 flex items-center justify-center font-bold">
                       <Cpu className="w-6 h-6" />
                     </div>
                     <div>
                       <h2 className="text-xl font-extrabold text-white">{overview.name}</h2>
-                      <p className="text-xs text-slate-400">Version {overview.version} • Trained with 12,450 records</p>
+                      <p className="text-xs text-zinc-400">Version {overview.version} • Trained with 12,450 records</p>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
-                    <div className="p-3 bg-slate-950 border border-slate-800 rounded-xl">
-                      <span className="text-[10px] text-slate-400 uppercase font-bold">Accuracy</span>
+                    <div className="p-3 bg-[#0A0A0A] border border-[#222222] rounded-xl">
+                      <span className="text-[10px] text-zinc-400 uppercase font-bold">Accuracy</span>
                       <p className="text-lg font-black text-emerald-400">{overview.accuracy * 100}%</p>
                     </div>
-                    <div className="p-3 bg-slate-950 border border-slate-800 rounded-xl">
-                      <span className="text-[10px] text-slate-400 uppercase font-bold">Precision</span>
-                      <p className="text-lg font-black text-indigo-400">{overview.precision * 100}%</p>
+                    <div className="p-3 bg-[#0A0A0A] border border-[#222222] rounded-xl">
+                      <span className="text-[10px] text-zinc-400 uppercase font-bold">Precision</span>
+                      <p className="text-lg font-black text-purple-400">{overview.precision * 100}%</p>
                     </div>
-                    <div className="p-3 bg-slate-950 border border-slate-800 rounded-xl">
-                      <span className="text-[10px] text-slate-400 uppercase font-bold">Recall</span>
-                      <p className="text-lg font-black text-purple-400">{overview.recall * 100}%</p>
+                    <div className="p-3 bg-[#0A0A0A] border border-[#222222] rounded-xl">
+                      <span className="text-[10px] text-zinc-400 uppercase font-bold">Recall</span>
+                      <p className="text-lg font-black text-purple-300">{overview.recall * 100}%</p>
                     </div>
-                    <div className="p-3 bg-slate-950 border border-slate-800 rounded-xl">
-                      <span className="text-[10px] text-slate-400 uppercase font-bold">F1 Score</span>
-                      <p className="text-lg font-black text-cyan-400">{overview.f1_score}</p>
+                    <div className="p-3 bg-[#0A0A0A] border border-[#222222] rounded-xl">
+                      <span className="text-[10px] text-zinc-400 uppercase font-bold">F1 Score</span>
+                      <p className="text-lg font-black text-white">{overview.f1_score}</p>
                     </div>
                   </div>
                 </Card>
@@ -198,12 +198,12 @@ export const AdminMlCenter: React.FC = () => {
 
             {/* MODEL VERSION HISTORY TAB */}
             {activeTab === 'models' && (
-              <Card className="p-5 bg-slate-900/80 border-slate-800 space-y-4">
+              <Card className="p-5 bg-[#111111] border-[#222222] space-y-4">
                 <h3 className="text-sm font-bold text-white">Model Version History</h3>
 
                 <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs text-slate-300">
-                    <thead className="bg-slate-950 text-slate-400 font-semibold uppercase tracking-wider border-b border-slate-800">
+                  <table className="w-full text-left text-xs text-zinc-300">
+                    <thead className="bg-[#0A0A0A] text-zinc-400 font-semibold uppercase tracking-wider border-b border-[#222222]">
                       <tr>
                         <th className="px-4 py-3">Algorithm</th>
                         <th className="px-4 py-3">Version</th>
@@ -215,18 +215,18 @@ export const AdminMlCenter: React.FC = () => {
                         <th className="px-4 py-3 text-right">Status / Action</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-800">
+                    <tbody className="divide-y divide-[#222222]">
                       {models.map((m) => (
-                        <tr key={m.id} className="hover:bg-slate-800/40">
+                        <tr key={m.id} className="hover:bg-[#151515]">
                           <td className="px-4 py-3 font-bold text-white flex items-center space-x-2">
-                            <Layers className="w-4 h-4 text-indigo-400" />
+                            <Layers className="w-4 h-4 text-purple-400" />
                             <span>{m.name}</span>
                           </td>
-                          <td className="px-4 py-3 font-mono text-slate-400">{m.version}</td>
+                          <td className="px-4 py-3 font-mono text-zinc-400">{m.version}</td>
                           <td className="px-4 py-3 font-bold text-emerald-400">{m.accuracy}</td>
-                          <td className="px-4 py-3 font-semibold text-indigo-400">{m.precision}</td>
-                          <td className="px-4 py-3 font-semibold text-purple-400">{m.recall}</td>
-                          <td className="px-4 py-3 font-semibold text-cyan-400">{m.f1_score}</td>
+                          <td className="px-4 py-3 font-semibold text-purple-400">{m.precision}</td>
+                          <td className="px-4 py-3 font-semibold text-purple-300">{m.recall}</td>
+                          <td className="px-4 py-3 font-semibold text-white">{m.f1_score}</td>
                           <td className="px-4 py-3 font-semibold text-amber-400">{m.roc_auc}</td>
                           <td className="px-4 py-3 text-right">
                             {m.is_active ? (
@@ -236,7 +236,7 @@ export const AdminMlCenter: React.FC = () => {
                                 variant="outline"
                                 size="sm"
                                 onClick={() => setModelToActivate(m)}
-                                className="text-xs border-indigo-800 text-indigo-300 hover:bg-indigo-950/60"
+                                className="text-xs border-[#222222] text-zinc-300 hover:bg-[#151515] hover:text-white"
                               >
                                 Activate Model
                               </Button>
@@ -256,27 +256,27 @@ export const AdminMlCenter: React.FC = () => {
                 {/* Comparison Highlights */}
                 {comparisonHighlights && (
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <Card className="p-4 bg-slate-900/90 border-slate-800 space-y-1">
-                      <span className="text-[10px] font-bold text-cyan-400 uppercase">Best F1 Score Model</span>
+                    <Card className="p-4 bg-[#111111] border-[#222222] space-y-1">
+                      <span className="text-[10px] font-bold text-purple-400 uppercase">Best F1 Score Model</span>
                       <p className="text-lg font-black text-white">{comparisonHighlights.best_f1}</p>
                     </Card>
-                    <Card className="p-4 bg-slate-900/90 border-slate-800 space-y-1">
+                    <Card className="p-4 bg-[#111111] border-[#222222] space-y-1">
                       <span className="text-[10px] font-bold text-emerald-400 uppercase">Best Accuracy Model</span>
                       <p className="text-lg font-black text-white">{comparisonHighlights.best_accuracy}</p>
                     </Card>
-                    <Card className="p-4 bg-slate-900/90 border-slate-800 space-y-1">
-                      <span className="text-[10px] font-bold text-indigo-400 uppercase">Current Production Model</span>
+                    <Card className="p-4 bg-[#111111] border-[#222222] space-y-1">
+                      <span className="text-[10px] font-bold text-zinc-400 uppercase">Current Production Model</span>
                       <p className="text-lg font-black text-white">{comparisonHighlights.production_model}</p>
                     </Card>
                   </div>
                 )}
 
-                <Card className="p-5 bg-slate-900/80 border-slate-800 space-y-4">
+                <Card className="p-5 bg-[#111111] border-[#222222] space-y-4">
                   <h3 className="text-sm font-bold text-white">Side-by-Side Model Evaluation Matrix</h3>
 
                   <div className="overflow-x-auto">
-                    <table className="w-full text-left text-xs text-slate-300">
-                      <thead className="bg-slate-950 text-slate-400 font-semibold uppercase tracking-wider border-b border-slate-800">
+                    <table className="w-full text-left text-xs text-zinc-300">
+                      <thead className="bg-[#0A0A0A] text-zinc-400 font-semibold uppercase tracking-wider border-b border-[#222222]">
                         <tr>
                           <th className="px-4 py-3">Metric</th>
                           {comparisonList.map((m) => (
@@ -287,33 +287,33 @@ export const AdminMlCenter: React.FC = () => {
                           ))}
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-800">
+                      <tbody className="divide-y divide-[#222222]">
                         <tr>
-                          <td className="px-4 py-3 font-bold text-slate-300">Accuracy</td>
+                          <td className="px-4 py-3 font-bold text-zinc-300">Accuracy</td>
                           {comparisonList.map((m) => (
                             <td key={m.id} className="px-4 py-3 font-bold text-emerald-400">{m.accuracy ? roundNum(m.accuracy * 100) + '%' : 'N/A'}</td>
                           ))}
                         </tr>
                         <tr>
-                          <td className="px-4 py-3 font-bold text-slate-300">Precision</td>
+                          <td className="px-4 py-3 font-bold text-zinc-300">Precision</td>
                           {comparisonList.map((m) => (
-                            <td key={m.id} className="px-4 py-3 font-semibold text-indigo-400">{m.precision ? roundNum(m.precision * 100) + '%' : 'N/A'}</td>
+                            <td key={m.id} className="px-4 py-3 font-semibold text-purple-400">{m.precision ? roundNum(m.precision * 100) + '%' : 'N/A'}</td>
                           ))}
                         </tr>
                         <tr>
-                          <td className="px-4 py-3 font-bold text-slate-300">Recall</td>
+                          <td className="px-4 py-3 font-bold text-zinc-300">Recall</td>
                           {comparisonList.map((m) => (
-                            <td key={m.id} className="px-4 py-3 font-semibold text-purple-400">{m.recall ? roundNum(m.recall * 100) + '%' : 'N/A'}</td>
+                            <td key={m.id} className="px-4 py-3 font-semibold text-purple-300">{m.recall ? roundNum(m.recall * 100) + '%' : 'N/A'}</td>
                           ))}
                         </tr>
                         <tr>
-                          <td className="px-4 py-3 font-bold text-slate-300">F1 Score</td>
+                          <td className="px-4 py-3 font-bold text-zinc-300">F1 Score</td>
                           {comparisonList.map((m) => (
-                            <td key={m.id} className="px-4 py-3 font-semibold text-cyan-400">{m.f1_score ?? 'N/A'}</td>
+                            <td key={m.id} className="px-4 py-3 font-semibold text-white">{m.f1_score ?? 'N/A'}</td>
                           ))}
                         </tr>
                         <tr>
-                          <td className="px-4 py-3 font-bold text-slate-300">ROC-AUC</td>
+                          <td className="px-4 py-3 font-bold text-zinc-300">ROC-AUC</td>
                           {comparisonList.map((m) => (
                             <td key={m.id} className="px-4 py-3 font-semibold text-amber-400">{m.roc_auc ?? 'N/A'}</td>
                           ))}
@@ -327,7 +327,7 @@ export const AdminMlCenter: React.FC = () => {
 
             {/* FEATURE IMPORTANCE TAB */}
             {activeTab === 'feature-importance' && (
-              <Card className="p-5 bg-slate-900/80 border-slate-800 space-y-4">
+              <Card className="p-5 bg-[#111111] border-[#222222] space-y-4">
                 <h3 className="text-sm font-bold text-white">Active Model Feature Importance Breakdown</h3>
 
                 <div className="space-y-3">
@@ -336,12 +336,12 @@ export const AdminMlCenter: React.FC = () => {
                     return (
                       <div key={feat} className="space-y-1">
                         <div className="flex justify-between text-xs font-semibold">
-                          <span className="text-slate-200">{feat}</span>
-                          <span className="text-indigo-400 font-mono">{percentage}%</span>
+                          <span className="text-zinc-200">{feat}</span>
+                          <span className="text-purple-400 font-mono">{percentage}%</span>
                         </div>
-                        <div className="w-full bg-slate-950 rounded-full h-3 border border-slate-800 overflow-hidden">
+                        <div className="w-full bg-[#0A0A0A] rounded-full h-3 border border-[#222222] overflow-hidden">
                           <div
-                            className="bg-gradient-to-r from-indigo-500 to-purple-500 h-full rounded-full transition-all duration-500"
+                            className="bg-purple-500 h-full rounded-full transition-all duration-500"
                             style={{ width: `${percentage}%` }}
                           />
                         </div>
@@ -354,12 +354,12 @@ export const AdminMlCenter: React.FC = () => {
 
             {/* PREDICTION MONITORING TAB */}
             {activeTab === 'predictions' && (
-              <Card className="p-5 bg-slate-900/80 border-slate-800 space-y-4">
+              <Card className="p-5 bg-[#111111] border-[#222222] space-y-4">
                 <h3 className="text-sm font-bold text-white">Live Prediction Stream</h3>
 
                 <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs text-slate-300">
-                    <thead className="bg-slate-950 text-slate-400 font-semibold uppercase tracking-wider border-b border-slate-800">
+                  <table className="w-full text-left text-xs text-zinc-300">
+                    <thead className="bg-[#0A0A0A] text-zinc-400 font-semibold uppercase tracking-wider border-b border-[#222222]">
                       <tr>
                         <th className="px-4 py-3">Lead</th>
                         <th className="px-4 py-3">Company</th>
@@ -370,20 +370,20 @@ export const AdminMlCenter: React.FC = () => {
                         <th className="px-4 py-3 text-right">Predicted At</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-800">
+                    <tbody className="divide-y divide-[#222222]">
                       {predictions.map((p) => (
-                        <tr key={p.id} className="hover:bg-slate-800/40">
+                        <tr key={p.id} className="hover:bg-[#151515]">
                           <td className="px-4 py-3 font-bold text-white">{p.lead_name}</td>
-                          <td className="px-4 py-3 text-slate-400">{p.company}</td>
-                          <td className="px-4 py-3 font-black text-indigo-400">{p.score}</td>
+                          <td className="px-4 py-3 text-zinc-400">{p.company}</td>
+                          <td className="px-4 py-3 font-black text-purple-400">{p.score}</td>
                           <td className="px-4 py-3 font-bold text-emerald-400">{p.conversion_probability}</td>
                           <td className="px-4 py-3">
                             <Badge variant={p.temperature === 'HOT' ? 'warning' : p.temperature === 'WARM' ? 'primary' : 'neutral'} size="sm">
                               {p.temperature}
                             </Badge>
                           </td>
-                          <td className="px-4 py-3 font-mono text-slate-400">{p.model}</td>
-                          <td className="px-4 py-3 text-right text-slate-400">{p.predicted_at}</td>
+                          <td className="px-4 py-3 font-mono text-zinc-400">{p.model}</td>
+                          <td className="px-4 py-3 text-right text-zinc-400">{p.predicted_at}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -394,19 +394,19 @@ export const AdminMlCenter: React.FC = () => {
 
             {/* MODEL TRAINING TAB */}
             {activeTab === 'training' && (
-              <Card className="p-6 bg-slate-900/80 border-slate-800 space-y-5 max-w-2xl mx-auto">
+              <Card className="p-6 bg-[#111111] border-[#222222] space-y-5 max-w-2xl mx-auto">
                 <div className="space-y-1">
                   <h3 className="text-base font-bold text-white flex items-center space-x-2">
                     <Play className="w-5 h-5 text-emerald-400" />
                     <span>Train Machine Learning Model</span>
                   </h3>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-zinc-400">
                     Configure dataset preprocessing, feature engineering, and execute model training.
                   </p>
                 </div>
 
                 {trainingSuccess && (
-                  <div className="p-3 bg-emerald-950/80 border border-emerald-800 rounded-lg flex items-center space-x-2 text-emerald-300 text-xs">
+                  <div className="p-3 bg-emerald-950/40 border border-emerald-800/60 rounded-xl flex items-center space-x-2 text-emerald-300 text-xs">
                     <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
                     <span>{trainingSuccess}</span>
                   </div>
@@ -434,13 +434,13 @@ export const AdminMlCenter: React.FC = () => {
                     ]}
                   />
 
-                  <div className="pt-2 border-t border-slate-800 flex justify-end">
+                  <div className="pt-2 border-t border-[#222222] flex justify-end">
                     <Button
                       type="submit"
                       variant="primary"
                       size="md"
                       isLoading={isTraining}
-                      className="bg-emerald-600 hover:bg-emerald-500 border-none font-bold"
+                      className="bg-white text-black hover:bg-zinc-200 border-none font-semibold"
                     >
                       Start Model Training
                     </Button>
@@ -459,16 +459,16 @@ export const AdminMlCenter: React.FC = () => {
             title="Activate Production Model"
           >
             <div className="space-y-4">
-              <div className="p-4 bg-indigo-950/40 border border-indigo-800 rounded-xl text-xs space-y-2 text-indigo-200">
+              <div className="p-4 bg-[#0A0A0A] border border-[#222222] rounded-xl text-xs space-y-2 text-zinc-200">
                 <p className="font-bold text-sm text-white">Are you sure you want to activate {modelToActivate.name} ({modelToActivate.version})?</p>
-                <p>This will make it the production model for all future lead scoring predictions in the system.</p>
+                <p className="text-zinc-400">This will make it the production model for all future lead scoring predictions in the system.</p>
               </div>
 
               <div className="flex justify-end space-x-3 pt-2">
                 <Button variant="outline" size="sm" onClick={() => setModelToActivate(null)}>
                   Cancel
                 </Button>
-                <Button variant="primary" size="sm" isLoading={isActivating} onClick={handleActivateModel} className="bg-indigo-600 border-none font-bold">
+                <Button variant="primary" size="sm" isLoading={isActivating} onClick={handleActivateModel} className="bg-white text-black hover:bg-zinc-200 border-none font-semibold">
                   Activate Model
                 </Button>
               </div>

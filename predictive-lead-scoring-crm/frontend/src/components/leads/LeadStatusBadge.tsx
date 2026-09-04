@@ -24,9 +24,9 @@ export const LeadStatusBadge: React.FC<LeadStatusBadgeProps> = ({
       label: 'Contacted',
     },
     qualified: {
-      bg: 'bg-indigo-500/10',
-      text: 'text-indigo-400',
-      border: 'border-indigo-500/20',
+      bg: 'bg-purple-500/10',
+      text: 'text-purple-400',
+      border: 'border-purple-500/20',
       label: 'Qualified',
     },
     proposal: {
@@ -59,8 +59,9 @@ export const LeadStatusBadge: React.FC<LeadStatusBadgeProps> = ({
 
   return (
     <span
-      className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold border ${style.bg} ${style.text} ${style.border} ${className}`}
+      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border transition-all duration-200 ${style.bg} ${style.text} ${style.border} ${className}`}
     >
+      <span className={`w-1.5 h-1.5 rounded-full ${style.text.replace('text-', 'bg-')} animate-pulse`} />
       {style.label}
     </span>
   );

@@ -185,12 +185,12 @@ export const ManagerSettings: React.FC = () => {
     <DashboardLayout>
       <div className="space-y-6 max-w-5xl">
         {/* Header Title */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#2A2A2E] pb-5">
           <div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
               Sales Manager Settings
             </h1>
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-zinc-400">
               Configure team lead routing parameters, sales quotas, and manager alert preferences.
             </p>
           </div>
@@ -211,7 +211,7 @@ export const ManagerSettings: React.FC = () => {
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex items-center space-x-1 border-b border-slate-800/80 overflow-x-auto custom-scrollbar pb-1">
+        <div className="flex items-center space-x-1 border-b border-[#2A2A2E] overflow-x-auto custom-scrollbar pb-1">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const active = activeTab === tab.id;
@@ -221,11 +221,11 @@ export const ManagerSettings: React.FC = () => {
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl font-bold text-xs whitespace-nowrap transition-all ${
                   active
-                    ? 'bg-indigo-600/20 text-indigo-400 border border-indigo-500/40 shadow-sm'
-                    : 'text-slate-400 hover:text-white hover:bg-slate-900'
+                    ? 'bg-[#FF7A00]/10 text-[#FF7A00] border border-[#FF7A00]/30 shadow-sm'
+                    : 'text-zinc-400 hover:text-white hover:bg-[#29292C]'
                 }`}
               >
-                <Icon className={`w-4 h-4 ${active ? 'text-indigo-400' : 'text-slate-400'}`} />
+                <Icon className={`w-4 h-4 ${active ? 'text-[#FF7A00]' : 'text-zinc-400'}`} />
                 <span>{tab.label}</span>
               </button>
             );
@@ -234,14 +234,14 @@ export const ManagerSettings: React.FC = () => {
 
         {/* Tab 1: Manager Profile & Region */}
         {activeTab === 'profile' && (
-          <Card className="bg-slate-900/60 border-slate-800/80 p-6 sm:p-8 space-y-6">
-            <div className="flex items-center space-x-4 border-b border-slate-800 pb-6">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-600 to-purple-600 text-white font-extrabold text-2xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
+          <Card className="bg-[#171718] border-[#2A2A2E] p-6 sm:p-8 space-y-6 rounded-2xl shadow-xl">
+            <div className="flex items-center space-x-4 border-b border-[#2A2A2E] pb-6">
+              <div className="w-16 h-16 rounded-2xl bg-[#29292C] text-[#FF7A00] border border-[#2A2A2E] font-extrabold text-2xl flex items-center justify-center shadow-lg">
                 {managerProfile.name.charAt(0)}
               </div>
               <div>
                 <h3 className="text-lg font-bold text-white">{managerProfile.name}</h3>
-                <p className="text-xs text-slate-400">{managerProfile.title} • {managerProfile.department}</p>
+                <p className="text-xs text-zinc-400">{managerProfile.title} • {managerProfile.department}</p>
               </div>
             </div>
 
@@ -282,10 +282,10 @@ export const ManagerSettings: React.FC = () => {
               <div className="pt-4 flex justify-end">
                 <Button
                   type="submit"
-                  variant="primary"
+                  variant="ai"
                   size="md"
                   leftIcon={<Save className="w-4 h-4" />}
-                  className="px-4 py-2.5 rounded-xl font-bold text-xs bg-indigo-600 hover:bg-indigo-500 text-white border-none"
+                  className="font-bold text-xs"
                 >
                   Save Profile Settings
                 </Button>
@@ -296,75 +296,75 @@ export const ManagerSettings: React.FC = () => {
 
         {/* Tab 2: AI Lead Routing */}
         {activeTab === 'allocation' && (
-          <Card className="bg-slate-900/60 border-slate-800/80 p-6 sm:p-8 space-y-6">
-            <div className="flex items-center space-x-3 text-indigo-400 border-b border-slate-800 pb-4">
-              <Sparkles className="w-5 h-5 text-indigo-400" />
+          <Card className="bg-[#171718] border-[#2A2A2E] p-6 sm:p-8 space-y-6 rounded-2xl shadow-xl">
+            <div className="flex items-center space-x-3 text-[#FF7A00] border-b border-[#2A2A2E] pb-4">
+              <Sparkles className="w-5 h-5 text-[#FF7A00]" />
               <div>
                 <h3 className="text-base font-bold text-white">AI Lead Assignment Rules</h3>
-                <p className="text-xs text-slate-400">Configure team lead routing thresholds and rep allocation rules</p>
+                <p className="text-xs text-zinc-400">Configure team lead routing thresholds and rep allocation rules</p>
               </div>
             </div>
 
             <form onSubmit={handleSaveAllocation} className="space-y-6 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+                <div className="p-4 rounded-xl bg-[#111113] border border-[#2A2A2E] space-y-2">
                   <label className="font-bold text-emerald-400 block">Hot Lead Score Cutoff</label>
                   <input
                     type="number"
                     value={allocationRules.hotThreshold}
                     onChange={(e) => setAllocationRules({ ...allocationRules, hotThreshold: Number(e.target.value) })}
-                    className="w-full bg-slate-900 text-white font-bold font-mono px-3 py-2 rounded-lg border border-slate-800"
+                    className="w-full bg-[#171718] text-white font-bold font-mono px-3 py-2 rounded-lg border border-[#2A2A2E]"
                   />
-                  <span className="text-[10px] text-slate-400">Score ≥ {allocationRules.hotThreshold} (High Intent)</span>
+                  <span className="text-[10px] text-zinc-400">Score ≥ {allocationRules.hotThreshold} (High Intent)</span>
                 </div>
 
-                <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
-                  <label className="font-bold text-indigo-400 block">Warm Lead Score Cutoff</label>
+                <div className="p-4 rounded-xl bg-[#111113] border border-[#2A2A2E] space-y-2">
+                  <label className="font-bold text-[#FF7A00] block">Warm Lead Score Cutoff</label>
                   <input
                     type="number"
                     value={allocationRules.warmThreshold}
                     onChange={(e) => setAllocationRules({ ...allocationRules, warmThreshold: Number(e.target.value) })}
-                    className="w-full bg-slate-900 text-white font-bold font-mono px-3 py-2 rounded-lg border border-slate-800"
+                    className="w-full bg-[#171718] text-white font-bold font-mono px-3 py-2 rounded-lg border border-[#2A2A2E]"
                   />
-                  <span className="text-[10px] text-slate-400">Score {allocationRules.warmThreshold}–{allocationRules.hotThreshold - 1}</span>
+                  <span className="text-[10px] text-zinc-400">Score {allocationRules.warmThreshold}–{allocationRules.hotThreshold - 1}</span>
                 </div>
 
-                <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+                <div className="p-4 rounded-xl bg-[#111113] border border-[#2A2A2E] space-y-2">
                   <label className="font-bold text-purple-400 block">Max Open Leads Per Rep</label>
                   <input
                     type="number"
                     value={allocationRules.maxLeadsPerRep}
                     onChange={(e) => setAllocationRules({ ...allocationRules, maxLeadsPerRep: Number(e.target.value) })}
-                    className="w-full bg-slate-900 text-white font-bold font-mono px-3 py-2 rounded-lg border border-slate-800"
+                    className="w-full bg-[#171718] text-white font-bold font-mono px-3 py-2 rounded-lg border border-[#2A2A2E]"
                   />
-                  <span className="text-[10px] text-slate-400">Capacity Workload Limit</span>
+                  <span className="text-[10px] text-zinc-400">Capacity Workload Limit</span>
                 </div>
               </div>
 
               <div className="space-y-3">
-                <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between">
+                <div className="p-4 rounded-xl bg-[#111113] border border-[#2A2A2E] flex items-center justify-between">
                   <div>
                     <span className="font-bold text-white block">Auto-Assign Incoming High-Score Leads</span>
-                    <span className="text-slate-400 text-[11px]">Automatically assign new inbound leads with score ≥ {allocationRules.hotThreshold} to available reps.</span>
+                    <span className="text-zinc-400 text-[11px]">Automatically assign new inbound leads with score ≥ {allocationRules.hotThreshold} to available reps.</span>
                   </div>
                   <input
                     type="checkbox"
                     checked={allocationRules.autoAssignNewLeads}
                     onChange={(e) => setAllocationRules({ ...allocationRules, autoAssignNewLeads: e.target.checked })}
-                    className="h-4 w-4 text-indigo-500 rounded border-slate-700 bg-slate-900 accent-indigo-500 cursor-pointer"
+                    className="h-4 w-4 rounded border-[#2A2A2E] bg-[#171718] accent-[#FF7A00] cursor-pointer"
                   />
                 </div>
 
-                <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between">
+                <div className="p-4 rounded-xl bg-[#111113] border border-[#2A2A2E] flex items-center justify-between">
                   <div>
                     <span className="font-bold text-white block">Equitable Rep Workload Balancing</span>
-                    <span className="text-slate-400 text-[11px]">Prioritize reps with lower active pipeline loads during automatic distribution.</span>
+                    <span className="text-zinc-400 text-[11px]">Prioritize reps with lower active pipeline loads during automatic distribution.</span>
                   </div>
                   <input
                     type="checkbox"
                     checked={allocationRules.balanceWorkload}
                     onChange={(e) => setAllocationRules({ ...allocationRules, balanceWorkload: e.target.checked })}
-                    className="h-4 w-4 text-indigo-500 rounded border-slate-700 bg-slate-900 accent-indigo-500 cursor-pointer"
+                    className="h-4 w-4 rounded border-[#2A2A2E] bg-[#171718] accent-[#FF7A00] cursor-pointer"
                   />
                 </div>
               </div>
@@ -372,10 +372,10 @@ export const ManagerSettings: React.FC = () => {
               <div className="pt-4 flex justify-end">
                 <Button
                   type="submit"
-                  variant="primary"
+                  variant="ai"
                   size="md"
                   leftIcon={<Save className="w-4 h-4" />}
-                  className="px-4 py-2.5 rounded-xl font-bold text-xs bg-indigo-600 hover:bg-indigo-500 text-white border-none"
+                  className="font-bold text-xs"
                 >
                   Save Allocation Rules
                 </Button>
@@ -386,12 +386,12 @@ export const ManagerSettings: React.FC = () => {
 
         {/* Tab 3: Team Targets */}
         {activeTab === 'targets' && (
-          <Card className="bg-slate-900/60 border-slate-800/80 p-6 sm:p-8 space-y-6">
-            <div className="flex items-center space-x-3 text-indigo-400 border-b border-slate-800 pb-4">
-              <Target className="w-5 h-5 text-indigo-400" />
+          <Card className="bg-[#171718] border-[#2A2A2E] p-6 sm:p-8 space-y-6 rounded-2xl shadow-xl">
+            <div className="flex items-center space-x-3 text-[#FF7A00] border-b border-[#2A2A2E] pb-4">
+              <Target className="w-5 h-5 text-[#FF7A00]" />
               <div>
                 <h3 className="text-base font-bold text-white">Team Targets & Quota Defaults</h3>
-                <p className="text-xs text-slate-400">Set default monthly quotas and stale lead escalation boundaries</p>
+                <p className="text-xs text-zinc-400">Set default monthly quotas and stale lead escalation boundaries</p>
               </div>
             </div>
 
@@ -414,10 +414,10 @@ export const ManagerSettings: React.FC = () => {
               <div className="pt-4 flex justify-end">
                 <Button
                   type="submit"
-                  variant="primary"
+                  variant="ai"
                   size="md"
                   leftIcon={<Save className="w-4 h-4" />}
-                  className="px-4 py-2.5 rounded-xl font-bold text-xs bg-indigo-600 hover:bg-indigo-500 text-white border-none"
+                  className="font-bold text-xs"
                 >
                   Save Target Metrics
                 </Button>
@@ -428,12 +428,12 @@ export const ManagerSettings: React.FC = () => {
 
         {/* Tab 4: Manager Notifications */}
         {activeTab === 'notifications' && (
-          <Card className="bg-slate-900/60 border-slate-800/80 p-6 sm:p-8 space-y-6">
-            <div className="flex items-center space-x-3 text-indigo-400 border-b border-slate-800 pb-4">
-              <Bell className="w-5 h-5 text-indigo-400" />
+          <Card className="bg-[#171718] border-[#2A2A2E] p-6 sm:p-8 space-y-6 rounded-2xl shadow-xl">
+            <div className="flex items-center space-x-3 text-[#FF7A00] border-b border-[#2A2A2E] pb-4">
+              <Bell className="w-5 h-5 text-[#FF7A00]" />
               <div>
                 <h3 className="text-base font-bold text-white">Manager Digest & Escalation Alerts</h3>
-                <p className="text-xs text-slate-400">Configure team supervision alerts and executive summaries</p>
+                <p className="text-xs text-zinc-400">Configure team supervision alerts and executive summaries</p>
               </div>
             </div>
 
@@ -464,10 +464,10 @@ export const ManagerSettings: React.FC = () => {
                   checked: notifications.weeklyForecastReport,
                 },
               ].map((item) => (
-                <div key={item.id} className="p-4 rounded-xl bg-slate-950 border border-slate-800 flex items-start justify-between">
+                <div key={item.id} className="p-4 rounded-xl bg-[#111113] border border-[#2A2A2E] flex items-start justify-between">
                   <div className="space-y-1">
                     <span className="font-bold text-white block">{item.title}</span>
-                    <p className="text-slate-400 text-[11px]">{item.desc}</p>
+                    <p className="text-zinc-400 text-[11px]">{item.desc}</p>
                   </div>
                   <input
                     type="checkbox"
@@ -475,7 +475,7 @@ export const ManagerSettings: React.FC = () => {
                     onChange={(e) =>
                       setNotifications({ ...notifications, [item.id]: e.target.checked })
                     }
-                    className="h-4 w-4 text-indigo-500 rounded border-slate-700 bg-slate-900 accent-indigo-500 cursor-pointer shrink-0 mt-1"
+                    className="h-4 w-4 rounded border-[#2A2A2E] bg-[#171718] accent-[#FF7A00] cursor-pointer shrink-0 mt-1"
                   />
                 </div>
               ))}
@@ -483,12 +483,12 @@ export const ManagerSettings: React.FC = () => {
               <div className="pt-4 flex justify-end">
                 <Button
                   type="submit"
-                  variant="primary"
+                  variant="ai"
                   size="md"
                   isLoading={isSavingNotifs}
                   disabled={isSavingNotifs}
                   leftIcon={<Save className="w-4 h-4" />}
-                  className="px-4 py-2.5 rounded-xl font-bold text-xs bg-indigo-600 hover:bg-indigo-500 text-white border-none"
+                  className="font-bold text-xs"
                 >
                   {isSavingNotifs ? 'Saving Preferences...' : 'Save Notification Settings'}
                 </Button>
@@ -499,12 +499,12 @@ export const ManagerSettings: React.FC = () => {
 
         {/* Tab 5: Security */}
         {activeTab === 'security' && (
-          <Card className="bg-slate-900/60 border-slate-800/80 p-6 sm:p-8 space-y-6">
-            <div className="flex items-center space-x-3 text-indigo-400 border-b border-slate-800 pb-4">
-              <Lock className="w-5 h-5 text-indigo-400" />
+          <Card className="bg-[#171718] border-[#2A2A2E] p-6 sm:p-8 space-y-6 rounded-2xl shadow-xl">
+            <div className="flex items-center space-x-3 text-[#FF7A00] border-b border-[#2A2A2E] pb-4">
+              <Lock className="w-5 h-5 text-[#FF7A00]" />
               <div>
                 <h3 className="text-base font-bold text-white">Manager Security & Password</h3>
-                <p className="text-xs text-slate-400">Update account credentials and authentication options</p>
+                <p className="text-xs text-zinc-400">Update account credentials and authentication options</p>
               </div>
             </div>
 
@@ -539,10 +539,10 @@ export const ManagerSettings: React.FC = () => {
               <div className="pt-4 flex justify-start">
                 <Button
                   type="submit"
-                  variant="primary"
+                  variant="ai"
                   size="md"
                   leftIcon={<Save className="w-4 h-4" />}
-                  className="px-4 py-2.5 rounded-xl font-bold text-xs bg-indigo-600 hover:bg-indigo-500 text-white border-none"
+                  className="font-bold text-xs"
                 >
                   Update Password
                 </Button>

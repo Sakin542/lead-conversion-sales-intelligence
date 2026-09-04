@@ -188,13 +188,13 @@ export const Leads: React.FC = () => {
     <DashboardLayout>
       <div className="space-y-6">
         {/* Header Bar */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-800 pb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-[#222222] pb-5">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
-              <Users className="w-7 h-7 text-indigo-400" />
+            <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-3">
+              <Users className="w-7 h-7 text-purple-400" />
               <span>Lead Directory</span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1">
+            <p className="text-xs sm:text-sm text-zinc-400 mt-1">
               Manage and track potential sales leads and customer conversion opportunities.
             </p>
           </div>
@@ -203,7 +203,6 @@ export const Leads: React.FC = () => {
             variant="primary"
             size="md"
             onClick={() => setIsCreateModalOpen(true)}
-            className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold border-none shadow-lg shadow-indigo-600/20"
             leftIcon={<Plus className="w-4 h-4" />}
           >
             Add New Lead
@@ -229,8 +228,8 @@ export const Leads: React.FC = () => {
 
         {/* Bulk Action Bar (When 1+ leads selected) */}
         {isManagerOrAdmin && selectedLeadIds.length > 0 && (
-          <div className="bg-indigo-950/80 border border-indigo-700/60 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 animate-fade-in shadow-xl">
-            <span className="text-xs font-bold text-indigo-200">
+          <div className="bg-[#111111] border border-purple-800/40 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xl">
+            <span className="text-xs font-semibold text-purple-300">
               {selectedLeadIds.length} leads selected
             </span>
 
@@ -239,7 +238,7 @@ export const Leads: React.FC = () => {
                 variant="outline"
                 size="sm"
                 onClick={() => setBulkActionType('assign')}
-                className="text-xs border-indigo-800 text-indigo-200 hover:bg-indigo-900/60"
+                className="text-xs border-[#222222] text-zinc-200 hover:bg-[#151515]"
                 leftIcon={<UserCheck className="w-3.5 h-3.5" />}
               >
                 Assign
@@ -249,7 +248,7 @@ export const Leads: React.FC = () => {
                 variant="outline"
                 size="sm"
                 onClick={() => setBulkActionType('status')}
-                className="text-xs border-indigo-800 text-indigo-200 hover:bg-indigo-900/60"
+                className="text-xs border-[#222222] text-zinc-200 hover:bg-[#151515]"
                 leftIcon={<Tag className="w-3.5 h-3.5" />}
               >
                 Change Status
@@ -259,7 +258,7 @@ export const Leads: React.FC = () => {
                 variant="outline"
                 size="sm"
                 onClick={() => setBulkActionType('followup')}
-                className="text-xs border-indigo-800 text-indigo-200 hover:bg-indigo-900/60"
+                className="text-xs border-[#222222] text-zinc-200 hover:bg-[#151515]"
                 leftIcon={<Calendar className="w-3.5 h-3.5" />}
               >
                 Add Follow-up
@@ -269,7 +268,7 @@ export const Leads: React.FC = () => {
                 variant="outline"
                 size="sm"
                 onClick={handleBulkExportCsv}
-                className="text-xs border-indigo-800 text-emerald-300 hover:bg-indigo-900/60"
+                className="text-xs border-[#222222] text-emerald-400 hover:bg-[#151515]"
                 leftIcon={<Download className="w-3.5 h-3.5" />}
               >
                 Export Selected
@@ -279,7 +278,7 @@ export const Leads: React.FC = () => {
                 variant="outline"
                 size="sm"
                 onClick={() => setBulkActionType('delete')}
-                className="text-xs border-rose-900 text-rose-300 hover:bg-rose-950/60"
+                className="text-xs border-rose-900/60 text-rose-300 hover:bg-rose-950/40"
                 leftIcon={<Trash2 className="w-3.5 h-3.5" />}
               >
                 Delete Selected

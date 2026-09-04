@@ -11,7 +11,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans w-full min-w-0 overflow-x-hidden">
+    <div className="min-h-screen bg-[#0B0B0D] text-white flex flex-col font-sans w-full min-w-0 overflow-x-hidden">
       {/* Sidebar Navigation */}
       <Sidebar
         mobileOpen={mobileSidebarOpen}

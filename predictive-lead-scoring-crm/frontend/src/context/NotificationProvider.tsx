@@ -139,12 +139,23 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
     setConnectionStatus('connecting');
 
-    const socketUrl = import.meta.env.VITE_SOCKET_URL || 'http://localhost:6001';
+    const socketUrl = import.meta.env.VITE_SOCKET_URL;
+    if (!socketUrl) {
+      setConnectionStatus('disconnected');
+      fetchUnreadCount();
+      fetchNotifications();
+      return;
+    }
+
+    setConnectionStatus('connecting');
+
     const socket = io(socketUrl, {
       auth: { token },
-      transports: ['polling', 'websocket'],
-      reconnectionAttempts: 10,
-      reconnectionDelay: 2000,
+      transports: ['websocket'],
+      autoConnect: true,
+      reconnectionAttempts: 2,
+      reconnectionDelay: 5000,
+      timeout: 3000,
     });
 
     socketRef.current = socket;
@@ -160,6 +171,12 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
     socket.on('connect_error', () => {
       setConnectionStatus('disconnected');
+      // Stop reconnection attempts when socket server is offline
+      try {
+        socket.disconnect();
+      } catch (e) {
+        // Ignore
+      }
     });
 
     // Real-Time Event Handler
@@ -191,7 +208,21 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     fetchNotifications();
 
     return () => {
-      socket.disconnect();
+      if (socket) {
+        socket.off();
+        if (socket.connected) {
+          socket.disconnect();
+        } else {
+          // If unmounting while still connecting (e.g. React 18 StrictMode), delay disconnect slightly to prevent WebSocket closed warning
+          setTimeout(() => {
+            try {
+              socket.disconnect();
+            } catch (e) {
+              // Ignore
+            }
+          }, 150);
+        }
+      }
       socketRef.current = null;
     };
   }, [user, fetchUnreadCount, fetchNotifications, dismissToast]);

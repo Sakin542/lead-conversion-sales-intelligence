@@ -51,7 +51,7 @@ export const EditLead: React.FC = () => {
         <div className="flex items-center space-x-3">
           <button
             onClick={() => navigate(`/leads/${id || ''}`)}
-            className="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition-colors"
+            className="p-2 rounded-lg bg-[#111111] border border-[#222222] text-zinc-400 hover:text-white hover:bg-[#151515] transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
           </button>
@@ -59,21 +59,22 @@ export const EditLead: React.FC = () => {
             <h1 className="text-2xl font-bold text-white tracking-tight">
               Edit Lead {lead ? `— ${lead.first_name} ${lead.last_name}` : ''}
             </h1>
-            <p className="text-xs text-slate-400">Update lead details and pipeline status</p>
+            <p className="text-xs text-zinc-400">Update lead details and pipeline status</p>
           </div>
         </div>
 
         {loading ? (
-          <div className="py-20 text-center bg-slate-900/40 border border-slate-800 rounded-xl flex flex-col items-center justify-center space-y-3">
+          <div className="py-20 text-center bg-[#111111] border border-[#222222] rounded-xl flex flex-col items-center justify-center space-y-3">
             <LoadingSpinner size="lg" />
-            <p className="text-xs text-slate-400">Loading lead data...</p>
+            <p className="text-xs text-zinc-400">Loading lead data...</p>
           </div>
         ) : error || !lead ? (
-          <div className="p-6 bg-rose-950/80 border border-rose-800 rounded-xl text-rose-300 text-sm flex items-center space-x-3">
+          <div className="p-6 bg-rose-950/40 border border-rose-800/60 rounded-xl text-rose-300 text-sm flex items-center space-x-3">
             <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />
             <span>{error || 'Lead not found.'}</span>
           </div>
         ) : (
+          <div className="p-6 bg-[#111111] border border-[#222222] rounded-xl shadow-xl">
             <LeadForm
               initialValues={{
                 first_name: lead.first_name,
@@ -94,6 +95,7 @@ export const EditLead: React.FC = () => {
               submitLabel="Save Changes"
               isSubmitting={isSubmitting}
             />
+          </div>
         )}
       </div>
     </DashboardLayout>

@@ -28,17 +28,17 @@ export const CreateLead: React.FC = () => {
         <div className="flex items-center space-x-3">
           <button
             onClick={() => navigate('/leads')}
-            className="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition-colors"
+            className="p-2 rounded-lg bg-[#111111] border border-[#222222] text-zinc-400 hover:text-white hover:bg-[#151515] transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
           </button>
           <div>
             <h1 className="text-2xl font-bold text-white tracking-tight">Create New Lead</h1>
-            <p className="text-xs text-slate-400">Add a new prospect to your sales database</p>
+            <p className="text-xs text-zinc-400">Add a new prospect to your sales database</p>
           </div>
         </div>
 
-        <div className="p-6 bg-slate-900/60 border border-slate-800/80 rounded-xl">
+        <div className="p-6 bg-[#111111] border border-[#222222] rounded-xl shadow-xl">
           <LeadForm
             onSubmit={handleSubmit}
             onCancel={() => navigate('/leads')}

@@ -34,13 +34,13 @@ export const SalesRepActivities: React.FC = () => {
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-800 pb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-[#2A2A2E] pb-5">
           <div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
-              <Phone className="w-7 h-7 text-indigo-400" />
+              <Phone className="w-7 h-7 text-[#FF7A00]" />
               <span>Activity &amp; Outreach Timeline</span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1">
+            <p className="text-xs sm:text-sm text-zinc-400 mt-1">
               Complete chronological audit of your calls, emails, demos, and meeting interactions with assigned leads.
             </p>
           </div>
@@ -48,7 +48,7 @@ export const SalesRepActivities: React.FC = () => {
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
-            className="bg-slate-950 text-xs text-slate-300 border border-slate-800 rounded-xl px-3 py-2"
+            className="bg-[#111113] text-xs text-zinc-300 border border-[#2A2A2E] focus:border-[#FF7A00] focus:outline-none rounded-xl px-3 py-2"
           >
             <option value="">All Activity Types</option>
             <option value="call">Calls</option>
@@ -60,17 +60,17 @@ export const SalesRepActivities: React.FC = () => {
           </select>
         </div>
 
-        <Card className="p-5 bg-slate-900/80 border-slate-800 space-y-4">
+        <Card className="p-5 bg-[#171718] border-[#2A2A2E] space-y-4">
           {loading ? (
             <div className="py-12 flex justify-center">
               <LoadingSpinner size="lg" />
             </div>
           ) : activities.length === 0 ? (
-            <p className="text-xs text-slate-500 py-10 text-center">No recorded outreach activities found.</p>
+            <p className="text-xs text-zinc-500 py-10 text-center">No recorded outreach activities found.</p>
           ) : (
             <div className="space-y-3">
               {activities.map((a) => (
-                <div key={a.id} className="p-4 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between">
+                <div key={a.id} className="p-4 bg-[#111113] rounded-xl border border-[#2A2A2E] flex items-center justify-between hover:border-[#29292C] transition-colors">
                   <div className="space-y-1">
                     <div className="flex items-center space-x-2">
                       <Badge variant="primary" size="sm" className="uppercase font-bold">
@@ -80,8 +80,8 @@ export const SalesRepActivities: React.FC = () => {
                         {a.lead ? `${a.lead.first_name} ${a.lead.last_name} (${a.lead.company})` : 'Assigned Lead'}
                       </span>
                     </div>
-                    <p className="text-xs text-slate-300">{a.description || a.notes}</p>
-                    <p className="text-[10px] text-slate-500">{new Date(a.created_at).toLocaleString()}</p>
+                    <p className="text-xs text-zinc-300">{a.description || a.notes}</p>
+                    <p className="text-[10px] text-zinc-500">{new Date(a.created_at).toLocaleString()}</p>
                   </div>
 
                   {a.outcome && (

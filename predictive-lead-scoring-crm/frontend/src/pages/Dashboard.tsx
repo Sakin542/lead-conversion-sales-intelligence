@@ -55,12 +55,12 @@ export const Dashboard: React.FC = () => {
   return (
     <DashboardLayout>
       {/* 1. Welcome Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#222222] pb-6">
         <div className="space-y-1">
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
             Good morning, {firstName}
           </h1>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-zinc-400">
             Here's what's happening with your sales pipeline today.
           </p>
         </div>
@@ -71,7 +71,6 @@ export const Dashboard: React.FC = () => {
             size="md"
             leftIcon={<Plus className="w-4 h-4" />}
             onClick={() => navigate('/leads/new')}
-            className="px-4 py-2.5 rounded-xl font-bold text-xs shadow-lg shadow-indigo-500/25 bg-gradient-to-r from-indigo-600 to-purple-600 border-none shrink-0 text-white"
           >
             Add Lead
           </Button>
@@ -79,9 +78,9 @@ export const Dashboard: React.FC = () => {
       </div>
 
       {/* Interactive Timeframe Filter Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900/60 border border-slate-800 rounded-2xl p-2.5 px-4 shadow-sm min-w-0">
-        <div className="flex items-center space-x-2 text-xs font-semibold text-slate-400 shrink-0">
-          <Filter className="w-3.5 h-3.5 text-indigo-400" />
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#0A0A0A] border border-[#222222] rounded-xl p-2.5 px-4 shadow-sm min-w-0">
+        <div className="flex items-center space-x-2 text-xs font-semibold text-zinc-400 shrink-0">
+          <Filter className="w-3.5 h-3.5 text-purple-400" />
           <span>Period Filter:</span>
         </div>
 
@@ -95,10 +94,10 @@ export const Dashboard: React.FC = () => {
             <button
               key={pill.id}
               onClick={() => setTimeframe(pill.id as any)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
                 timeframe === pill.id
-                  ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                  ? 'bg-white text-black font-bold shadow-md'
+                  : 'text-zinc-400 hover:text-white hover:bg-[#151515]'
               }`}
             >
               {pill.label}

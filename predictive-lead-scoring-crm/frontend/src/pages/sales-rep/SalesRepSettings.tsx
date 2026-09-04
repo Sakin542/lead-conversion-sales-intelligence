@@ -131,15 +131,15 @@ export const SalesRepSettings: React.FC = () => {
     <DashboardLayout>
       <div className="space-y-6 max-w-4xl mx-auto min-w-0">
         {/* Header Title */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#2A2A2E] pb-5">
           <div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
-              <div className="p-2.5 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 text-indigo-400">
+              <div className="p-2.5 rounded-2xl bg-[#FF7A00]/10 border border-[#FF7A00]/20 text-[#FF7A00]">
                 <SlidersHorizontal className="w-6 h-6" />
               </div>
               <span>Sales Rep Settings</span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1">
+            <p className="text-xs sm:text-sm text-zinc-400 mt-1">
               Configure daily workload limits, email signature, lead reminders, and account security.
             </p>
           </div>
@@ -160,7 +160,7 @@ export const SalesRepSettings: React.FC = () => {
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex items-center space-x-1 border-b border-slate-800/80 overflow-x-auto custom-scrollbar pb-1">
+        <div className="flex items-center space-x-1 border-b border-[#2A2A2E] overflow-x-auto custom-scrollbar pb-1">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const active = activeTab === tab.id;
@@ -170,11 +170,11 @@ export const SalesRepSettings: React.FC = () => {
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl font-bold text-xs whitespace-nowrap transition-all ${
                   active
-                    ? 'bg-indigo-600/20 text-indigo-400 border border-indigo-500/40 shadow-sm'
-                    : 'text-slate-400 hover:text-white hover:bg-slate-900'
+                    ? 'bg-[#FF7A00]/10 text-[#FF7A00] border border-[#FF7A00]/30 shadow-sm'
+                    : 'text-zinc-400 hover:text-white hover:bg-[#1C1C1E]'
                 }`}
               >
-                <Icon className={`w-4 h-4 ${active ? 'text-indigo-400' : 'text-slate-400'}`} />
+                <Icon className={`w-4 h-4 ${active ? 'text-[#FF7A00]' : 'text-zinc-400'}`} />
                 <span>{tab.label}</span>
               </button>
             );
@@ -183,12 +183,12 @@ export const SalesRepSettings: React.FC = () => {
 
         {/* Tab 1: Workload & Signatures */}
         {activeTab === 'preferences' && (
-          <Card className="bg-slate-900/80 border-slate-800 p-6 sm:p-8 space-y-6">
-            <div className="flex items-center space-x-3 text-indigo-400 border-b border-slate-800 pb-4">
-              <Sliders className="w-5 h-5 text-indigo-400" />
+          <Card className="bg-[#171718] border-[#2A2A2E] p-6 sm:p-8 space-y-6">
+            <div className="flex items-center space-x-3 text-[#FF7A00] border-b border-[#2A2A2E] pb-4">
+              <Sliders className="w-5 h-5 text-[#FF7A00]" />
               <div>
                 <h3 className="text-base font-bold text-white">Daily Sales & Email Preferences</h3>
-                <p className="text-xs text-slate-400">Configure lead capacity limits and default message signatures</p>
+                <p className="text-xs text-zinc-400">Configure lead capacity limits and default message signatures</p>
               </div>
             </div>
 
@@ -201,11 +201,11 @@ export const SalesRepSettings: React.FC = () => {
                   onChange={(e) => setMaxActiveLeads(Number(e.target.value))}
                 />
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-300 block text-xs">Follow-Up Reminder Lead Time</label>
+                  <label className="font-bold text-zinc-300 block text-xs">Follow-Up Reminder Lead Time</label>
                   <select
                     value={reminderLeadTime}
                     onChange={(e) => setReminderLeadTime(e.target.value)}
-                    className="w-full bg-slate-950 text-white rounded-xl p-2.5 border border-slate-800 focus:outline-none"
+                    className="w-full bg-[#111113] text-white rounded-xl p-2.5 border border-[#2A2A2E] focus:outline-none focus:border-[#FF7A00]"
                   >
                     <option value="15">15 Minutes Before Call</option>
                     <option value="30">30 Minutes Before Call</option>
@@ -215,12 +215,12 @@ export const SalesRepSettings: React.FC = () => {
               </div>
 
               <div className="space-y-1.5">
-                <label className="font-bold text-slate-300 block text-xs">Default Outbound Email Signature</label>
+                <label className="font-bold text-zinc-300 block text-xs">Default Outbound Email Signature</label>
                 <textarea
                   rows={4}
                   value={emailSignature}
                   onChange={(e) => setEmailSignature(e.target.value)}
-                  className="w-full bg-slate-950 text-white text-xs font-mono p-3 rounded-xl border border-slate-800 focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-[#111113] text-white text-xs font-mono p-3 rounded-xl border border-[#2A2A2E] focus:outline-none focus:border-[#FF7A00]"
                   placeholder="Enter email signature..."
                 />
               </div>
@@ -228,10 +228,10 @@ export const SalesRepSettings: React.FC = () => {
               <div className="pt-3 flex justify-end">
                 <Button
                   type="submit"
-                  variant="primary"
+                  variant="ai"
                   size="md"
                   leftIcon={<Save className="w-4 h-4" />}
-                  className="bg-indigo-600 hover:bg-indigo-500 border-none font-bold text-xs px-5 py-2.5 rounded-xl"
+                  className="px-5 py-2.5 rounded-xl"
                 >
                   Save Daily Preferences
                 </Button>
@@ -242,12 +242,12 @@ export const SalesRepSettings: React.FC = () => {
 
         {/* Tab 2: Notifications */}
         {activeTab === 'notifications' && (
-          <Card className="bg-slate-900/80 border-slate-800 p-6 sm:p-8 space-y-6">
-            <div className="flex items-center space-x-3 text-indigo-400 border-b border-slate-800 pb-4">
-              <Bell className="w-5 h-5 text-indigo-400" />
+          <Card className="bg-[#171718] border-[#2A2A2E] p-6 sm:p-8 space-y-6">
+            <div className="flex items-center space-x-3 text-[#FF7A00] border-b border-[#2A2A2E] pb-4">
+              <Bell className="w-5 h-5 text-[#FF7A00]" />
               <div>
                 <h3 className="text-base font-bold text-white">Alert & Reminders Preferences</h3>
-                <p className="text-xs text-slate-400">Choose when to receive real-time notifications</p>
+                <p className="text-xs text-zinc-400">Choose when to receive real-time notifications</p>
               </div>
             </div>
 
@@ -275,16 +275,16 @@ export const SalesRepSettings: React.FC = () => {
                   setter: setNotifDealUpdate,
                 },
               ].map((item) => (
-                <div key={item.id} className="p-4 rounded-xl bg-slate-950 border border-slate-800 flex items-start justify-between">
+                <div key={item.id} className="p-4 rounded-xl bg-[#111113] border border-[#2A2A2E] flex items-start justify-between">
                   <div>
                     <span className="font-bold text-white block">{item.title}</span>
-                    <span className="text-slate-400 text-[11px]">{item.desc}</span>
+                    <span className="text-zinc-400 text-[11px]">{item.desc}</span>
                   </div>
                   <input
                     type="checkbox"
                     checked={item.checked}
                     onChange={(e) => item.setter(e.target.checked)}
-                    className="h-4 w-4 text-indigo-500 rounded border-slate-700 bg-slate-900 accent-indigo-500 cursor-pointer shrink-0 mt-1"
+                    className="h-4 w-4 text-[#FF7A00] rounded border-[#2A2A2E] bg-[#111113] accent-[#FF7A00] cursor-pointer shrink-0 mt-1"
                   />
                 </div>
               ))}
@@ -292,11 +292,11 @@ export const SalesRepSettings: React.FC = () => {
               <div className="pt-3 flex justify-end">
                 <Button
                   type="submit"
-                  variant="primary"
+                  variant="ai"
                   size="md"
                   isLoading={isSaving}
                   leftIcon={<Save className="w-4 h-4" />}
-                  className="bg-indigo-600 hover:bg-indigo-500 border-none font-bold text-xs px-5 py-2.5 rounded-xl"
+                  className="px-5 py-2.5 rounded-xl"
                 >
                   Save Notification Alerts
                 </Button>
@@ -307,12 +307,12 @@ export const SalesRepSettings: React.FC = () => {
 
         {/* Tab 3: Security */}
         {activeTab === 'security' && (
-          <Card className="bg-slate-900/80 border-slate-800 p-6 sm:p-8 space-y-6">
-            <div className="flex items-center space-x-3 text-indigo-400 border-b border-slate-800 pb-4">
-              <Lock className="w-5 h-5 text-indigo-400" />
+          <Card className="bg-[#171718] border-[#2A2A2E] p-6 sm:p-8 space-y-6">
+            <div className="flex items-center space-x-3 text-[#FF7A00] border-b border-[#2A2A2E] pb-4">
+              <Lock className="w-5 h-5 text-[#FF7A00]" />
               <div>
                 <h3 className="text-base font-bold text-white">Account Password & Security</h3>
-                <p className="text-xs text-slate-400">Update your account login password</p>
+                <p className="text-xs text-zinc-400">Update your account login password</p>
               </div>
             </div>
 
@@ -347,11 +347,11 @@ export const SalesRepSettings: React.FC = () => {
               <div className="pt-3 flex justify-start">
                 <Button
                   type="submit"
-                  variant="primary"
+                  variant="ai"
                   size="md"
                   isLoading={isSaving}
                   leftIcon={<Save className="w-4 h-4" />}
-                  className="bg-indigo-600 hover:bg-indigo-500 border-none font-bold text-xs px-5 py-2.5 rounded-xl"
+                  className="px-5 py-2.5 rounded-xl"
                 >
                   Update Password
                 </Button>
