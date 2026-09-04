@@ -56,17 +56,17 @@ export const HotLeadsTable: React.FC = () => {
 
   return (
     <>
-      <Card className="bg-slate-900/60 border-slate-800/80 p-6 space-y-4">
+      <Card className="p-6 space-y-4">
         <div className="flex items-center justify-between">
           <div className="space-y-1">
             <div className="flex items-center space-x-2">
-              <Sparkles className="w-4 h-4 text-indigo-400" />
+              <Sparkles className="w-4 h-4 text-purple-400" />
               <h3 className="text-base font-bold text-white tracking-tight">Top Leads</h3>
             </div>
-            <p className="text-xs text-slate-400">High intent prospects requiring priority outreach</p>
+            <p className="text-xs text-zinc-400">High intent prospects requiring priority outreach</p>
           </div>
 
-          <Link to="/leads" className="text-xs font-bold text-indigo-400 hover:text-indigo-300 flex items-center space-x-1">
+          <Link to="/leads" className="text-xs font-semibold text-purple-400 hover:text-purple-300 flex items-center space-x-1">
             <span>View All Leads</span>
             <ExternalLink className="w-3.5 h-3.5" />
           </Link>
@@ -74,9 +74,9 @@ export const HotLeadsTable: React.FC = () => {
 
         {/* Table Container */}
         <div className="w-full min-w-0 overflow-x-auto custom-scrollbar">
-          <table className="w-full min-w-[640px] text-left text-xs text-slate-300">
+          <table className="w-full min-w-[640px] text-left text-xs text-zinc-300">
             <thead>
-              <tr className="border-b border-slate-800 text-slate-400 font-semibold uppercase text-[11px] tracking-wider">
+              <tr className="border-b border-[#222222] text-zinc-400 font-medium uppercase text-[11px] tracking-wider">
                 <th className="py-3 px-4">Lead</th>
                 <th className="py-3 px-4">Company</th>
                 <th className="py-3 px-4">Score</th>
@@ -86,24 +86,24 @@ export const HotLeadsTable: React.FC = () => {
                 <th className="py-3 px-4 text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60">
+            <tbody className="divide-y divide-[#222222]">
               {topHotLeads.map((lead) => (
-                <tr key={lead.id} className="hover:bg-slate-800/40 transition-colors group">
+                <tr key={lead.id} className="hover:bg-[#151515] transition-colors group">
                   {/* Lead Name & Email */}
                   <td className="py-3.5 px-4 font-medium text-white">
                     <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 text-slate-200 font-bold flex items-center justify-center text-xs shrink-0">
+                      <div className="w-8 h-8 rounded-full bg-[#151515] border border-[#222222] text-zinc-200 font-bold flex items-center justify-center text-xs shrink-0">
                         {lead.name.charAt(0)}
                       </div>
                       <div>
-                        <p className="font-bold text-slate-100 group-hover:text-indigo-300 transition-colors">{lead.name}</p>
-                        <p className="text-[11px] text-slate-400">{lead.email}</p>
+                        <p className="font-bold text-white group-hover:text-purple-300 transition-colors">{lead.name}</p>
+                        <p className="text-[11px] text-zinc-400">{lead.email}</p>
                       </div>
                     </div>
                   </td>
 
                   {/* Company */}
-                  <td className="py-3.5 px-4 font-medium text-slate-200 whitespace-nowrap">
+                  <td className="py-3.5 px-4 font-medium text-zinc-200 whitespace-nowrap">
                     {lead.company}
                   </td>
 
@@ -118,12 +118,12 @@ export const HotLeadsTable: React.FC = () => {
                   </td>
 
                   {/* Last Activity */}
-                  <td className="py-3.5 px-4 text-slate-400 whitespace-nowrap">
+                  <td className="py-3.5 px-4 text-zinc-400 whitespace-nowrap">
                     {lead.lastActivity}
                   </td>
 
                   {/* Owner */}
-                  <td className="py-3.5 px-4 text-slate-300 font-medium whitespace-nowrap">
+                  <td className="py-3.5 px-4 text-zinc-300 font-medium whitespace-nowrap">
                     {lead.owner}
                   </td>
 
@@ -131,7 +131,7 @@ export const HotLeadsTable: React.FC = () => {
                   <td className="py-3.5 px-4 text-right whitespace-nowrap">
                     <button
                       onClick={() => setSelectedLead(lead)}
-                      className="px-3 py-1.5 rounded-lg bg-indigo-600/20 text-indigo-400 hover:bg-indigo-600 hover:text-white font-bold text-xs transition-all border border-indigo-500/30"
+                      className="px-3 py-1.5 rounded-lg bg-purple-950/40 text-purple-300 hover:bg-purple-600 hover:text-white font-medium text-xs transition-all border border-purple-800/40"
                     >
                       View
                     </button>

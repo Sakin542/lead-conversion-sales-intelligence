@@ -8,15 +8,15 @@ export const LeadScoreDistribution: React.FC = () => {
   const totalLeads = scoreDistributionData.reduce((acc, curr) => acc + curr.count, 0);
 
   return (
-    <Card className="bg-slate-900/60 border-slate-800/80 p-6 flex flex-col justify-between space-y-6">
+    <Card className="p-6 flex flex-col justify-between space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="space-y-1">
           <div className="flex items-center space-x-2">
-            <Target className="w-4 h-4 text-emerald-400" />
+            <Target className="w-4 h-4 text-[#FF7A00]" />
             <h3 className="text-base font-bold text-white tracking-tight">Lead Score Distribution</h3>
           </div>
-          <p className="text-xs text-slate-400">AI predicted intent & probability breakdown</p>
+          <p className="text-xs text-[#A1A1AA]">AI predicted intent & probability breakdown</p>
         </div>
       </div>
 
@@ -36,15 +36,15 @@ export const LeadScoreDistribution: React.FC = () => {
                 dataKey="count"
               >
                 {scoreDistributionData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} stroke="#0f172a" strokeWidth={2} />
+                  <Cell key={`cell-${index}`} fill={entry.color} stroke="#171718" strokeWidth={2} />
                 ))}
               </Pie>
               <Tooltip
                 contentStyle={{
-                  backgroundColor: '#0f172a',
-                  borderColor: '#334155',
+                  backgroundColor: '#171718',
+                  borderColor: '#2A2A2E',
                   borderRadius: '0.75rem',
-                  color: '#f8fafc',
+                  color: '#FFFFFF',
                   fontSize: '12px',
                 }}
                 formatter={(value: any, name: any) => [`${value} leads`, name]}
@@ -54,29 +54,29 @@ export const LeadScoreDistribution: React.FC = () => {
 
           {/* Center Label */}
           <div className="absolute flex flex-col items-center justify-center text-center pointer-events-none">
-            <span className="text-xl font-extrabold text-white tracking-tight">{totalLeads}</span>
-            <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400">Total Leads</span>
+            <span className="text-xl font-bold text-white tracking-tight">{totalLeads}</span>
+            <span className="text-[10px] uppercase font-semibold tracking-wider text-[#A1A1AA]">Total Leads</span>
           </div>
         </div>
 
         {/* Legend / Category List */}
         <div className="space-y-3">
           {scoreDistributionData.map((item) => (
-            <div key={item.name} className="flex items-center justify-between text-xs p-2 rounded-xl bg-slate-950/40 border border-slate-800/40">
+            <div key={item.name} className="flex items-center justify-between text-xs p-2 rounded-xl bg-[#111113] border border-[#2A2A2E]">
               <div className="flex items-center space-x-2.5">
                 <span
                   className="w-2.5 h-2.5 rounded-full shrink-0"
                   style={{ backgroundColor: item.color }}
                 />
                 <div>
-                  <span className="font-bold text-slate-200">{item.name}</span>
-                  <span className="text-slate-400 ml-1.5 font-mono text-[11px]">({item.range})</span>
+                  <span className="font-bold text-white">{item.name}</span>
+                  <span className="text-[#A1A1AA] ml-1.5 font-mono text-[11px]">({item.range})</span>
                 </div>
               </div>
 
               <div className="text-right">
-                <span className="font-extrabold text-white">{item.count}</span>
-                <span className="text-[10px] text-slate-400 block">{item.percentage}%</span>
+                <span className="font-bold text-white">{item.count}</span>
+                <span className="text-[10px] text-[#A1A1AA] block">{item.percentage}%</span>
               </div>
             </div>
           ))}

@@ -75,8 +75,8 @@ class ManagerReportController extends Controller
 
             case 'revenue':
                 $data = [
-                    'won_revenue' => (float) Deal::where('stage', 'won')->sum('value') ?: (float) Lead::whereIn('status', ['won', 'converted'])->sum('estimated_value'),
-                    'pipeline_value' => (float) Deal::whereNotIn('stage', ['won', 'lost'])->sum('value') ?: (float) Lead::whereNotIn('status', ['won', 'lost', 'converted'])->sum('estimated_value'),
+                    'won_revenue' => (float) Deal::whereHas('pipelineStage', fn($q) => $q->where('slug', 'won'))->sum('value') ?: (float) Lead::whereIn('status', ['won', 'converted'])->sum('estimated_value'),
+                    'pipeline_value' => (float) Deal::whereHas('pipelineStage', fn($q) => $q->whereNotIn('slug', ['won', 'lost']))->sum('value') ?: (float) Lead::whereNotIn('status', ['won', 'lost', 'converted'])->sum('estimated_value'),
                     'by_source' => Lead::whereIn('status', ['won', 'converted'])->select('source', DB::raw('SUM(COALESCE(estimated_value, 0)) as revenue'))->groupBy('source')->get(),
                 ];
                 break;

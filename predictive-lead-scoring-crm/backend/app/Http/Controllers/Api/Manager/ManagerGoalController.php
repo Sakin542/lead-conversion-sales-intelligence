@@ -53,7 +53,7 @@ class ManagerGoalController extends Controller
                     break;
 
                 case 'revenue':
-                    $query = Deal::where('stage', 'won');
+                    $query = Deal::whereHas('pipelineStage', fn($q) => $q->where('slug', 'won'));
                     if ($goal->user_id) $query->where('user_id', $goal->user_id);
                     if ($goal->start_date) $query->whereDate('created_at', '>=', $goal->start_date);
                     if ($goal->end_date) $query->whereDate('created_at', '<=', $goal->end_date);
@@ -119,7 +119,7 @@ class ManagerGoalController extends Controller
         // Summary for Team Target Metrics
         $teamRevenueGoal = $goals->where('type', 'revenue')->whereNull('user_id')->first();
         $teamRevenueTarget = $teamRevenueGoal ? $teamRevenueGoal->target_value : 500000;
-        $actualTeamRevenue = (float) Deal::where('stage', 'won')->sum('value');
+        $actualTeamRevenue = (float) Deal::whereHas('pipelineStage', fn($q) => $q->where('slug', 'won'))->sum('value');
         if ($actualTeamRevenue == 0) {
             $actualTeamRevenue = (float) Lead::whereIn('status', ['won', 'converted'])->sum('estimated_value');
         }

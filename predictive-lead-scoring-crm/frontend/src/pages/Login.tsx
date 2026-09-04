@@ -98,33 +98,33 @@ export const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100">
+    <div className="min-h-screen flex flex-col bg-[#0B0B0D] text-zinc-100 font-sans antialiased selection:bg-[#FF7A00]/30 selection:text-white">
       <Navbar />
 
-      <main className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-        {/* Ambient Glow Orb */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
+      <main className="flex-1 flex items-center justify-center py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        {/* Subtle Ambient Glow */}
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-[#FF7A00]/10 rounded-full blur-[120px] pointer-events-none" />
 
-        {/* Full Black Login Card Container */}
-        <div className="max-w-md w-full bg-black rounded-2xl shadow-2xl border border-slate-800 p-6 sm:p-10 space-y-6 relative z-10 text-white">
+        {/* Enterprise Login Card Container */}
+        <div className="max-w-md w-full bg-[#171718] rounded-xl shadow-2xl border border-[#2A2A2E] p-6 sm:p-8 space-y-6 relative z-10 text-white">
           <div className="text-center space-y-2">
-            <h2 className="text-3xl font-extrabold text-white tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
               Log In
             </h2>
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-[#A1A1AA]">
               Sign in to manage your high-converting lead pipeline
             </p>
           </div>
 
           {successMessage && (
-            <div className="p-3.5 bg-emerald-950/60 border border-emerald-800 rounded-lg flex items-center space-x-2.5 text-emerald-400 text-sm">
+            <div className="p-3.5 bg-emerald-950/40 border border-emerald-800/60 rounded-lg flex items-center space-x-2.5 text-emerald-400 text-sm">
               <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
               <span>{successMessage}</span>
             </div>
           )}
 
           {apiError && (
-            <div className="p-3.5 bg-rose-950/60 border border-rose-800 rounded-lg flex items-center space-x-2.5 text-rose-400 text-sm">
+            <div className="p-3.5 bg-rose-950/40 border border-rose-800/60 rounded-lg flex items-center space-x-2.5 text-rose-400 text-sm">
               <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />
               <span>{apiError}</span>
             </div>
@@ -139,7 +139,7 @@ export const Login: React.FC = () => {
               value={formData.email}
               onChange={handleChange}
               error={errors.email}
-              leftIcon={<Mail className="w-4 h-4 text-slate-400" />}
+              leftIcon={<Mail className="w-4 h-4 text-[#71717A]" />}
               autoComplete="email"
             />
 
@@ -152,13 +152,13 @@ export const Login: React.FC = () => {
                 value={formData.password}
                 onChange={handleChange}
                 error={errors.password}
-                leftIcon={<Lock className="w-4 h-4 text-slate-400" />}
+                leftIcon={<Lock className="w-4 h-4 text-[#71717A]" />}
                 autoComplete="current-password"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-9 text-slate-400 hover:text-slate-200 focus:outline-none"
+                className="absolute right-3 top-9 text-[#71717A] hover:text-white focus:outline-none"
                 aria-label="Toggle password visibility"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -171,12 +171,12 @@ export const Login: React.FC = () => {
                   type="checkbox"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className="h-4 w-4 text-indigo-500 rounded border-slate-700 bg-slate-950 accent-indigo-500 cursor-pointer"
+                  className="h-4 w-4 rounded border-[#2A2A2E] bg-[#111113] accent-[#FF7A00] cursor-pointer"
                 />
-                <span className="text-slate-300 font-medium">Remember me</span>
+                <span className="text-[#A1A1AA] font-medium">Remember me</span>
               </label>
 
-              <Link to="/forgot-password" className="font-semibold text-indigo-400 hover:text-indigo-300">
+              <Link to="/forgot-password" className="font-medium text-[#FF7A00] hover:text-[#FF8C1A] transition-colors">
                 Forgot your password?
               </Link>
             </div>
@@ -184,9 +184,9 @@ export const Login: React.FC = () => {
             <div className="pt-2">
               <Button
                 type="submit"
-                variant="primary"
+                variant="ai"
                 size="lg"
-                className="w-full justify-center shadow-lg shadow-indigo-500/25 bg-gradient-to-r from-indigo-600 to-purple-600 border-none font-bold"
+                className="w-full justify-center font-bold"
                 isLoading={isSubmitting}
               >
                 Sign In

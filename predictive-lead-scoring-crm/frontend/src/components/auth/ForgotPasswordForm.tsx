@@ -81,10 +81,10 @@ export const ForgotPasswordForm: React.FC = () => {
           <h2 className="text-2xl font-bold text-white tracking-tight">
             Reset link sent
           </h2>
-          <p className="text-sm text-slate-300 max-w-sm mx-auto leading-relaxed">
-            If an account exists for <span className="font-semibold text-indigo-400">{email}</span>, we've sent you a password reset link.
+          <p className="text-sm text-zinc-300 max-w-sm mx-auto leading-relaxed">
+            If an account exists for <span className="font-semibold text-[#FF7A00]">{email}</span>, we've sent you a password reset link.
           </p>
-          <p className="text-xs text-slate-400 max-w-xs mx-auto pt-1">
+          <p className="text-xs text-zinc-400 max-w-xs mx-auto pt-1">
             Please check your inbox and follow the instructions to reset your password.
           </p>
         </div>
@@ -92,7 +92,7 @@ export const ForgotPasswordForm: React.FC = () => {
         <div className="pt-4 space-y-3">
           <Link
             to="/login"
-            className="inline-flex items-center justify-center w-full min-h-[44px] px-5 py-2.5 rounded-xl font-bold text-sm bg-slate-800 hover:bg-slate-700 text-slate-100 hover:text-white border border-slate-700 transition-all shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-950"
+            className="inline-flex items-center justify-center w-full min-h-[44px] px-5 py-2.5 rounded-xl font-bold text-sm bg-[#1A1A1C] hover:bg-[#222225] text-white border border-[#2A2A2E] transition-all shadow-md focus:outline-none focus:ring-2 focus:ring-[#FF7A00]"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Login
@@ -106,7 +106,7 @@ export const ForgotPasswordForm: React.FC = () => {
                 setEmailError(null);
                 setApiError(null);
               }}
-              className="text-xs text-indigo-400 hover:text-indigo-300 font-semibold focus:outline-none"
+              className="text-xs text-[#FF7A00] hover:text-[#FF8C1A] font-medium focus:outline-none transition-colors"
             >
               Didn't receive the email? Try again
             </button>
@@ -119,17 +119,17 @@ export const ForgotPasswordForm: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="space-y-2 text-left">
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
           Forgot your password?
         </h1>
-        <p className="text-sm text-slate-400 leading-relaxed">
+        <p className="text-sm text-zinc-400 leading-relaxed">
           No worries. Enter your registered email address and we'll send you a secure link to reset your password.
         </p>
       </div>
 
       {apiError && (
         <div
-          className="p-3.5 bg-rose-950/60 border border-rose-800/80 rounded-xl flex items-start space-x-3 text-rose-300 text-sm"
+          className="p-3.5 bg-rose-950/40 border border-rose-800/60 rounded-xl flex items-start space-x-3 text-rose-300 text-sm"
           role="alert"
           aria-live="assertive"
         >
@@ -149,7 +149,7 @@ export const ForgotPasswordForm: React.FC = () => {
             value={email}
             onChange={handleEmailChange}
             error={emailError || undefined}
-            leftIcon={<Mail className="w-4 h-4 text-slate-400" />}
+            leftIcon={<Mail className="w-4 h-4 text-zinc-400" />}
             autoComplete="email"
             required
             aria-invalid={!!emailError}
@@ -162,7 +162,7 @@ export const ForgotPasswordForm: React.FC = () => {
             type="submit"
             variant="primary"
             size="lg"
-            className="w-full justify-center shadow-lg shadow-indigo-500/25 bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 border-none font-bold text-white tracking-wide"
+            className="w-full justify-center"
             isLoading={isSubmitting}
             disabled={isSubmitting}
           >
@@ -171,10 +171,10 @@ export const ForgotPasswordForm: React.FC = () => {
         </div>
       </form>
 
-      <div className="border-t border-slate-800/80 pt-4 text-center">
+      <div className="border-t border-[#2A2A2E] pt-4 text-center">
         <Link
           to="/login"
-          className="inline-flex items-center text-xs font-semibold text-indigo-400 hover:text-indigo-300 transition-colors group focus:outline-none focus:underline"
+          className="inline-flex items-center text-xs font-medium text-[#FF7A00] hover:text-[#FF8C1A] transition-colors group focus:outline-none focus:underline"
         >
           <ArrowLeft className="w-3.5 h-3.5 mr-1.5 transition-transform group-hover:-translate-x-1" />
           Back to Login

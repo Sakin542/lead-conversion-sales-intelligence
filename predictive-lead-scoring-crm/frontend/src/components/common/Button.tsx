@@ -2,7 +2,7 @@ import React from 'react';
 import LoadingSpinner from './LoadingSpinner';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'ai';
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
   leftIcon?: React.ReactNode;
@@ -20,20 +20,21 @@ export const Button: React.FC<ButtonProps> = ({
   className = '',
   ...props
 }) => {
-  const baseStyles = 'inline-flex items-center justify-center font-bold rounded-xl transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 shrink-0 disabled:opacity-60 disabled:cursor-not-allowed disabled:pointer-events-none';
+  const baseStyles = 'inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-200 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-[#FF7A00]/50 focus:ring-offset-2 focus:ring-offset-[#0B0B0D] shrink-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none';
 
   const variantStyles = {
-    primary: 'bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white shadow-lg shadow-indigo-500/25 border border-indigo-400/30',
-    secondary: 'bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 shadow-md',
-    outline: 'border border-slate-700/80 bg-slate-900/60 text-slate-200 hover:bg-slate-800 hover:text-white hover:border-slate-600 backdrop-blur-md',
-    ghost: 'text-slate-300 hover:bg-slate-800/80 hover:text-white',
-    danger: 'bg-rose-600 hover:bg-rose-500 text-white shadow-lg shadow-rose-500/25 border border-rose-400/30',
+    primary: 'bg-[#FFFFFF] hover:bg-[#E5E5E5] text-[#000000] font-semibold border border-transparent shadow-sm',
+    ai: 'bg-[#FF7A00] hover:bg-[#FF8C1A] text-[#FFFFFF] font-semibold shadow-md shadow-[#FF7A00]/20 border border-[#FF7A00]/30',
+    secondary: 'bg-[#1A1A1C] hover:bg-[#252528] text-[#FFFFFF] border border-[#2A2A2E]',
+    outline: 'border border-[#2A2A2E] bg-[#111113] text-[#FFFFFF] hover:bg-[#1C1C1E] hover:border-[#383838]',
+    ghost: 'text-[#A1A1AA] hover:text-[#FFFFFF] hover:bg-[#1C1C1E]',
+    danger: 'bg-rose-600 hover:bg-rose-500 text-white shadow-sm border border-rose-500/20',
   };
 
   const sizeStyles = {
-    sm: 'text-xs px-4 py-2 min-h-[36px] gap-1.5',
-    md: 'text-sm px-5 py-2.5 min-h-[42px] gap-2',
-    lg: 'text-base px-6.5 py-3.5 min-h-[48px] gap-2.5',
+    sm: 'text-xs px-3.5 py-1.5 min-h-[34px] gap-1.5',
+    md: 'text-sm px-4.5 py-2 min-h-[40px] gap-2',
+    lg: 'text-base px-6 py-3 min-h-[46px] gap-2.5',
   };
 
   return (

@@ -8,6 +8,7 @@ use App\Models\Lead;
 use App\Models\LeadActivity;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 
 class SalesRepActivityController extends Controller
 {
@@ -18,6 +19,7 @@ class SalesRepActivityController extends Controller
     {
         $userId = $request->user()->id;
         $userRole = $request->user()->role;
+        $hasActivityType = Schema::hasColumn('lead_activities', 'activity_type');
 
         $query = LeadActivity::with('lead:id,first_name,last_name,email,company');
 
@@ -31,7 +33,12 @@ class SalesRepActivityController extends Controller
         }
 
         if ($type = $request->query('type')) {
-            $query->where('activity_type', $type);
+            $query->where(function ($q) use ($type, $hasActivityType) {
+                $q->where('type', $type);
+                if ($hasActivityType) {
+                    $q->orWhere('activity_type', $type);
+                }
+            });
         }
 
         $perPage = min((int) $request->query('per_page', 20), 100);
@@ -56,6 +63,7 @@ class SalesRepActivityController extends Controller
     {
         $userId = $request->user()->id;
         $userRole = $request->user()->role;
+        $hasActivityType = Schema::hasColumn('lead_activities', 'activity_type');
 
         $request->validate([
             'lead_id' => ['required', 'integer', 'exists:leads,id'],
@@ -75,17 +83,31 @@ class SalesRepActivityController extends Controller
 
         $description = $request->notes ?: ucfirst($request->activity_type) . ($request->outcome ? " - {$request->outcome}" : ' logged');
 
-        $activity = LeadActivity::create([
+        // Map request activity_type to valid enum value for legacy 'type' column
+        $typeMapping = [
+            'call' => 'call',
+            'email' => 'email_open',
+            'meeting' => 'meeting',
+            'demo' => 'demo_request',
+        ];
+        $legacyType = $typeMapping[$request->activity_type] ?? 'call';
+
+        $activityData = [
             'lead_id' => $lead->id,
             'user_id' => $userId,
-            'activity_type' => $request->activity_type,
-            'type' => $request->activity_type,
+            'type' => $legacyType,
             'description' => $description,
             'outcome' => $request->outcome,
             'notes' => $request->notes,
             'occurred_at' => now(),
             'created_at' => now(),
-        ]);
+        ];
+
+        if ($hasActivityType) {
+            $activityData['activity_type'] = $request->activity_type;
+        }
+
+        $activity = LeadActivity::create($activityData);
 
         // Update lead's last activity timestamp
         $lead->touch();

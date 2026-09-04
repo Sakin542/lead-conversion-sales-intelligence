@@ -96,13 +96,13 @@ export const AdminEmailTemplates: React.FC = () => {
   return (
     <AdminLayout>
       <div className="space-y-6">
-        <div className="flex items-center justify-between border-b border-indigo-950 pb-5">
+        <div className="flex items-center justify-between border-b border-[#2A2A2E] pb-5">
           <div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
-              <Mail className="w-7 h-7 text-indigo-400" />
+              <Mail className="w-7 h-7 text-[#FF7A00]" />
               <span>Email Template Management</span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1">
+            <p className="text-xs sm:text-sm text-zinc-400 mt-1">
               Configure system email notification templates, edit subjects, HTML content, and toggles.
             </p>
           </div>
@@ -111,7 +111,7 @@ export const AdminEmailTemplates: React.FC = () => {
             variant="outline"
             size="sm"
             onClick={fetchTemplates}
-            className="border-slate-800 text-slate-300 hover:bg-slate-900"
+            className="border-[#2A2A2E] text-zinc-300 hover:bg-[#29292C]"
             leftIcon={<RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />}
           >
             Refresh Templates
@@ -122,56 +122,81 @@ export const AdminEmailTemplates: React.FC = () => {
           <div className="py-16 flex justify-center">
             <LoadingSpinner size="lg" />
           </div>
+        ) : templates.length === 0 ? (
+          <Card className="p-12 text-center border-[#2A2A2E] bg-[#171718]">
+            <Mail className="w-12 h-12 text-zinc-600 mx-auto mb-3 opacity-60" />
+            <h3 className="text-base font-bold text-white">No Email Templates Found</h3>
+            <p className="text-xs text-zinc-400 mt-1 max-w-sm mx-auto mb-4">
+              There are currently no email templates configured in the database.
+            </p>
+            <Button variant="ai" size="sm" onClick={fetchTemplates} leftIcon={<RefreshCw className="w-4 h-4" />}>
+              Reload System Templates
+            </Button>
+          </Card>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {templates.map((t) => (
-              <Card key={t.id} className="p-5 bg-slate-900/80 border-slate-800 space-y-3">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-white leading-tight">{t.name}</h3>
-                  <Badge variant={t.is_enabled ? 'success' : 'neutral'} size="sm">
-                    {t.is_enabled ? 'Enabled' : 'Disabled'}
-                  </Badge>
+              <Card key={t.id} className="p-5 bg-[#171718] border-[#2A2A2E] space-y-4 hover:border-[#FF7A00]/40 transition-all">
+                <div className="flex items-center justify-between pb-2 border-b border-[#2A2A2E]">
+                  <div className="flex items-center space-x-2.5">
+                    <h3 className="text-sm font-extrabold text-white leading-tight">{t.name}</h3>
+                    <Badge variant={t.is_enabled ? 'success' : 'neutral'} size="sm">
+                      {t.is_enabled ? 'Enabled' : 'Disabled'}
+                    </Badge>
+                  </div>
+
+                  {/* Header Direct Quick Edit Action */}
+                  <button
+                    onClick={() => handleEditOpen(t)}
+                    className="flex items-center space-x-1.5 text-xs font-bold text-[#FF7A00] hover:text-white bg-[#FF7A00]/10 hover:bg-[#FF7A00] border border-[#FF7A00]/30 px-3 py-1.5 rounded-lg transition-all shadow-xs"
+                    title="Edit Template"
+                  >
+                    <Edit3 className="w-3.5 h-3.5" />
+                    <span>Edit</span>
+                  </button>
                 </div>
 
-                <div className="space-y-1 text-xs text-slate-400">
-                  <p><strong>Key:</strong> <span className="font-mono text-indigo-400">{t.key}</span></p>
-                  <p><strong>Subject:</strong> <span className="text-slate-200">{t.subject}</span></p>
+                <div className="space-y-1.5 text-xs text-zinc-400">
+                  <p><strong className="text-zinc-300">Template Key:</strong> <span className="font-mono text-[#FF7A00] font-semibold">{t.key}</span></p>
+                  <p><strong className="text-zinc-300">Default Subject:</strong> <span className="text-zinc-200">{t.subject}</span></p>
                 </div>
 
-                <div className="pt-2 flex justify-end space-x-2 border-t border-slate-800/80">
+                <div className="pt-3 flex items-center justify-between gap-2 border-t border-[#2A2A2E]">
+                  <div className="flex items-center space-x-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setTestTemplate(t);
+                        setRecipientEmail('');
+                        setTestFeedback(null);
+                      }}
+                      className="text-xs border-[#FF7A00]/40 text-[#FF7A00] hover:bg-[#FF7A00]/10"
+                      leftIcon={<Mail className="w-3.5 h-3.5" />}
+                    >
+                      Test Email
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        handleEditOpen(t);
+                        setIsPreviewModalOpen(true);
+                      }}
+                      className="text-xs border-[#2A2A2E] text-zinc-300 hover:bg-[#29292C]"
+                      leftIcon={<Eye className="w-3.5 h-3.5" />}
+                    >
+                      Preview
+                    </Button>
+                  </div>
+
                   <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      setTestTemplate(t);
-                      setRecipientEmail('');
-                      setTestFeedback(null);
-                    }}
-                    className="text-xs border-indigo-800 text-indigo-300 hover:bg-indigo-950/60"
-                    leftIcon={<Mail className="w-3.5 h-3.5" />}
-                  >
-                    Test Email
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      handleEditOpen(t);
-                      setIsPreviewModalOpen(true);
-                    }}
-                    className="text-xs border-slate-800 text-slate-300"
-                    leftIcon={<Eye className="w-3.5 h-3.5" />}
-                  >
-                    Preview
-                  </Button>
-                  <Button
-                    variant="primary"
+                    variant="ai"
                     size="sm"
                     onClick={() => handleEditOpen(t)}
-                    className="text-xs bg-indigo-600 border-none font-bold"
                     leftIcon={<Edit3 className="w-3.5 h-3.5" />}
                   >
-                    Edit
+                    Edit Template
                   </Button>
                 </div>
               </Card>
@@ -192,12 +217,12 @@ export const AdminEmailTemplates: React.FC = () => {
             />
 
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1">Body HTML Content</label>
+              <label className="text-xs font-semibold text-zinc-300 block mb-1">Body HTML Content</label>
               <textarea
                 rows={8}
                 value={bodyHtml}
                 onChange={(e) => setBodyHtml(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs font-mono text-slate-200 focus:outline-none focus:border-indigo-500"
+                className="w-full bg-[#111113] border border-[#2A2A2E] rounded-xl p-3 text-xs font-mono text-white placeholder-zinc-500 focus:outline-none focus:border-[#FF7A00] focus:ring-1 focus:ring-[#FF7A00] selection:bg-[#FF7A00]/30"
                 required
               />
             </div>
@@ -207,16 +232,16 @@ export const AdminEmailTemplates: React.FC = () => {
                 type="checkbox"
                 checked={isEnabled}
                 onChange={(e) => setIsEnabled(e.target.checked)}
-                className="h-4 w-4 text-indigo-500 rounded bg-slate-950 accent-indigo-500"
+                className="h-4 w-4 text-[#FF7A00] rounded bg-[#111113] accent-[#FF7A00]"
               />
-              <span className="text-xs text-slate-300 font-semibold">Enable Template for Automated System Dispatch</span>
+              <span className="text-xs text-zinc-300 font-semibold">Enable Template for Automated System Dispatch</span>
             </label>
 
-            <div className="pt-4 flex justify-end space-x-3 border-t border-slate-800">
+            <div className="pt-4 flex justify-end space-x-3 border-t border-[#2A2A2E]">
               <Button type="button" variant="outline" size="sm" onClick={() => setSelectedTemplate(null)}>
                 Cancel
               </Button>
-              <Button type="submit" variant="primary" size="sm" isLoading={isSaving} className="bg-indigo-600 hover:bg-indigo-500 border-none font-bold">
+              <Button type="submit" variant="ai" size="sm" isLoading={isSaving}>
                 Save Template
               </Button>
             </div>
@@ -228,11 +253,11 @@ export const AdminEmailTemplates: React.FC = () => {
       {selectedTemplate && isPreviewModalOpen && (
         <Modal isOpen={isPreviewModalOpen} onClose={() => setIsPreviewModalOpen(false)} title={`Preview ${selectedTemplate.name}`}>
           <div className="space-y-4 text-xs">
-            <div className="p-3 bg-slate-950 border border-slate-800 rounded-xl space-y-1">
-              <p><strong className="text-slate-400">Subject:</strong> <span className="text-white font-bold">{subject}</span></p>
+            <div className="p-3 bg-[#111113] border border-[#2A2A2E] rounded-xl space-y-1">
+              <p><strong className="text-zinc-400">Subject:</strong> <span className="text-white font-bold">{subject}</span></p>
             </div>
 
-            <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-slate-200 leading-relaxed max-h-[50vh] overflow-y-auto">
+            <div className="p-4 bg-[#111113] border border-[#2A2A2E] rounded-xl text-zinc-200 leading-relaxed max-h-[50vh] overflow-y-auto [&_h1]:text-white [&_h2]:text-white [&_h3]:text-white [&_h4]:text-white [&_p]:text-zinc-300 [&_a]:text-[#FF7A00]">
               <div dangerouslySetInnerHTML={{ __html: bodyHtml }} />
             </div>
 
@@ -259,16 +284,16 @@ export const AdminEmailTemplates: React.FC = () => {
             />
 
             {testFeedback && (
-              <div className="p-3 bg-indigo-950/60 border border-indigo-800 rounded-xl text-xs font-semibold text-indigo-200">
+              <div className="p-3 bg-[#FF7A00]/10 border border-[#FF7A00]/30 rounded-xl text-xs font-semibold text-[#FF7A00]">
                 {testFeedback}
               </div>
             )}
 
-            <div className="pt-3 flex justify-end space-x-3 border-t border-slate-800">
+            <div className="pt-3 flex justify-end space-x-3 border-t border-[#2A2A2E]">
               <Button type="button" variant="outline" size="sm" onClick={() => setTestTemplate(null)}>
                 Cancel
               </Button>
-              <Button type="submit" variant="primary" size="sm" isLoading={isSendingTest} className="bg-indigo-600 hover:bg-indigo-500 border-none font-bold">
+              <Button type="submit" variant="ai" size="sm" isLoading={isSendingTest}>
                 Dispatch Test Email
               </Button>
             </div>

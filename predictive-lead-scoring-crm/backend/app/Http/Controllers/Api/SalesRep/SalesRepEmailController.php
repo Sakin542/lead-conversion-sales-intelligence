@@ -10,6 +10,7 @@ use App\Models\LeadActivity;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Schema;
 
 class SalesRepEmailController extends Controller
 {
@@ -21,8 +22,15 @@ class SalesRepEmailController extends Controller
         $userId = $request->user()->id;
         $userRole = $request->user()->role;
 
+        $hasActivityType = Schema::hasColumn('lead_activities', 'activity_type');
+
         $query = LeadActivity::with('lead:id,first_name,last_name,email,company')
-            ->where('activity_type', 'email');
+            ->where(function ($q) use ($hasActivityType) {
+                $q->whereIn('type', ['email', 'email_open', 'email_click', 'demo_request']);
+                if ($hasActivityType) {
+                    $q->orWhere('activity_type', 'email');
+                }
+            });
 
         if ($userRole === 'SALES_REP') {
             $assignedLeadIds = Lead::where('assigned_to', $userId)->pluck('id');
@@ -69,6 +77,8 @@ class SalesRepEmailController extends Controller
         $subject = $request->subject;
         $bodyHtml = $request->body_html;
 
+        $hasActivityType = Schema::hasColumn('lead_activities', 'activity_type');
+
         try {
             Mail::html($bodyHtml, function ($message) use ($recipientEmail, $subject) {
                 $message->to($recipientEmail)
@@ -76,17 +86,22 @@ class SalesRepEmailController extends Controller
             });
 
             // Log email activity
-            $activity = LeadActivity::create([
+            $activityData = [
                 'lead_id' => $lead->id,
                 'user_id' => $userId,
-                'activity_type' => 'email',
-                'type' => 'email',
+                'type' => 'email_open',
                 'description' => "Email sent to {$recipientEmail}: {$subject}",
                 'outcome' => 'Sent',
                 'notes' => "Subject: {$subject}",
                 'occurred_at' => now(),
                 'created_at' => now(),
-            ]);
+            ];
+
+            if ($hasActivityType) {
+                $activityData['activity_type'] = 'email';
+            }
+
+            $activity = LeadActivity::create($activityData);
 
             AuditLog::log(
                 $userId,
@@ -104,17 +119,22 @@ class SalesRepEmailController extends Controller
             ]);
         } catch (\Throwable $e) {
             // Log failed attempt
-            LeadActivity::create([
+            $failedData = [
                 'lead_id' => $lead->id,
                 'user_id' => $userId,
-                'activity_type' => 'email',
-                'type' => 'email',
+                'type' => 'email_open',
                 'description' => "Failed email attempt to {$recipientEmail}",
                 'outcome' => 'Failed',
                 'notes' => "Failed attempt: {$e->getMessage()}",
                 'occurred_at' => now(),
                 'created_at' => now(),
-            ]);
+            ];
+
+            if ($hasActivityType) {
+                $failedData['activity_type'] = 'email';
+            }
+
+            LeadActivity::create($failedData);
 
             return response()->json([
                 'success' => false,

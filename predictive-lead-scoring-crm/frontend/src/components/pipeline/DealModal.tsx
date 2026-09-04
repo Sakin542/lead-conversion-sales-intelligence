@@ -117,7 +117,7 @@ export const DealModal: React.FC<DealModalProps> = ({
         )}
 
         <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+          <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
             Deal Title <span className="text-rose-400">*</span>
           </label>
           <Input
@@ -131,14 +131,14 @@ export const DealModal: React.FC<DealModalProps> = ({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+            <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
               Associated Lead <span className="text-rose-400">*</span>
             </label>
             <select
               name="lead_id"
               value={formData.lead_id}
               onChange={handleChange}
-              className="w-full px-3.5 py-2.5 min-h-[42px] bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-200 focus:outline-none focus:border-indigo-500 transition-colors"
+              className="w-full px-3.5 py-2.5 min-h-[42px] bg-[#0A0A0A] border border-[#222222] rounded-xl text-sm text-zinc-200 focus:outline-none focus:border-purple-500 transition-colors"
               required
             >
               {leads.length === 0 ? (
@@ -154,14 +154,14 @@ export const DealModal: React.FC<DealModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+            <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
               Pipeline Stage <span className="text-rose-400">*</span>
             </label>
             <select
               name="pipeline_stage_id"
               value={formData.pipeline_stage_id}
               onChange={handleChange}
-              className="w-full px-3.5 py-2.5 min-h-[42px] bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-200 focus:outline-none focus:border-indigo-500 transition-colors"
+              className="w-full px-3.5 py-2.5 min-h-[42px] bg-[#0A0A0A] border border-[#222222] rounded-xl text-sm text-zinc-200 focus:outline-none focus:border-purple-500 transition-colors"
               required
             >
               {stages.map((st) => (
@@ -175,7 +175,7 @@ export const DealModal: React.FC<DealModalProps> = ({
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+            <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
               Deal Value ($)
             </label>
             <Input
@@ -190,7 +190,7 @@ export const DealModal: React.FC<DealModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+            <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
               Win Probability (%)
             </label>
             <Input
@@ -205,7 +205,7 @@ export const DealModal: React.FC<DealModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+            <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
               Expected Close Date
             </label>
             <Input
@@ -218,19 +218,19 @@ export const DealModal: React.FC<DealModalProps> = ({
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-1.5">Deal Notes</label>
+          <label className="block text-xs font-semibold text-zinc-300 mb-1.5">Deal Notes</label>
           <textarea
             name="notes"
             value={formData.notes}
             onChange={handleChange}
             rows={2}
             placeholder="Add key decision makers, proposal links, next steps..."
-            className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-200 focus:outline-none focus:border-indigo-500 transition-colors custom-scrollbar"
+            className="w-full px-3.5 py-2.5 bg-[#0A0A0A] border border-[#222222] rounded-xl text-sm text-zinc-200 focus:outline-none focus:border-purple-500 transition-colors custom-scrollbar"
           />
         </div>
 
         {/* Modal Footer Buttons */}
-        <div className="flex items-center justify-end space-x-3 pt-4 border-t border-slate-800">
+        <div className="flex items-center justify-end space-x-3 pt-4 border-t border-[#222222]">
           <Button
             type="button"
             variant="secondary"
@@ -247,7 +247,7 @@ export const DealModal: React.FC<DealModalProps> = ({
             size="sm"
             isLoading={isSubmitting}
             leftIcon={!editingDeal ? <Plus className="w-4 h-4" /> : undefined}
-            className="bg-indigo-600 hover:bg-indigo-500 border-none font-bold min-w-[130px]"
+            className="min-w-[130px]"
           >
             {editingDeal ? 'Save Changes' : 'Create Deal'}
           </Button>

@@ -30,7 +30,7 @@ export const NotificationToastContainer: React.FC<NotificationToastProps> = ({
   const getToastIcon = (type?: string, priority?: string) => {
     const isCritical = priority === 'CRITICAL' || priority === 'HIGH' || type?.includes('HOT') || type?.includes('OVERDUE');
     if (type?.includes('HOT') || type?.includes('LEAD')) {
-      return <Flame className={`w-5 h-5 ${isCritical ? 'text-amber-400 animate-bounce' : 'text-amber-400'}`} />;
+      return <Flame className={`w-5 h-5 ${isCritical ? 'text-[#FF7A00] animate-bounce' : 'text-[#FF7A00]'}`} />;
     }
     if (type?.includes('FOLLOW')) {
       return <Clock className="w-5 h-5 text-cyan-400" />;
@@ -41,7 +41,7 @@ export const NotificationToastContainer: React.FC<NotificationToastProps> = ({
     if (type?.includes('ALERT') || type?.includes('FAILED')) {
       return <AlertTriangle className="w-5 h-5 text-rose-400" />;
     }
-    return <Sparkles className="w-5 h-5 text-indigo-400" />;
+    return <Sparkles className="w-5 h-5 text-[#FF7A00]" />;
   };
 
   const handleToastClick = (toast: ToastItem) => {
@@ -63,12 +63,12 @@ export const NotificationToastContainer: React.FC<NotificationToastProps> = ({
             key={toast.id}
             className={`pointer-events-auto p-4 rounded-2xl border shadow-2xl backdrop-blur-xl transition-all duration-300 transform translate-y-0 flex items-start space-x-3 group ${
               isHigh
-                ? 'bg-slate-900/95 border-amber-500/50 shadow-amber-500/10 ring-1 ring-amber-500/30'
-                : 'bg-slate-900/90 border-slate-800 shadow-indigo-500/5 ring-1 ring-slate-800'
+                ? 'bg-[#171718]/95 border-[#FF7A00]/50 shadow-orange-500/10 ring-1 ring-[#FF7A00]/30'
+                : 'bg-[#171718]/90 border-[#2A2A2E] ring-1 ring-[#2A2A2E]'
             }`}
           >
             {/* Type Icon */}
-            <div className="p-2 rounded-xl bg-slate-800/80 shrink-0 mt-0.5">
+            <div className="p-2 rounded-xl bg-[#111113] shrink-0 mt-0.5">
               {getToastIcon(toast.type, toast.priority)}
             </div>
 
@@ -79,12 +79,12 @@ export const NotificationToastContainer: React.FC<NotificationToastProps> = ({
                   {toast.title}
                 </h4>
                 {isHigh && (
-                  <span className="px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/40 rounded-full shrink-0">
+                  <span className="px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider bg-[#FF7A00]/20 text-[#FF7A00] border border-[#FF7A00]/40 rounded-full shrink-0">
                     URGENT
                   </span>
                 )}
               </div>
-              <p className="text-xs text-slate-300 mt-1 line-clamp-2 leading-relaxed">
+              <p className="text-xs text-zinc-300 mt-1 line-clamp-2 leading-relaxed">
                 {toast.message}
               </p>
 
@@ -92,7 +92,7 @@ export const NotificationToastContainer: React.FC<NotificationToastProps> = ({
               {toast.action_url && (
                 <button
                   onClick={() => handleToastClick(toast)}
-                  className="mt-2.5 inline-flex items-center space-x-1 text-[11px] font-bold text-indigo-400 hover:text-indigo-300 transition-colors"
+                  className="mt-2.5 inline-flex items-center space-x-1 text-[11px] font-bold text-[#FF7A00] hover:text-[#FF8C1A] transition-colors"
                 >
                   <span>View Details</span>
                   <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
@@ -103,7 +103,7 @@ export const NotificationToastContainer: React.FC<NotificationToastProps> = ({
             {/* Dismiss Button */}
             <button
               onClick={() => onDismiss(toast.id)}
-              className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors shrink-0"
+              className="text-zinc-400 hover:text-white p-1 rounded-lg hover:bg-[#29292C] transition-colors shrink-0"
             >
               <X className="w-3.5 h-3.5" />
             </button>

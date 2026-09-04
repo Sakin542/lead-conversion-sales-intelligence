@@ -44,12 +44,12 @@ export const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
       {/* Animated Glowing Icon Box */}
       <div className="relative flex items-center justify-center">
         {/* Animated Rotating Gradient Ring */}
-        <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 via-cyan-400 to-purple-600 rounded-xl blur-sm opacity-80 group-hover:opacity-100 transition duration-500 animate-spin-slow"></div>
+        <div className="absolute -inset-1 bg-gradient-to-r from-[#FF7A00] via-[#FF8C1A] to-[#F59E0B] rounded-xl blur-sm opacity-70 group-hover:opacity-100 transition duration-500 animate-spin-slow"></div>
 
         {/* Inner Icon Container */}
-        <div className={`relative ${currentSize.box} bg-slate-950 text-white flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300 border border-slate-800`}>
-          <TrendingUp className={`${currentSize.icon} text-indigo-400 group-hover:text-cyan-300 transition-colors`} />
-          <Sparkles className="w-2.5 h-2.5 text-amber-400 absolute top-1 right-1 animate-pulse" />
+        <div className={`relative ${currentSize.box} bg-[#101011] text-white flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300 border border-[#2A2A2E]`}>
+          <TrendingUp className={`${currentSize.icon} text-[#FF7A00] group-hover:text-[#FF8C1A] transition-colors`} />
+          <Sparkles className="w-2.5 h-2.5 text-[#FF8C1A] absolute top-1 right-1 animate-pulse" />
         </div>
       </div>
 

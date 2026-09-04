@@ -98,7 +98,7 @@ export const LeadDetails: React.FC = () => {
           <div className="flex items-center space-x-3">
             <button
               onClick={() => navigate('/leads')}
-              className="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition-colors"
+              className="p-2 rounded-lg bg-[#111111] border border-[#222222] text-zinc-400 hover:text-white hover:bg-[#151515] transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
             </button>
@@ -106,7 +106,7 @@ export const LeadDetails: React.FC = () => {
               <h1 className="text-2xl font-bold text-white tracking-tight">
                 {lead ? `${lead.first_name} ${lead.last_name}` : 'Lead Details'}
               </h1>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-zinc-400">
                 {lead ? `${lead.job_title || 'Lead'} at ${lead.company}` : 'Viewing prospect file'}
               </p>
             </div>
@@ -118,7 +118,7 @@ export const LeadDetails: React.FC = () => {
                 variant="secondary"
                 size="sm"
                 onClick={() => navigate(`/leads/${lead.id}/edit`)}
-                className="flex items-center space-x-1.5"
+                className="flex items-center space-x-1.5 border-[#222222] text-zinc-300 hover:bg-[#151515]"
               >
                 <Edit className="w-4 h-4" />
                 <span>Edit Lead</span>
@@ -138,12 +138,12 @@ export const LeadDetails: React.FC = () => {
 
         {/* Loading / Error States */}
         {loading ? (
-          <div className="py-20 text-center bg-slate-900/40 border border-slate-800 rounded-xl flex flex-col items-center justify-center space-y-3">
+          <div className="py-20 text-center bg-[#111111] border border-[#222222] rounded-xl flex flex-col items-center justify-center space-y-3">
             <LoadingSpinner size="lg" />
-            <p className="text-xs text-slate-400">Loading lead file...</p>
+            <p className="text-xs text-zinc-400">Loading lead file...</p>
           </div>
         ) : error || !lead ? (
-          <div className="p-6 bg-rose-950/80 border border-rose-800 rounded-xl text-rose-300 text-sm flex items-center space-x-3">
+          <div className="p-6 bg-rose-950/40 border border-rose-800/60 rounded-xl text-rose-300 text-sm flex items-center space-x-3">
             <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />
             <span>{error || 'Lead not found.'}</span>
           </div>
@@ -151,10 +151,10 @@ export const LeadDetails: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Left Column: Lead Info Card */}
             <div className="lg:col-span-1 space-y-6">
-              <div className="p-6 bg-slate-900/60 border border-slate-800/80 rounded-xl space-y-6">
+              <div className="p-6 bg-[#111111] border border-[#222222] rounded-xl space-y-6 shadow-xl">
                 {/* Profile Header */}
                 <div className="flex items-center space-x-4">
-                  <div className="w-14 h-14 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 font-bold flex items-center justify-center text-xl shrink-0">
+                  <div className="w-14 h-14 rounded-2xl bg-zinc-800 border border-[#222222] text-white font-bold flex items-center justify-center text-xl shrink-0">
                     {lead.first_name.charAt(0)}
                     {lead.last_name.charAt(0)}
                   </div>
@@ -162,7 +162,7 @@ export const LeadDetails: React.FC = () => {
                     <h2 className="text-lg font-bold text-white leading-snug">
                       {lead.first_name} {lead.last_name}
                     </h2>
-                    <p className="text-xs text-slate-400">{lead.job_title || 'No title specified'}</p>
+                    <p className="text-xs text-zinc-400">{lead.job_title || 'No title specified'}</p>
                     <div className="mt-2">
                       <LeadStatusBadge status={lead.status} />
                     </div>
@@ -170,49 +170,49 @@ export const LeadDetails: React.FC = () => {
                 </div>
 
                 {/* Key Attributes List */}
-                <div className="space-y-3 text-xs pt-4 border-t border-slate-800/60">
-                  <div className="flex items-center text-slate-300">
-                    <Mail className="w-4 h-4 text-slate-500 mr-3 shrink-0" />
-                    <a href={`mailto:${lead.email}`} className="hover:text-indigo-400 transition-colors truncate">
+                <div className="space-y-3 text-xs pt-4 border-t border-[#222222]">
+                  <div className="flex items-center text-zinc-300">
+                    <Mail className="w-4 h-4 text-zinc-500 mr-3 shrink-0" />
+                    <a href={`mailto:${lead.email}`} className="hover:text-purple-400 transition-colors truncate">
                       {lead.email}
                     </a>
                   </div>
 
                   {lead.phone && (
-                    <div className="flex items-center text-slate-300">
-                      <Phone className="w-4 h-4 text-slate-500 mr-3 shrink-0" />
+                    <div className="flex items-center text-zinc-300">
+                      <Phone className="w-4 h-4 text-zinc-500 mr-3 shrink-0" />
                       <span>{lead.phone}</span>
                     </div>
                   )}
 
-                  <div className="flex items-center text-slate-300">
-                    <Building className="w-4 h-4 text-slate-500 mr-3 shrink-0" />
-                    <span className="font-semibold text-slate-200">{lead.company}</span>
+                  <div className="flex items-center text-zinc-300">
+                    <Building className="w-4 h-4 text-zinc-500 mr-3 shrink-0" />
+                    <span className="font-semibold text-zinc-200">{lead.company}</span>
                   </div>
 
                   {lead.industry && (
-                    <div className="flex items-center text-slate-300">
-                      <Tag className="w-4 h-4 text-slate-500 mr-3 shrink-0" />
+                    <div className="flex items-center text-zinc-300">
+                      <Tag className="w-4 h-4 text-zinc-500 mr-3 shrink-0" />
                       <span>Industry: {lead.industry}</span>
                     </div>
                   )}
 
                   {lead.company_size && (
-                    <div className="flex items-center text-slate-300">
-                      <Users className="w-4 h-4 text-slate-500 mr-3 shrink-0" />
+                    <div className="flex items-center text-zinc-300">
+                      <Users className="w-4 h-4 text-zinc-500 mr-3 shrink-0" />
                       <span>Size: {lead.company_size}</span>
                     </div>
                   )}
 
-                  <div className="flex items-center text-slate-300">
+                  <div className="flex items-center text-zinc-300">
                     <DollarSign className="w-4 h-4 text-emerald-400 mr-3 shrink-0" />
                     <span>Est. Value: </span>
                     <strong className="text-emerald-400 ml-1">{formatCurrency(lead.estimated_value)}</strong>
                   </div>
 
                   {lead.source && (
-                    <div className="flex items-center text-slate-300">
-                      <Calendar className="w-4 h-4 text-slate-500 mr-3 shrink-0" />
+                    <div className="flex items-center text-zinc-300">
+                      <Calendar className="w-4 h-4 text-zinc-500 mr-3 shrink-0" />
                       <span>Source: {lead.source}</span>
                     </div>
                   )}
@@ -220,11 +220,11 @@ export const LeadDetails: React.FC = () => {
 
                 {/* Notes Section */}
                 {lead.notes && (
-                  <div className="pt-4 border-t border-slate-800/60 space-y-1.5">
-                    <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                  <div className="pt-4 border-t border-[#222222] space-y-1.5">
+                    <h4 className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
                       Notes
                     </h4>
-                    <p className="text-xs text-slate-300 whitespace-pre-wrap leading-relaxed bg-slate-950 p-3 rounded-lg border border-slate-800">
+                    <p className="text-xs text-zinc-300 whitespace-pre-wrap leading-relaxed bg-[#0A0A0A] p-3 rounded-lg border border-[#222222]">
                       {lead.notes}
                     </p>
                   </div>
@@ -234,7 +234,7 @@ export const LeadDetails: React.FC = () => {
 
             {/* Right Column: Activity Timeline */}
             <div className="lg:col-span-2">
-              <div className="p-6 bg-slate-900/60 border border-slate-800/80 rounded-xl">
+              <div className="p-6 bg-[#111111] border border-[#222222] rounded-xl shadow-xl">
                 <ActivityTimeline
                   activities={activities}
                   onAddActivity={handleAddActivity}
@@ -252,7 +252,7 @@ export const LeadDetails: React.FC = () => {
           title="Delete Lead"
         >
           <div className="space-y-4">
-            <p className="text-sm text-slate-300 leading-relaxed">
+            <p className="text-sm text-zinc-300 leading-relaxed">
               Are you sure you want to delete lead{' '}
               <strong className="text-white font-bold">
                 {lead?.first_name} {lead?.last_name}
@@ -263,11 +263,12 @@ export const LeadDetails: React.FC = () => {
               This will permanently delete the lead and all associated activities and deals.
             </p>
 
-            <div className="flex items-center justify-end space-x-3 pt-4 border-t border-slate-800">
+            <div className="flex items-center justify-end space-x-3 pt-4 border-t border-[#222222]">
               <Button
                 variant="secondary"
                 onClick={() => setIsDeleteModalOpen(false)}
                 disabled={isDeleting}
+                className="border-[#222222] text-zinc-300 hover:bg-[#151515]"
               >
                 Cancel
               </Button>

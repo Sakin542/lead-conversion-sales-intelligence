@@ -89,7 +89,7 @@ export const LeadForm: React.FC<LeadFormProps> = ({
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {error && (
-        <div className="p-3.5 bg-rose-950/80 border border-rose-800/80 rounded-xl text-rose-300 text-xs flex items-center space-x-2">
+        <div className="p-3.5 bg-rose-950/40 border border-rose-800/60 rounded-xl text-rose-300 text-xs flex items-center space-x-2">
           <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
           <span>{error}</span>
         </div>
@@ -98,7 +98,7 @@ export const LeadForm: React.FC<LeadFormProps> = ({
       {/* Basic Contact Info */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+          <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
             First Name <span className="text-rose-400">*</span>
           </label>
           <Input
@@ -111,7 +111,7 @@ export const LeadForm: React.FC<LeadFormProps> = ({
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+          <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
             Last Name <span className="text-rose-400">*</span>
           </label>
           <Input
@@ -124,7 +124,7 @@ export const LeadForm: React.FC<LeadFormProps> = ({
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+          <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
             Email Address <span className="text-rose-400">*</span>
           </label>
           <Input
@@ -138,7 +138,7 @@ export const LeadForm: React.FC<LeadFormProps> = ({
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-1.5">Phone Number</label>
+          <label className="block text-xs font-semibold text-zinc-300 mb-1.5">Phone Number</label>
           <Input
             name="phone"
             value={formData.phone}
@@ -149,9 +149,9 @@ export const LeadForm: React.FC<LeadFormProps> = ({
       </div>
 
       {/* Company Info */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-slate-800/60">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-[#222222]">
         <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+          <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
             Company Name <span className="text-rose-400">*</span>
           </label>
           <Input
@@ -164,7 +164,7 @@ export const LeadForm: React.FC<LeadFormProps> = ({
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-1.5">Job Title</label>
+          <label className="block text-xs font-semibold text-zinc-300 mb-1.5">Job Title</label>
           <Input
             name="job_title"
             value={formData.job_title}
@@ -174,7 +174,7 @@ export const LeadForm: React.FC<LeadFormProps> = ({
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-1.5">Industry</label>
+          <label className="block text-xs font-semibold text-zinc-300 mb-1.5">Industry</label>
           <Input
             name="industry"
             value={formData.industry}
@@ -184,12 +184,12 @@ export const LeadForm: React.FC<LeadFormProps> = ({
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-1.5">Company Size</label>
+          <label className="block text-xs font-semibold text-zinc-300 mb-1.5">Company Size</label>
           <select
             name="company_size"
             value={formData.company_size}
             onChange={handleChange}
-            className="w-full px-3.5 py-2.5 min-h-[42px] bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-200 focus:outline-none focus:border-indigo-500 transition-colors"
+            className="w-full px-3.5 py-2.5 min-h-[42px] bg-[#0A0A0A] border border-[#222222] rounded-xl text-sm text-zinc-200 focus:outline-none focus:border-zinc-500 transition-colors"
           >
             {COMPANY_SIZE_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -201,14 +201,14 @@ export const LeadForm: React.FC<LeadFormProps> = ({
       </div>
 
       {/* Deal / Lead Pipeline Details */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2 border-t border-slate-800/60">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2 border-t border-[#222222]">
         <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-1.5">Status</label>
+          <label className="block text-xs font-semibold text-zinc-300 mb-1.5">Status</label>
           <select
             name="status"
             value={formData.status}
             onChange={handleChange}
-            className="w-full px-3.5 py-2.5 min-h-[42px] bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-200 focus:outline-none focus:border-indigo-500 transition-colors"
+            className="w-full px-3.5 py-2.5 min-h-[42px] bg-[#0A0A0A] border border-[#222222] rounded-xl text-sm text-zinc-200 focus:outline-none focus:border-zinc-500 transition-colors"
           >
             {STATUS_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -219,12 +219,12 @@ export const LeadForm: React.FC<LeadFormProps> = ({
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-1.5">Source</label>
+          <label className="block text-xs font-semibold text-zinc-300 mb-1.5">Source</label>
           <select
             name="source"
             value={formData.source}
             onChange={handleChange}
-            className="w-full px-3.5 py-2.5 min-h-[42px] bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-200 focus:outline-none focus:border-indigo-500 transition-colors"
+            className="w-full px-3.5 py-2.5 min-h-[42px] bg-[#0A0A0A] border border-[#222222] rounded-xl text-sm text-zinc-200 focus:outline-none focus:border-zinc-500 transition-colors"
           >
             {SOURCE_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -235,7 +235,7 @@ export const LeadForm: React.FC<LeadFormProps> = ({
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-1.5">Estimated Value ($)</label>
+          <label className="block text-xs font-semibold text-zinc-300 mb-1.5">Estimated Value ($)</label>
           <Input
             type="number"
             name="estimated_value"
@@ -249,27 +249,27 @@ export const LeadForm: React.FC<LeadFormProps> = ({
       </div>
 
       {/* Notes */}
-      <div className="pt-2 border-t border-slate-800/60">
-        <label className="block text-xs font-semibold text-slate-300 mb-1.5">Lead Notes</label>
+      <div className="pt-2 border-t border-[#222222]">
+        <label className="block text-xs font-semibold text-zinc-300 mb-1.5">Lead Notes</label>
         <textarea
           name="notes"
           value={formData.notes}
           onChange={handleChange}
           rows={3}
           placeholder="Add background info, preferences, meeting summaries..."
-          className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-200 focus:outline-none focus:border-indigo-500 transition-colors custom-scrollbar"
+          className="w-full px-3.5 py-2.5 bg-[#0A0A0A] border border-[#222222] rounded-xl text-sm text-zinc-200 focus:outline-none focus:border-zinc-500 transition-colors custom-scrollbar"
         />
       </div>
 
       {/* Footer Buttons: Cancel & Create Lead / Save Lead */}
-      <div className="flex items-center justify-end space-x-3 pt-4 border-t border-slate-800">
+      <div className="flex items-center justify-end space-x-3 pt-4 border-t border-[#222222]">
         {onCancel && (
           <Button
             type="button"
             variant="secondary"
             onClick={onCancel}
             disabled={isSubmitting}
-            className="min-w-[100px]"
+            className="min-w-[100px] border-[#222222] text-zinc-300 hover:bg-[#151515]"
           >
             Cancel
           </Button>
@@ -278,7 +278,7 @@ export const LeadForm: React.FC<LeadFormProps> = ({
           type="submit"
           variant="primary"
           isLoading={isSubmitting}
-          className="min-w-[130px]"
+          className="min-w-[130px] bg-white text-black hover:bg-zinc-200 border-none font-semibold"
         >
           {submitLabel}
         </Button>

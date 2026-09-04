@@ -72,7 +72,7 @@ class AdminAnalyticsController extends Controller
             ->groupBy('status')
             ->get();
 
-        $totalRevenue = (float) (clone $dealQuery)->where('stage', 'won')->sum('value');
+        $totalRevenue = (float) (clone $dealQuery)->whereHas('pipelineStage', fn($q) => $q->where('slug', 'won'))->sum('value');
         if ($totalRevenue == 0) {
             $totalRevenue = (float) (clone $leadQuery)->whereIn('status', ['won', 'converted'])->sum('estimated_value');
         }

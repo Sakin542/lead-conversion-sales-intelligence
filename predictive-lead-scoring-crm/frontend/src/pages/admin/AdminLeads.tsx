@@ -134,13 +134,13 @@ export const AdminLeads: React.FC = () => {
     <AdminLayout>
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-indigo-950 pb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-[#222222] pb-5">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
+            <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-3">
               <Target className="w-7 h-7 text-purple-400" />
               <span>Lead Intelligence & Management</span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1">
+            <p className="text-xs sm:text-sm text-zinc-400 mt-1">
               Global lead oversight, public website lead monitoring, AI scores, and team assignments.
             </p>
           </div>
@@ -150,17 +150,16 @@ export const AdminLeads: React.FC = () => {
               variant="outline"
               size="sm"
               onClick={fetchLeads}
-              className="border-slate-800 text-slate-300 hover:bg-slate-900"
+              className="border-[#222222] text-zinc-300 hover:bg-[#151515]"
               leftIcon={<RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />}
             >
               Refresh
             </Button>
             <Button
-              variant="primary"
+              variant="secondary"
               size="sm"
               onClick={handleExportCsv}
-              className="bg-emerald-600 hover:bg-emerald-500 border-none font-bold"
-              leftIcon={<Download className="w-4 h-4" />}
+              leftIcon={<Download className="w-4 h-4 text-emerald-400" />}
             >
               Export Leads CSV
             </Button>
@@ -170,47 +169,47 @@ export const AdminLeads: React.FC = () => {
         {/* Public Website Lead Capture Monitoring Banner */}
         {websiteMetrics && (
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="p-4 bg-slate-900/90 border border-slate-800 rounded-2xl flex items-center space-x-4">
-              <div className="p-3 bg-indigo-950 border border-indigo-800 rounded-xl text-indigo-400">
+            <div className="p-4 bg-[#111111] border border-[#222222] rounded-xl flex items-center space-x-4">
+              <div className="p-3 bg-purple-950/40 border border-purple-800/40 rounded-xl text-purple-400">
                 <Globe className="w-6 h-6" />
               </div>
               <div>
-                <p className="text-xs text-slate-400 font-bold uppercase">Website Capture Leads</p>
-                <p className="text-xl font-black text-white">{websiteMetrics.total_website_leads || 0}</p>
+                <p className="text-xs text-zinc-400 font-semibold uppercase">Website Capture Leads</p>
+                <p className="text-xl font-bold text-white">{websiteMetrics.total_website_leads || 0}</p>
               </div>
             </div>
 
-            <div className="p-4 bg-slate-900/90 border border-slate-800 rounded-2xl flex items-center space-x-4">
-              <div className="p-3 bg-emerald-950 border border-emerald-800 rounded-xl text-emerald-400">
+            <div className="p-4 bg-[#111111] border border-[#222222] rounded-xl flex items-center space-x-4">
+              <div className="p-3 bg-emerald-950/40 border border-emerald-800/40 rounded-xl text-emerald-400">
                 <Target className="w-6 h-6" />
               </div>
               <div>
-                <p className="text-xs text-slate-400 font-bold uppercase">Website Conversion Rate</p>
-                <p className="text-xl font-black text-emerald-400">{websiteMetrics.website_conversion_rate || 0}%</p>
+                <p className="text-xs text-zinc-400 font-semibold uppercase">Website Conversion Rate</p>
+                <p className="text-xl font-bold text-emerald-400">{websiteMetrics.website_conversion_rate || 0}%</p>
               </div>
             </div>
 
-            <div className="p-4 bg-slate-900/90 border border-slate-800 rounded-2xl flex items-center space-x-4">
-              <div className="p-3 bg-purple-950 border border-purple-800 rounded-xl text-purple-400">
+            <div className="p-4 bg-[#111111] border border-[#222222] rounded-xl flex items-center space-x-4">
+              <div className="p-3 bg-blue-950/40 border border-blue-800/40 rounded-xl text-blue-400">
                 <Building className="w-6 h-6" />
               </div>
               <div>
-                <p className="text-xs text-slate-400 font-bold uppercase">Website Lead Revenue</p>
-                <p className="text-xl font-black text-white">${(websiteMetrics.website_revenue || 0).toLocaleString()}</p>
+                <p className="text-xs text-zinc-400 font-semibold uppercase">Website Lead Revenue</p>
+                <p className="text-xl font-bold text-white">${(websiteMetrics.website_revenue || 0).toLocaleString()}</p>
               </div>
             </div>
           </div>
         )}
 
         {/* Filters */}
-        <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 shadow-xl">
+        <div className="bg-[#0A0A0A] border border-[#222222] rounded-xl p-4 shadow-xl">
           <form onSubmit={handleSearchSubmit} className="grid grid-cols-1 sm:grid-cols-12 gap-3">
             <div className="sm:col-span-4">
               <Input
                 placeholder="Search lead name, company, email..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                leftIcon={<Search className="w-4 h-4 text-slate-400" />}
+                leftIcon={<Search className="w-4 h-4 text-zinc-400" />}
               />
             </div>
             <div className="sm:col-span-2">
@@ -266,16 +265,16 @@ export const AdminLeads: React.FC = () => {
         </div>
 
         {error && (
-          <div className="p-4 bg-rose-950/60 border border-rose-800 rounded-xl text-rose-300 text-sm">
+          <div className="p-4 bg-rose-950/40 border border-rose-800/60 rounded-xl text-rose-300 text-sm">
             {error}
           </div>
         )}
 
         {/* Lead Table */}
-        <div className="bg-slate-900/80 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+        <div className="bg-[#0A0A0A] border border-[#222222] rounded-xl overflow-hidden shadow-xl">
           <div className="w-full min-w-0 overflow-x-auto custom-scrollbar">
-            <table className="w-full min-w-[750px] text-left text-xs text-slate-300">
-              <thead className="bg-slate-950 text-slate-400 font-semibold uppercase tracking-wider border-b border-slate-800">
+            <table className="w-full min-w-[750px] text-left text-xs text-zinc-300">
+              <thead className="bg-[#111111] text-zinc-400 font-medium uppercase tracking-wider border-b border-[#222222]">
                 <tr>
                   <th className="px-5 py-3.5">Lead Name</th>
                   <th className="px-5 py-3.5">Company & Source</th>
@@ -286,41 +285,41 @@ export const AdminLeads: React.FC = () => {
                   <th className="px-5 py-3.5 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800">
+              <tbody className="divide-y divide-[#222222]">
                 {loading ? (
                   <tr>
-                    <td colSpan={7} className="px-5 py-8 text-center text-slate-500">
+                    <td colSpan={7} className="px-5 py-8 text-center text-zinc-500">
                       <LoadingSpinner size="md" />
                     </td>
                   </tr>
                 ) : leads.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="px-5 py-8 text-center text-slate-500">
+                    <td colSpan={7} className="px-5 py-8 text-center text-zinc-500">
                       No leads match current filter criteria.
                     </td>
                   </tr>
                 ) : (
                   leads.map((l) => (
-                    <tr key={l.id} className="hover:bg-slate-800/40 transition-colors">
+                    <tr key={l.id} className="hover:bg-[#151515] transition-colors">
                       <td className="px-5 py-3.5">
                         <p className="font-bold text-white leading-snug">{l.first_name} {l.last_name}</p>
-                        <p className="text-[11px] text-slate-400 leading-snug">{l.email}</p>
+                        <p className="text-[11px] text-zinc-400 leading-snug">{l.email}</p>
                       </td>
                       <td className="px-5 py-3.5">
-                        <p className="font-bold text-slate-200">{l.company || 'N/A'}</p>
-                        <span className="inline-flex items-center text-[10px] text-indigo-400">
+                        <p className="font-bold text-zinc-200">{l.company || 'N/A'}</p>
+                        <span className="inline-flex items-center text-[10px] text-purple-400">
                           {l.source === 'website' || l.source === '🌐 Website' ? '🌐 Public Website' : l.source}
                         </span>
                       </td>
-                      <td className="px-5 py-3.5 uppercase font-bold text-slate-300">
+                      <td className="px-5 py-3.5 uppercase font-bold text-zinc-300">
                         {l.status}
                       </td>
                       <td className="px-5 py-3.5">
                         {getTemperatureBadge(l.score ?? 0)}
                       </td>
-                      <td className="px-5 py-3.5 font-medium text-slate-200">
+                      <td className="px-5 py-3.5 font-medium text-zinc-200">
                         {l.assigned_to_user ? (
-                          <span className="text-indigo-400 font-bold">{l.assigned_to_user.name}</span>
+                          <span className="text-purple-400 font-bold">{l.assigned_to_user.name}</span>
                         ) : (
                           <span className="text-amber-400 italic">Unassigned</span>
                         )}
@@ -331,14 +330,14 @@ export const AdminLeads: React.FC = () => {
                       <td className="px-5 py-3.5 text-right space-x-1.5">
                         <button
                           onClick={() => handleOpenAssignModal(l)}
-                          className="p-1.5 text-slate-400 hover:text-indigo-400 hover:bg-slate-800 rounded-lg"
+                          className="p-1.5 text-zinc-400 hover:text-purple-400 hover:bg-[#151515] rounded-lg"
                           title="Assign / Reassign Lead"
                         >
                           <UserCheck className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => handleDeleteLead(l.id)}
-                          className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-rose-950/40 rounded-lg"
+                          className="p-1.5 text-zinc-400 hover:text-rose-400 hover:bg-rose-950/40 rounded-lg"
                           title="Delete Lead Record"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -353,7 +352,7 @@ export const AdminLeads: React.FC = () => {
 
           {/* Pagination Footer */}
           {pagination && pagination.last_page > 1 && (
-            <div className="p-4 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+            <div className="p-4 border-t border-[#222222] flex items-center justify-between text-xs text-zinc-400">
               <span>Page {pagination.current_page} of {pagination.last_page} ({pagination.total} Total Leads)</span>
               <div className="flex gap-2">
                 <Button
@@ -381,7 +380,7 @@ export const AdminLeads: React.FC = () => {
       {/* Assign Modal */}
       <Modal isOpen={isAssignModalOpen} onClose={() => setIsAssignModalOpen(false)} title="Assign / Reassign Lead">
         <form onSubmit={handleAssignSubmit} className="space-y-4">
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-zinc-400">
             Select a sales representative to take ownership of <strong className="text-white">{selectedLead?.first_name} {selectedLead?.last_name}</strong>.
           </p>
 
@@ -395,11 +394,11 @@ export const AdminLeads: React.FC = () => {
             ]}
           />
 
-          <div className="pt-4 flex justify-end space-x-3 border-t border-slate-800">
-            <Button type="button" variant="outline" size="sm" onClick={() => setIsAssignModalOpen(false)}>
+          <div className="pt-4 flex justify-end space-x-3 border-t border-[#222222]">
+            <Button type="button" variant="secondary" size="sm" onClick={() => setIsAssignModalOpen(false)}>
               Cancel
             </Button>
-            <Button type="submit" variant="primary" size="sm" isLoading={isAssigning} className="bg-indigo-600 hover:bg-indigo-500 border-none font-bold">
+            <Button type="submit" variant="primary" size="sm" isLoading={isAssigning}>
               Save Lead Assignment
             </Button>
           </div>

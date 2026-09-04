@@ -210,27 +210,27 @@ export const AdminSettings: React.FC = () => {
     <AdminLayout>
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-indigo-950 pb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#222222] pb-5">
           <div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
-              <Settings className="w-7 h-7 text-indigo-400" />
+              <Settings className="w-7 h-7 text-purple-400" />
               <span>System Admin Settings</span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1">
+            <p className="text-xs sm:text-sm text-zinc-400 mt-1">
               Global system configuration, AI model parameters, security policies, and API keys.
             </p>
           </div>
 
           <div className="flex items-center space-x-3">
             {successMsg && (
-              <div className="p-2.5 bg-emerald-950/80 border border-emerald-800 rounded-xl flex items-center space-x-2 text-emerald-400 text-xs font-bold shadow-lg">
+              <div className="p-2.5 bg-emerald-950/40 border border-emerald-800/60 rounded-xl flex items-center space-x-2 text-emerald-400 text-xs font-semibold shadow-lg">
                 <CheckCircle2 className="w-4 h-4 shrink-0" />
                 <span>{successMsg}</span>
               </div>
             )}
 
             {errorMsg && (
-              <div className="p-2.5 bg-rose-950/80 border border-rose-800 rounded-xl flex items-center space-x-2 text-rose-400 text-xs font-bold shadow-lg">
+              <div className="p-2.5 bg-rose-950/40 border border-rose-800/60 rounded-xl flex items-center space-x-2 text-rose-400 text-xs font-semibold shadow-lg">
                 <AlertTriangle className="w-4 h-4 shrink-0" />
                 <span>{errorMsg}</span>
               </div>
@@ -240,7 +240,7 @@ export const AdminSettings: React.FC = () => {
               variant="outline"
               size="sm"
               onClick={fetchSettings}
-              className="border-slate-800 text-slate-300 hover:bg-slate-900 font-bold text-xs"
+              className="border-[#222222] text-zinc-300 hover:bg-[#151515] hover:text-white font-semibold text-xs"
               leftIcon={<RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />}
             >
               Refresh
@@ -249,7 +249,7 @@ export const AdminSettings: React.FC = () => {
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex items-center space-x-1 border-b border-slate-800/80 overflow-x-auto custom-scrollbar pb-1">
+        <div className="flex items-center space-x-1 border-b border-[#222222] overflow-x-auto custom-scrollbar pb-1">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const active = activeTab === tab.id;
@@ -257,13 +257,13 @@ export const AdminSettings: React.FC = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl font-bold text-xs whitespace-nowrap transition-all ${
+                className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl font-semibold text-xs whitespace-nowrap transition-all ${
                   active
-                    ? 'bg-indigo-600/20 text-indigo-400 border border-indigo-500/40 shadow-sm'
-                    : 'text-slate-400 hover:text-white hover:bg-slate-900'
+                    ? 'bg-[#151515] text-white border border-[#333333] shadow-sm'
+                    : 'text-zinc-400 hover:text-white hover:bg-[#111111]'
                 }`}
               >
-                <Icon className={`w-4 h-4 ${active ? 'text-indigo-400' : 'text-slate-400'}`} />
+                <Icon className={`w-4 h-4 ${active ? 'text-purple-400' : 'text-zinc-400'}`} />
                 <span>{tab.label}</span>
               </button>
             );
@@ -279,14 +279,14 @@ export const AdminSettings: React.FC = () => {
             {/* Tab 0: Admin Profile & Display Name */}
             {activeTab === 'profile' && (
               <div className="space-y-6">
-                <Card className="p-6 bg-slate-900/80 border-slate-800 space-y-6">
-                  <div className="flex items-center space-x-4 border-b border-slate-800 pb-4">
-                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-purple-600 text-white font-extrabold text-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                <Card className="p-6 bg-[#111111] border-[#222222] space-y-6">
+                  <div className="flex items-center space-x-4 border-b border-[#222222] pb-4">
+                    <div className="w-14 h-14 rounded-2xl bg-zinc-800 border border-[#222222] text-white font-extrabold text-xl flex items-center justify-center shadow-lg">
                       {adminName.slice(0, 2).toUpperCase()}
                     </div>
                     <div>
                       <h3 className="text-base font-bold text-white">{adminName}</h3>
-                      <p className="text-xs text-slate-400">Root System Administrator Identity</p>
+                      <p className="text-xs text-zinc-400">Root System Administrator Identity</p>
                     </div>
                   </div>
 
@@ -299,18 +299,18 @@ export const AdminSettings: React.FC = () => {
                     />
 
                     <div className="space-y-1">
-                      <label className="font-bold text-slate-300 block text-xs">System Admin Email (Unchangeable)</label>
+                      <label className="font-bold text-zinc-300 block text-xs">System Admin Email (Unchangeable)</label>
                       <div className="relative flex items-center">
                         <input
                           type="email"
                           value={adminEmail}
                           disabled
                           readOnly
-                          className="w-full bg-slate-950 text-slate-400 font-mono text-xs px-3.5 py-2.5 rounded-xl border border-slate-800 opacity-80 cursor-not-allowed"
+                          className="w-full bg-[#0A0A0A] text-zinc-400 font-mono text-xs px-3.5 py-2.5 rounded-xl border border-[#222222] opacity-80 cursor-not-allowed"
                         />
-                        <Lock className="w-3.5 h-3.5 text-slate-500 absolute right-3 pointer-events-none" />
+                        <Lock className="w-3.5 h-3.5 text-zinc-500 absolute right-3 pointer-events-none" />
                       </div>
-                      <span className="text-[10px] text-slate-500 font-medium block">Root System Admin email is permanent and cannot be modified.</span>
+                      <span className="text-[10px] text-zinc-500 font-medium block">Root System Admin email is permanent and cannot be modified.</span>
                     </div>
                   </div>
                 </Card>
@@ -319,9 +319,9 @@ export const AdminSettings: React.FC = () => {
             {/* Tab 1: AI Lead Scoring Engine */}
             {activeTab === 'ai' && (
               <div className="space-y-6">
-                <Card className="p-6 bg-slate-900/80 border-slate-800 space-y-4">
-                  <h3 className="text-sm font-bold text-white flex items-center space-x-2 border-b border-slate-800 pb-3">
-                    <Sparkles className="w-4 h-4 text-indigo-400" />
+                <Card className="p-6 bg-[#111111] border-[#222222] space-y-4">
+                  <h3 className="text-sm font-bold text-white flex items-center space-x-2 border-b border-[#222222] pb-3">
+                    <Sparkles className="w-4 h-4 text-purple-400" />
                     <span>AI Lead Scoring Temperature Cutoffs</span>
                   </h3>
 
@@ -348,19 +348,19 @@ export const AdminSettings: React.FC = () => {
                   </div>
                 </Card>
 
-                <Card className="p-6 bg-slate-900/80 border-slate-800 space-y-4 text-xs">
-                  <h3 className="text-sm font-bold text-white flex items-center space-x-2 border-b border-slate-800 pb-3">
+                <Card className="p-6 bg-[#111111] border-[#222222] space-y-4 text-xs">
+                  <h3 className="text-sm font-bold text-white flex items-center space-x-2 border-b border-[#222222] pb-3">
                     <Sliders className="w-4 h-4 text-purple-400" />
                     <span>ML Model Automation & Lead Routing Strategy</span>
                   </h3>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div className="space-y-1">
-                      <label className="font-bold text-slate-300 block">Model Retraining Schedule</label>
+                      <label className="font-bold text-zinc-300 block">Model Retraining Schedule</label>
                       <select
                         value={retrainSchedule}
                         onChange={(e) => setRetrainSchedule(e.target.value)}
-                        className="w-full bg-slate-950 text-white rounded-xl p-2.5 border border-slate-800 focus:outline-none"
+                        className="w-full bg-[#0A0A0A] text-white rounded-xl p-2.5 border border-[#222222] focus:outline-none focus:border-zinc-500"
                       >
                         <option value="daily">Daily Automatic</option>
                         <option value="weekly">Weekly (Recommended)</option>
@@ -370,11 +370,11 @@ export const AdminSettings: React.FC = () => {
                     </div>
 
                     <div className="space-y-1">
-                      <label className="font-bold text-slate-300 block">Auto-Rescore Frequency</label>
+                      <label className="font-bold text-zinc-300 block">Auto-Rescore Frequency</label>
                       <select
                         value={autoRescoreInterval}
                         onChange={(e) => setAutoRescoreInterval(e.target.value)}
-                        className="w-full bg-slate-950 text-white rounded-xl p-2.5 border border-slate-800 focus:outline-none"
+                        className="w-full bg-[#0A0A0A] text-white rounded-xl p-2.5 border border-[#222222] focus:outline-none focus:border-zinc-500"
                       >
                         <option value="1">Every 1 Hour</option>
                         <option value="6">Every 6 Hours</option>
@@ -383,11 +383,11 @@ export const AdminSettings: React.FC = () => {
                     </div>
 
                     <div className="space-y-1">
-                      <label className="font-bold text-slate-300 block">Lead Auto-Distribution Engine</label>
+                      <label className="font-bold text-zinc-300 block">Lead Auto-Distribution Engine</label>
                       <select
                         value={distributionMode}
                         onChange={(e) => setDistributionMode(e.target.value)}
-                        className="w-full bg-slate-950 text-white rounded-xl p-2.5 border border-slate-800 focus:outline-none"
+                        className="w-full bg-[#0A0A0A] text-white rounded-xl p-2.5 border border-[#222222] focus:outline-none focus:border-zinc-500"
                       >
                         <option value="workload">Equitable Workload Balancing</option>
                         <option value="roundrobin">Round Robin</option>
@@ -402,44 +402,44 @@ export const AdminSettings: React.FC = () => {
             {/* Tab 2: Operations & Maintenance */}
             {activeTab === 'maintenance' && (
               <div className="space-y-6">
-                <Card className="p-6 bg-slate-900/80 border-slate-800 space-y-4">
-                  <h3 className="text-sm font-bold text-white flex items-center space-x-2 border-b border-slate-800 pb-3">
+                <Card className="p-6 bg-[#111111] border-[#222222] space-y-4">
+                  <h3 className="text-sm font-bold text-white flex items-center space-x-2 border-b border-[#222222] pb-3">
                     <AlertTriangle className="w-4 h-4 text-amber-400" />
                     <span>System Maintenance Mode</span>
                   </h3>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-zinc-400">
                     Enabling maintenance mode broadcasts maintenance notices to users and restricts write actions.
                   </p>
 
-                  <label className="flex items-center space-x-3 cursor-pointer p-4 bg-slate-950 rounded-xl border border-slate-800">
+                  <label className="flex items-center space-x-3 cursor-pointer p-4 bg-[#0A0A0A] rounded-xl border border-[#222222]">
                     <input
                       type="checkbox"
                       checked={isMaintenanceMode}
                       onChange={handleMaintenanceToggle}
-                      className="h-4 w-4 text-amber-500 rounded bg-slate-950 accent-amber-500 cursor-pointer"
+                      className="h-4 w-4 text-amber-500 rounded bg-[#0A0A0A] accent-amber-500 cursor-pointer"
                     />
                     <div>
                       <span className="text-xs text-amber-300 font-extrabold uppercase block">
                         Enable System Maintenance Mode
                       </span>
-                      <span className="text-[11px] text-slate-400">Broadcast maintenance alert across all client sessions</span>
+                      <span className="text-[11px] text-zinc-400">Broadcast maintenance alert across all client sessions</span>
                     </div>
                   </label>
                 </Card>
 
-                <Card className="p-6 bg-slate-900/80 border-slate-800 space-y-4 text-xs">
-                  <h3 className="text-sm font-bold text-white flex items-center space-x-2 border-b border-slate-800 pb-3">
-                    <Server className="w-4 h-4 text-indigo-400" />
+                <Card className="p-6 bg-[#111111] border-[#222222] space-y-4 text-xs">
+                  <h3 className="text-sm font-bold text-white flex items-center space-x-2 border-b border-[#222222] pb-3">
+                    <Server className="w-4 h-4 text-purple-400" />
                     <span>Operational Performance & Logging</span>
                   </h3>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1">
-                      <label className="font-bold text-slate-300 block">System Log Level</label>
+                      <label className="font-bold text-zinc-300 block">System Log Level</label>
                       <select
                         value={logLevel}
                         onChange={(e) => setLogLevel(e.target.value)}
-                        className="w-full bg-slate-950 text-white rounded-xl p-2.5 border border-slate-800 focus:outline-none"
+                        className="w-full bg-[#0A0A0A] text-white rounded-xl p-2.5 border border-[#222222] focus:outline-none focus:border-zinc-500"
                       >
                         <option value="error">Error Only (Production)</option>
                         <option value="info">Info & Warnings (Recommended)</option>
@@ -461,8 +461,8 @@ export const AdminSettings: React.FC = () => {
             {/* Tab 3: Email SMTP Gateway */}
             {activeTab === 'email' && (
               <div className="space-y-6">
-                <Card className="p-6 bg-slate-900/80 border-slate-800 space-y-4 text-xs">
-                  <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                <Card className="p-6 bg-[#111111] border-[#222222] space-y-4 text-xs">
+                  <div className="flex items-center justify-between border-b border-[#222222] pb-3">
                     <h3 className="text-sm font-bold text-white flex items-center space-x-2">
                       <Mail className="w-4 h-4 text-purple-400" />
                       <span>SMTP Email Delivery Configuration</span>
@@ -473,8 +473,8 @@ export const AdminSettings: React.FC = () => {
                       size="sm"
                       onClick={handleSendTestEmail}
                       isLoading={isSendingTestMail}
-                      leftIcon={<Send className="w-3.5 h-3.5 text-indigo-400" />}
-                      className="border-slate-800 text-slate-300 font-bold text-xs"
+                      leftIcon={<Send className="w-3.5 h-3.5 text-purple-400" />}
+                      className="border-[#222222] text-zinc-300 font-semibold text-xs hover:bg-[#151515]"
                     >
                       Send Test Email
                     </Button>
@@ -509,20 +509,20 @@ export const AdminSettings: React.FC = () => {
                   </div>
                 </Card>
 
-                <Card className="p-6 bg-slate-900/80 border-slate-800 space-y-3 text-xs">
-                  <h3 className="text-sm font-bold text-white flex items-center space-x-2 border-b border-slate-800 pb-3">
-                    <Bell className="w-4 h-4 text-indigo-400" />
+                <Card className="p-6 bg-[#111111] border-[#222222] space-y-3 text-xs">
+                  <h3 className="text-sm font-bold text-white flex items-center space-x-2 border-b border-[#222222] pb-3">
+                    <Bell className="w-4 h-4 text-purple-400" />
                     <span>System Email Trigger Notifications</span>
                   </h3>
 
-                  <label className="flex items-center space-x-3 cursor-pointer p-3 bg-slate-950 rounded-xl border border-slate-800">
+                  <label className="flex items-center space-x-3 cursor-pointer p-3 bg-[#0A0A0A] rounded-xl border border-[#222222]">
                     <input
                       type="checkbox"
                       checked={hotLeadNotif}
                       onChange={(e) => setHotLeadNotif(e.target.checked)}
-                      className="h-4 w-4 text-indigo-500 rounded bg-slate-950 accent-indigo-500"
+                      className="h-4 w-4 text-purple-500 rounded bg-[#0A0A0A] accent-purple-500"
                     />
-                    <span className="text-slate-200 font-semibold">
+                    <span className="text-zinc-200 font-semibold">
                       Send Instant Email Alert when a lead achieves HOT Intent score ({hotThreshold}+)
                     </span>
                   </label>
@@ -533,8 +533,8 @@ export const AdminSettings: React.FC = () => {
             {/* Tab 4: Security & Audit Governance */}
             {activeTab === 'security' && (
               <div className="space-y-6">
-                <Card className="p-6 bg-slate-900/80 border-slate-800 space-y-4 text-xs">
-                  <h3 className="text-sm font-bold text-white flex items-center space-x-2 border-b border-slate-800 pb-3">
+                <Card className="p-6 bg-[#111111] border-[#222222] space-y-4 text-xs">
+                  <h3 className="text-sm font-bold text-white flex items-center space-x-2 border-b border-[#222222] pb-3">
                     <Shield className="w-4 h-4 text-emerald-400" />
                     <span>System Access & Session Security Policy</span>
                   </h3>
@@ -562,16 +562,16 @@ export const AdminSettings: React.FC = () => {
                   </div>
 
                   <div className="space-y-3 pt-2">
-                    <div className="p-4 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between">
+                    <div className="p-4 bg-[#0A0A0A] rounded-xl border border-[#222222] flex items-center justify-between">
                       <div>
                         <span className="font-bold text-white block">Enforce Two-Factor Authentication (2FA)</span>
-                        <span className="text-slate-400 text-[11px]">Mandate 2FA login verification for Admin and Sales Manager roles</span>
+                        <span className="text-zinc-400 text-[11px]">Mandate 2FA login verification for Admin and Sales Manager roles</span>
                       </div>
                       <input
                         type="checkbox"
                         checked={enforce2FA}
                         onChange={(e) => setEnforce2FA(e.target.checked)}
-                        className="h-4 w-4 text-indigo-500 rounded border-slate-700 bg-slate-900 accent-indigo-500 cursor-pointer"
+                        className="h-4 w-4 text-purple-500 rounded border-[#222222] bg-[#0A0A0A] accent-purple-500 cursor-pointer"
                       />
                     </div>
                   </div>
@@ -582,10 +582,10 @@ export const AdminSettings: React.FC = () => {
             {/* Tab 5: Sanctum API & Webhooks */}
             {activeTab === 'api' && (
               <div className="space-y-6">
-                <Card className="p-6 bg-slate-900/80 border-slate-800 space-y-4 text-xs">
-                  <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                <Card className="p-6 bg-[#111111] border-[#222222] space-y-4 text-xs">
+                  <div className="flex items-center justify-between border-b border-[#222222] pb-3">
                     <h3 className="text-sm font-bold text-white flex items-center space-x-2">
-                      <Key className="w-4 h-4 text-indigo-400" />
+                      <Key className="w-4 h-4 text-purple-400" />
                       <span>Laravel Sanctum Admin Bearer Token</span>
                     </h3>
                     <Button
@@ -594,15 +594,15 @@ export const AdminSettings: React.FC = () => {
                       size="sm"
                       onClick={handleGenerateToken}
                       isLoading={isGeneratingToken}
-                      leftIcon={<RefreshCw className="w-3.5 h-3.5 text-indigo-400" />}
-                      className="border-slate-800 text-slate-300 font-bold text-xs"
+                      leftIcon={<RefreshCw className="w-3.5 h-3.5 text-purple-400" />}
+                      className="border-[#222222] text-zinc-300 font-semibold text-xs hover:bg-[#151515]"
                     >
                       Generate New Token
                     </Button>
                   </div>
 
-                  <p className="text-slate-400">
-                    Use this system administrator bearer token to execute full CRUD API requests to <code className="text-indigo-300 font-mono">http://localhost:8000/api/admin</code>
+                  <p className="text-zinc-400">
+                    Use this system administrator bearer token to execute full CRUD API requests to <code className="text-purple-300 font-mono">http://localhost:8000/api/admin</code>
                   </p>
 
                   <div className="flex items-center space-x-2 pt-1">
@@ -610,7 +610,7 @@ export const AdminSettings: React.FC = () => {
                       type="text"
                       readOnly
                       value={apiToken}
-                      className="flex-1 bg-slate-950 text-slate-300 font-mono text-xs px-3.5 py-2.5 rounded-xl border border-slate-800 focus:outline-none"
+                      className="flex-1 bg-[#0A0A0A] text-zinc-300 font-mono text-xs px-3.5 py-2.5 rounded-xl border border-[#222222] focus:outline-none"
                     />
                     <Button
                       type="button"
@@ -618,15 +618,15 @@ export const AdminSettings: React.FC = () => {
                       size="sm"
                       onClick={handleCopyToken}
                       leftIcon={copiedToken ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                      className="font-bold border-slate-700 text-xs text-white"
+                      className="font-semibold border-[#222222] text-xs text-white hover:bg-[#151515]"
                     >
                       {copiedToken ? 'Copied!' : 'Copy Token'}
                     </Button>
                   </div>
                 </Card>
 
-                <Card className="p-6 bg-slate-900/80 border-slate-800 space-y-4 text-xs">
-                  <h3 className="text-sm font-bold text-white flex items-center space-x-2 border-b border-slate-800 pb-3">
+                <Card className="p-6 bg-[#111111] border-[#222222] space-y-4 text-xs">
+                  <h3 className="text-sm font-bold text-white flex items-center space-x-2 border-b border-[#222222] pb-3">
                     <Zap className="w-4 h-4 text-amber-400" />
                     <span>System Event Webhook Dispatcher</span>
                   </h3>
@@ -641,14 +641,14 @@ export const AdminSettings: React.FC = () => {
             )}
 
             {/* Save System Settings Button */}
-            <div className="flex justify-end pt-2 border-t border-slate-800/80">
+            <div className="flex justify-end pt-2 border-t border-[#222222]">
               <Button
                 type="submit"
                 variant="primary"
                 size="md"
                 isLoading={isSaving}
                 leftIcon={<Save className="w-4 h-4" />}
-                className="bg-indigo-600 hover:bg-indigo-500 border-none font-bold text-xs px-6 py-2.5 rounded-xl shadow-lg shadow-indigo-500/25"
+                className="bg-white text-black hover:bg-zinc-200 border-none font-semibold text-xs px-6 py-2.5 rounded-xl shadow-lg"
               >
                 Save System Settings
               </Button>

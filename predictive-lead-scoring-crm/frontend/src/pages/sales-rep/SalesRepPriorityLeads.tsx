@@ -34,13 +34,13 @@ export const SalesRepPriorityLeads: React.FC = () => {
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-800 pb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-[#2A2A2E] pb-5">
           <div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
-              <Flame className="w-7 h-7 text-amber-400" />
+              <Flame className="w-7 h-7 text-[#FF7A00]" />
               <span>Priority Lead Center</span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1">
+            <p className="text-xs sm:text-sm text-zinc-400 mt-1">
               Focus on high-probability leads, urgent follow-ups, and overdue tasks to maximize conversion.
             </p>
           </div>
@@ -53,32 +53,32 @@ export const SalesRepPriorityLeads: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* HOT LEADS */}
-            <Card className="p-5 bg-slate-900/80 border-slate-800 flex flex-col justify-between h-full space-y-4">
+            <Card className="p-5 bg-[#171718] border-[#2A2A2E] flex flex-col justify-between h-full space-y-4">
               <div className="space-y-4">
-                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div className="flex items-center justify-between border-b border-[#2A2A2E] pb-3">
                   <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                    <Flame className="w-4 h-4 text-amber-400" />
+                    <Flame className="w-4 h-4 text-[#FF7A00]" />
                     <span>HOT Leads (Score &ge; 80)</span>
                   </h3>
                   <Badge variant="warning" size="sm">Immediate Action</Badge>
                 </div>
 
                 {data?.hot_leads?.length === 0 ? (
-                  <p className="text-xs text-slate-500 py-6 text-center">No HOT leads assigned currently.</p>
+                  <p className="text-xs text-zinc-500 py-6 text-center">No HOT leads assigned currently.</p>
                 ) : (
                   <div className="space-y-3">
                     {data?.hot_leads?.map((l: any) => (
-                      <div key={l.id} className="p-3.5 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between">
+                      <div key={l.id} className="p-3.5 bg-[#111113] rounded-xl border border-[#2A2A2E] flex items-center justify-between">
                         <div>
                           <p className="text-sm font-extrabold text-white">{l.first_name} {l.last_name}</p>
-                          <p className="text-xs text-slate-400">{l.company} • {l.email}</p>
-                          <p className="text-[11px] text-amber-400/90 font-semibold mt-1">Reason: High Intent AI Score ({l.score}/100)</p>
+                          <p className="text-xs text-zinc-400">{l.company} • {l.email}</p>
+                          <p className="text-[11px] text-[#FF7A00] font-semibold mt-1">Reason: High Intent AI Score ({l.score}/100)</p>
                         </div>
                         <Button
-                          variant="primary"
+                          variant="ai"
                           size="sm"
                           onClick={() => navigate(`/sales-rep/leads/${l.id}`)}
-                          className="bg-indigo-600 border-none font-bold text-xs"
+                          className="text-xs"
                         >
                           Execute <ArrowRight className="w-3 h-3 ml-1" />
                         </Button>
@@ -90,32 +90,32 @@ export const SalesRepPriorityLeads: React.FC = () => {
             </Card>
 
             {/* HIGH PRIORITY LEADS */}
-            <Card className="p-5 bg-slate-900/80 border-slate-800 flex flex-col justify-between h-full space-y-4">
+            <Card className="p-5 bg-[#171718] border-[#2A2A2E] flex flex-col justify-between h-full space-y-4">
               <div className="space-y-4">
-                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div className="flex items-center justify-between border-b border-[#2A2A2E] pb-3">
                   <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-indigo-400" />
+                    <Sparkles className="w-4 h-4 text-[#FF7A00]" />
                     <span>High Priority Prospects (Score 65+)</span>
                   </h3>
                   <Badge variant="primary" size="sm">High Intent</Badge>
                 </div>
 
                 {data?.high_priority_leads?.length === 0 ? (
-                  <p className="text-xs text-slate-500 py-6 text-center">No high priority prospects currently.</p>
+                  <p className="text-xs text-zinc-500 py-6 text-center">No high priority prospects currently.</p>
                 ) : (
                   <div className="space-y-3">
                     {data?.high_priority_leads?.map((l: any) => (
-                      <div key={l.id} className="p-3.5 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between">
+                      <div key={l.id} className="p-3.5 bg-[#111113] rounded-xl border border-[#2A2A2E] flex items-center justify-between">
                         <div>
                           <p className="text-sm font-extrabold text-white">{l.first_name} {l.last_name}</p>
-                          <p className="text-xs text-slate-400">{l.company} • {l.email}</p>
-                          <p className="text-[11px] text-indigo-400 font-semibold mt-1">Reason: Elevated Conversion Probability</p>
+                          <p className="text-xs text-zinc-400">{l.company} • {l.email}</p>
+                          <p className="text-[11px] text-[#FF7A00] font-semibold mt-1">Reason: Elevated Conversion Probability</p>
                         </div>
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => navigate(`/sales-rep/leads/${l.id}`)}
-                          className="border-indigo-800 text-indigo-300 text-xs"
+                          className="border-[#2A2A2E] text-zinc-300 hover:bg-[#1C1C1E] text-xs"
                         >
                           View Lead <ArrowRight className="w-3 h-3 ml-1" />
                         </Button>
@@ -127,31 +127,31 @@ export const SalesRepPriorityLeads: React.FC = () => {
             </Card>
 
             {/* FOLLOW-UP DUE TODAY */}
-            <Card className="p-5 bg-slate-900/80 border-slate-800 flex flex-col justify-between h-full space-y-4">
+            <Card className="p-5 bg-[#171718] border-[#2A2A2E] flex flex-col justify-between h-full space-y-4">
               <div className="space-y-4">
-                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div className="flex items-center justify-between border-b border-[#2A2A2E] pb-3">
                   <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-cyan-400" />
+                    <Clock className="w-4 h-4 text-[#FF7A00]" />
                     <span>Follow-up Due Today</span>
                   </h3>
                   <Badge variant="primary" size="sm">Due Today</Badge>
                 </div>
 
                 {data?.followup_due_today?.length === 0 ? (
-                  <p className="text-xs text-slate-500 py-6 text-center">No follow-ups due today.</p>
+                  <p className="text-xs text-zinc-500 py-6 text-center">No follow-ups due today.</p>
                 ) : (
                   <div className="space-y-3">
                     {data?.followup_due_today?.map((f: any) => (
-                      <div key={f.id} className="p-3.5 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between">
+                      <div key={f.id} className="p-3.5 bg-[#111113] rounded-xl border border-[#2A2A2E] flex items-center justify-between">
                         <div>
                           <p className="text-sm font-extrabold text-white">{f.lead ? `${f.lead.first_name} ${f.lead.last_name}` : 'Follow-up Task'}</p>
-                          <p className="text-xs text-slate-400">{f.notes || 'Scheduled outreach due today'}</p>
+                          <p className="text-xs text-zinc-400">{f.notes || 'Scheduled outreach due today'}</p>
                         </div>
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => navigate('/sales-rep/follow-ups')}
-                          className="border-cyan-800 text-cyan-300 text-xs"
+                          className="border-[#2A2A2E] text-zinc-300 hover:bg-[#1C1C1E] text-xs"
                         >
                           Open Schedule
                         </Button>
@@ -163,9 +163,9 @@ export const SalesRepPriorityLeads: React.FC = () => {
             </Card>
 
             {/* OVERDUE FOLLOW-UPS */}
-            <Card className="p-5 bg-slate-900/80 border-slate-800 flex flex-col justify-between h-full space-y-4">
+            <Card className="p-5 bg-[#171718] border-[#2A2A2E] flex flex-col justify-between h-full space-y-4">
               <div className="space-y-4">
-                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div className="flex items-center justify-between border-b border-[#2A2A2E] pb-3">
                   <h3 className="text-sm font-bold text-white flex items-center gap-2">
                     <AlertTriangle className="w-4 h-4 text-rose-400" />
                     <span>Overdue Follow-up Reminders</span>
@@ -174,11 +174,11 @@ export const SalesRepPriorityLeads: React.FC = () => {
                 </div>
 
                 {data?.overdue_followups?.length === 0 ? (
-                  <p className="text-xs text-slate-500 py-6 text-center">No overdue follow-up tasks.</p>
+                  <p className="text-xs text-zinc-500 py-6 text-center">No overdue follow-up tasks.</p>
                 ) : (
                   <div className="space-y-3">
                     {data?.overdue_followups?.map((f: any) => (
-                      <div key={f.id} className="p-3.5 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between">
+                      <div key={f.id} className="p-3.5 bg-[#111113] rounded-xl border border-[#2A2A2E] flex items-center justify-between">
                         <div>
                           <p className="text-sm font-extrabold text-white">{f.lead ? `${f.lead.first_name} ${f.lead.last_name}` : 'Follow-up Task'}</p>
                           <p className="text-xs text-rose-400 font-semibold">{f.notes || 'Overdue task requiring immediate completion'}</p>
@@ -187,7 +187,7 @@ export const SalesRepPriorityLeads: React.FC = () => {
                           variant="outline"
                           size="sm"
                           onClick={() => navigate('/sales-rep/follow-ups')}
-                          className="border-rose-900 text-rose-300 hover:bg-rose-950/60 text-xs"
+                          className="border-rose-900/60 text-rose-400 hover:bg-rose-950/40 text-xs"
                         >
                           Resolve Now
                         </Button>

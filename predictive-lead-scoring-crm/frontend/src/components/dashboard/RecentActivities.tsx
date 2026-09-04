@@ -55,15 +55,15 @@ export const RecentActivities: React.FC = () => {
   };
 
   return (
-    <Card className="bg-slate-900/60 border-slate-800/80 p-6 space-y-6">
+    <Card className="p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="space-y-1">
           <div className="flex items-center space-x-2">
-            <Activity className="w-4 h-4 text-indigo-400" />
+            <Activity className="w-4 h-4 text-purple-400" />
             <h3 className="text-base font-bold text-white tracking-tight">Recent Activity</h3>
           </div>
-          <p className="text-xs text-slate-400">Real-time buyer engagement feed</p>
+          <p className="text-xs text-zinc-400">Real-time buyer engagement feed</p>
         </div>
       </div>
 
@@ -72,23 +72,23 @@ export const RecentActivities: React.FC = () => {
         {realActivities.length > 0 ? (
           realActivities.slice(0, 5).map((act) => (
             <div key={act.id} className="flex items-start space-x-3 text-xs">
-              <div className="p-2 rounded-xl bg-slate-950 border border-slate-800 shrink-0 mt-0.5">
+              <div className="p-2 rounded-xl bg-[#0A0A0A] border border-[#222222] shrink-0 mt-0.5">
                 {getActivityIcon(act.type)}
               </div>
 
-              <div className="flex-1 space-y-1 border-b border-slate-800/50 pb-3">
-                <p className="text-slate-200 leading-snug">
+              <div className="flex-1 space-y-1 border-b border-[#222222] pb-3">
+                <p className="text-zinc-200 leading-snug">
                   <span className="font-bold text-white">
                     {act.lead ? `${act.lead.first_name} ${act.lead.last_name}` : 'Lead'}
                   </span>{' '}
-                  <span className="text-slate-300">{act.description}</span>
+                  <span className="text-zinc-300">{act.description}</span>
                 </p>
                 {act.lead?.company && (
-                  <p className="text-[11px] text-slate-400 font-mono">{act.lead.company}</p>
+                  <p className="text-[11px] text-zinc-400 font-mono">{act.lead.company}</p>
                 )}
               </div>
 
-              <span className="text-[11px] text-slate-400 shrink-0 font-medium">
+              <span className="text-[11px] text-zinc-400 shrink-0 font-medium">
                 {formatTimestamp(act.occurred_at || act.created_at)}
               </span>
             </div>
@@ -96,19 +96,19 @@ export const RecentActivities: React.FC = () => {
         ) : (
           mockActivities.map((act) => (
             <div key={act.id} className="flex items-start space-x-3 text-xs">
-              <div className="p-2 rounded-xl bg-slate-950 border border-slate-800 shrink-0 mt-0.5">
-                <Activity className="w-4 h-4 text-slate-400" />
+              <div className="p-2 rounded-xl bg-[#0A0A0A] border border-[#222222] shrink-0 mt-0.5">
+                <Activity className="w-4 h-4 text-zinc-400" />
               </div>
 
-              <div className="flex-1 space-y-1 border-b border-slate-800/50 pb-3">
-                <p className="text-slate-200 leading-snug">
+              <div className="flex-1 space-y-1 border-b border-[#222222] pb-3">
+                <p className="text-zinc-200 leading-snug">
                   <span className="font-bold text-white">{act.user}</span>{' '}
-                  <span className="text-slate-300">{act.action}</span>
+                  <span className="text-zinc-300">{act.action}</span>
                 </p>
-                <p className="text-[11px] text-slate-400 font-mono">{act.target}</p>
+                <p className="text-[11px] text-zinc-400 font-mono">{act.target}</p>
               </div>
 
-              <span className="text-[11px] text-slate-400 shrink-0 font-medium">{act.timestamp}</span>
+              <span className="text-[11px] text-zinc-400 shrink-0 font-medium">{act.timestamp}</span>
             </div>
           ))
         )}

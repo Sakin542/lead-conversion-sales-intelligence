@@ -118,7 +118,7 @@ export const Pipeline: React.FC = () => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold text-white tracking-tight">Sales Pipeline</h1>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-zinc-400">
               Track deal progress and revenue conversion across all 7 pipeline stages
             </p>
           </div>
@@ -128,7 +128,7 @@ export const Pipeline: React.FC = () => {
               variant="outline"
               size="sm"
               onClick={fetchPipelineData}
-              className="border-slate-800 text-slate-300 hover:bg-slate-900"
+              className="border-[#222222] text-zinc-300 hover:bg-[#151515]"
               leftIcon={<RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />}
             >
               Refresh
@@ -139,7 +139,6 @@ export const Pipeline: React.FC = () => {
               size="sm"
               onClick={() => handleOpenAddDeal()}
               leftIcon={<Plus className="w-4 h-4" />}
-              className="bg-indigo-600 hover:bg-indigo-500 border-none font-bold shadow-lg shadow-indigo-600/20"
             >
               Create Deal
             </Button>
@@ -148,7 +147,7 @@ export const Pipeline: React.FC = () => {
 
         {/* Error Banner */}
         {error && (
-          <div className="p-4 bg-rose-950/80 border border-rose-800/80 rounded-xl text-rose-300 text-xs flex items-center justify-between">
+          <div className="p-4 bg-rose-950/40 border border-rose-800/60 rounded-xl text-rose-300 text-xs flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
               <span>{error}</span>
@@ -167,9 +166,9 @@ export const Pipeline: React.FC = () => {
 
         {/* Board Content */}
         {loading ? (
-          <div className="py-24 text-center bg-slate-900/40 border border-slate-800 rounded-xl flex flex-col items-center justify-center space-y-3">
+          <div className="py-24 text-center bg-[#111111] border border-[#222222] rounded-xl flex flex-col items-center justify-center space-y-3">
             <LoadingSpinner size="lg" />
-            <p className="text-xs text-slate-400 font-medium">Loading sales pipeline...</p>
+            <p className="text-xs text-zinc-400 font-medium">Loading sales pipeline...</p>
           </div>
         ) : (
           <PipelineBoard

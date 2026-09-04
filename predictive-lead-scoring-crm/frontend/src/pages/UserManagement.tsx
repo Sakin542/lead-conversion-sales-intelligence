@@ -129,13 +129,13 @@ export const UserManagement: React.FC = () => {
     <DashboardLayout>
       <div className="space-y-6">
         {/* Header section */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-800/80 pb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-[#2A2A2E] pb-5">
           <div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
-              <Shield className="w-7 h-7 text-indigo-400" />
+              <Shield className="w-7 h-7 text-[#FF7A00]" />
               <span>CRM User Management</span>
             </h1>
-            <p className="text-sm text-slate-400 mt-1">
+            <p className="text-sm text-zinc-400 mt-1">
               Manage accounts, assign roles, and issue invitation links for CRM team members.
             </p>
           </div>
@@ -145,16 +145,16 @@ export const UserManagement: React.FC = () => {
               variant="outline"
               size="sm"
               onClick={fetchUsers}
-              className="border-slate-800 text-slate-300 hover:bg-slate-900"
+              className="border-[#2A2A2E] text-zinc-300 hover:bg-[#29292C] hover:text-white"
               leftIcon={<RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />}
             >
               Refresh
             </Button>
             <Button
-              variant="primary"
+              variant="ai"
               size="sm"
               onClick={handleOpenInviteModal}
-              className="bg-gradient-to-r from-indigo-600 to-purple-600 border-none font-bold"
+              className="font-bold"
               leftIcon={<UserPlus className="w-4 h-4" />}
             >
               Invite CRM User
@@ -163,17 +163,17 @@ export const UserManagement: React.FC = () => {
         </div>
 
         {error && (
-          <div className="p-4 bg-rose-950/60 border border-rose-800 rounded-xl flex items-center space-x-3 text-rose-300 text-sm">
+          <div className="p-4 bg-rose-950/80 border border-rose-800 rounded-xl flex items-center space-x-3 text-rose-300 text-sm">
             <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
         {/* User Table */}
-        <div className="bg-slate-900/80 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+        <div className="bg-[#171718] border border-[#2A2A2E] rounded-2xl overflow-hidden shadow-xl">
           <div className="w-full min-w-0 overflow-x-auto custom-scrollbar">
-            <table className="w-full min-w-[650px] text-left text-sm text-slate-300">
-              <thead className="bg-slate-950/60 text-slate-400 text-xs font-semibold uppercase tracking-wider border-b border-slate-800">
+            <table className="w-full min-w-[650px] text-left text-sm text-zinc-300">
+              <thead className="bg-[#111113] text-zinc-400 text-xs font-semibold uppercase tracking-wider border-b border-[#2A2A2E]">
                 <tr>
                   <th className="px-6 py-4">User</th>
                   <th className="px-6 py-4">Role</th>
@@ -182,25 +182,25 @@ export const UserManagement: React.FC = () => {
                   {currentUser?.role === 'ADMIN' && <th className="px-6 py-4 text-right">Actions</th>}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60">
+              <tbody className="divide-y divide-[#2A2A2E]">
                 {loading && users.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-6 py-8 text-center text-slate-500">
+                    <td colSpan={5} className="px-6 py-8 text-center text-zinc-500">
                       Loading team members...
                     </td>
                   </tr>
                 ) : users.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-6 py-8 text-center text-slate-500">
+                    <td colSpan={5} className="px-6 py-8 text-center text-zinc-500">
                       No CRM users found. Click "Invite CRM User" to get started.
                     </td>
                   </tr>
                 ) : (
                   users.map((usr) => (
-                    <tr key={usr.id} className="hover:bg-slate-800/40 transition-colors">
+                    <tr key={usr.id} className="hover:bg-[#1C1C1E] transition-colors">
                       <td className="px-6 py-4">
                         <div className="flex items-center space-x-3">
-                          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 text-white font-bold text-xs flex items-center justify-center">
+                          <div className="w-9 h-9 rounded-xl bg-[#29292C] text-[#FF7A00] border border-[#2A2A2E] font-bold text-xs flex items-center justify-center">
                             {usr.name
                               .split(' ')
                               .map((n) => n[0])
@@ -210,7 +210,7 @@ export const UserManagement: React.FC = () => {
                           </div>
                           <div>
                             <p className="font-bold text-white leading-tight">{usr.name}</p>
-                            <p className="text-xs text-slate-400 leading-tight mt-0.5">{usr.email}</p>
+                            <p className="text-xs text-zinc-400 leading-tight mt-0.5">{usr.email}</p>
                           </div>
                         </div>
                       </td>
@@ -226,13 +226,13 @@ export const UserManagement: React.FC = () => {
                             Active Account
                           </span>
                         ) : (
-                          <span className="inline-flex items-center text-xs font-semibold text-amber-400 bg-amber-950/60 border border-amber-800/80 px-2.5 py-0.5 rounded-full">
-                            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 mr-1.5 animate-pulse"></span>
+                          <span className="inline-flex items-center text-xs font-semibold text-[#FF7A00] bg-[#FF7A00]/10 border border-[#FF7A00]/40 px-2.5 py-0.5 rounded-full">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#FF7A00] mr-1.5 animate-pulse"></span>
                             Pending Invitation
                           </span>
                         )}
                       </td>
-                      <td className="px-6 py-4 text-xs text-slate-400">
+                      <td className="px-6 py-4 text-xs text-zinc-400">
                         {usr.created_at ? new Date(usr.created_at).toLocaleDateString() : 'N/A'}
                       </td>
                       {currentUser?.role === 'ADMIN' && (
@@ -241,7 +241,7 @@ export const UserManagement: React.FC = () => {
                             <button
                               onClick={() => handleDeleteUser(usr.id)}
                               disabled={deletingId === usr.id}
-                              className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-rose-950/40 rounded-lg transition-colors"
+                              className="p-1.5 text-zinc-400 hover:text-rose-400 hover:bg-rose-950/40 rounded-lg transition-colors"
                               title="Delete User"
                             >
                               <Trash2 className="w-4 h-4" />
@@ -265,7 +265,7 @@ export const UserManagement: React.FC = () => {
         title="Invite CRM User"
       >
         <form onSubmit={handleSendInvite} className="space-y-4">
-          <p className="text-xs text-slate-400 leading-relaxed">
+          <p className="text-xs text-zinc-400 leading-relaxed">
             Send an email invitation containing a secure link to set up their password and activate their CRM account.
           </p>
 
@@ -297,7 +297,7 @@ export const UserManagement: React.FC = () => {
             placeholder="sarah@company.com"
             value={inviteEmail}
             onChange={(e) => setInviteEmail(e.target.value)}
-            leftIcon={<Mail className="w-4 h-4 text-slate-400" />}
+            leftIcon={<Mail className="w-4 h-4 text-zinc-400" />}
             required
           />
 
@@ -316,7 +316,7 @@ export const UserManagement: React.FC = () => {
             }
           />
 
-          <div className="pt-4 flex justify-end space-x-3 border-t border-slate-800">
+          <div className="pt-4 flex justify-end space-x-3 border-t border-[#2A2A2E]">
             <Button
               type="button"
               variant="outline"
@@ -327,10 +327,10 @@ export const UserManagement: React.FC = () => {
             </Button>
             <Button
               type="submit"
-              variant="primary"
+              variant="ai"
               size="sm"
               isLoading={isSubmittingInvite}
-              className="bg-gradient-to-r from-indigo-600 to-purple-600 border-none font-bold"
+              className="font-bold"
             >
               Send Invitation
             </Button>

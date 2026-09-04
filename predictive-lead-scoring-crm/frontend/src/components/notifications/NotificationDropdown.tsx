@@ -54,13 +54,13 @@ export const NotificationDropdown: React.FC<NotificationDropdownProps> = ({ onCl
   const displayList = notifications.slice(0, 6);
 
   return (
-    <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-slate-900/95 border border-slate-800 rounded-2xl shadow-2xl backdrop-blur-xl p-4 z-50 space-y-3 ring-1 ring-slate-800 animate-fadeIn">
+    <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-[#1C1C1E] border border-[#2A2A2E] rounded-2xl shadow-2xl backdrop-blur-xl p-4 z-50 space-y-3 ring-1 ring-[#2A2A2E] animate-fadeIn">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-slate-800/80 pb-3">
+      <div className="flex items-center justify-between border-b border-[#2A2A2E] pb-3">
         <div className="flex items-center space-x-2">
           <h3 className="text-sm font-bold text-white tracking-wide">Notifications</h3>
           {unreadCount > 0 && (
-            <span className="px-2 py-0.5 text-[10px] font-extrabold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 rounded-full">
+            <span className="px-2 py-0.5 text-[10px] font-extrabold bg-[#FF7A00]/20 text-[#FF7A00] border border-[#FF7A00]/30 rounded-full">
               {unreadCount} New
             </span>
           )}
@@ -68,10 +68,10 @@ export const NotificationDropdown: React.FC<NotificationDropdownProps> = ({ onCl
 
         <div className="flex items-center space-x-2">
           {/* Status Live Tag */}
-          <span className="text-[10px] font-semibold flex items-center space-x-1 text-slate-400">
+          <span className="text-[10px] font-semibold flex items-center space-x-1 text-zinc-400">
             <span
               className={`w-1.5 h-1.5 rounded-full ${
-                connectionStatus === 'connected' ? 'bg-emerald-400 animate-pulse' : 'bg-slate-500'
+                connectionStatus === 'connected' ? 'bg-[#FF7A00] animate-pulse' : 'bg-zinc-500'
               }`}
             />
             <span>{connectionStatus === 'connected' ? 'Live' : 'Connecting'}</span>
@@ -80,7 +80,7 @@ export const NotificationDropdown: React.FC<NotificationDropdownProps> = ({ onCl
           {unreadCount > 0 && (
             <button
               onClick={() => markAllRead()}
-              className="text-[11px] font-semibold text-indigo-400 hover:text-indigo-300 flex items-center space-x-1 transition-colors"
+              className="text-[11px] font-semibold text-[#FF7A00] hover:text-[#FF8C1A] flex items-center space-x-1 transition-colors"
             >
               <CheckCheck className="w-3.5 h-3.5" />
               <span>Mark All Read</span>
@@ -90,9 +90,9 @@ export const NotificationDropdown: React.FC<NotificationDropdownProps> = ({ onCl
       </div>
 
       {/* Notification Items List */}
-      <div className="max-h-80 overflow-y-auto space-y-1.5 pr-1 scrollbar-thin scrollbar-thumb-slate-800">
+      <div className="max-h-80 overflow-y-auto space-y-1.5 pr-1 scrollbar-thin scrollbar-thumb-[#2A2A2E]">
         {displayList.length === 0 ? (
-          <div className="py-8 text-center text-slate-500 text-xs">
+          <div className="py-8 text-center text-zinc-500 text-xs">
             No notifications available
           </div>
         ) : (
@@ -105,31 +105,31 @@ export const NotificationDropdown: React.FC<NotificationDropdownProps> = ({ onCl
                 onClick={() => handleItemClick(item)}
                 className={`p-3 rounded-xl transition-all cursor-pointer flex items-start space-x-3 group relative ${
                   isUnread
-                    ? 'bg-slate-800/80 hover:bg-slate-800 text-slate-200 border-l-2 border-indigo-500'
-                    : 'hover:bg-slate-800/40 text-slate-400 opacity-90'
+                    ? 'bg-[#171718] hover:bg-[#29292C] text-zinc-200 border-l-2 border-[#FF7A00]'
+                    : 'hover:bg-[#29292C]/40 text-zinc-400 opacity-90'
                 }`}
               >
-                <div className="p-1.5 rounded-lg bg-slate-900 border border-slate-800/80 shrink-0 mt-0.5">
+                <div className="p-1.5 rounded-lg bg-[#111113] border border-[#2A2A2E] shrink-0 mt-0.5">
                   {getNotificationIcon(item.type, item.priority)}
                 </div>
 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-1">
-                    <p className={`text-xs truncate ${isUnread ? 'font-bold text-white' : 'font-semibold text-slate-300'}`}>
+                    <p className={`text-xs truncate ${isUnread ? 'font-bold text-white' : 'font-semibold text-zinc-300'}`}>
                       {item.title}
                     </p>
-                    <span className="text-[10px] text-slate-500 shrink-0">
+                    <span className="text-[10px] text-zinc-500 shrink-0">
                       {item.formatted_time || 'Recent'}
                     </span>
                   </div>
 
-                  <p className="text-xs text-slate-400 mt-0.5 line-clamp-2 leading-snug">
+                  <p className="text-xs text-zinc-400 mt-0.5 line-clamp-2 leading-snug">
                     {item.message}
                   </p>
                 </div>
 
                 {isUnread && (
-                  <span className="w-2 h-2 rounded-full bg-indigo-500 shrink-0 mt-1.5 ring-2 ring-slate-950" />
+                  <span className="w-2 h-2 rounded-full bg-[#FF7A00] shrink-0 mt-1.5 ring-2 ring-[#1C1C1E]" />
                 )}
               </div>
             );
@@ -138,11 +138,11 @@ export const NotificationDropdown: React.FC<NotificationDropdownProps> = ({ onCl
       </div>
 
       {/* Footer Link to Full Notification Center */}
-      <div className="border-t border-slate-800/80 pt-2.5 text-center">
+      <div className="border-t border-[#2A2A2E] pt-2.5 text-center">
         <Link
           to={getNotificationCenterPath()}
           onClick={onClose}
-          className="text-xs font-bold text-indigo-400 hover:text-indigo-300 inline-flex items-center space-x-1 transition-colors"
+          className="text-xs font-bold text-[#FF7A00] hover:text-[#FF8C1A] inline-flex items-center space-x-1 transition-colors"
         >
           <span>View All Notifications</span>
           <ArrowRight className="w-3.5 h-3.5" />

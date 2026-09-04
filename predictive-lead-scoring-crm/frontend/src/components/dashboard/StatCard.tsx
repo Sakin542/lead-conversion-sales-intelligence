@@ -11,52 +11,52 @@ export const StatCard: React.FC<StatCardProps> = ({ metric }) => {
   const getIcon = () => {
     switch (metric.type) {
       case 'total':
-        return <Users className="w-5 h-5 text-blue-400" />;
+        return <Users className="w-4.5 h-4.5 text-zinc-300" />;
       case 'hot':
-        return <Flame className="w-5 h-5 text-emerald-400" />;
+        return <Flame className="w-4.5 h-4.5 text-rose-400" />;
       case 'conversion':
-        return <TrendingUp className="w-5 h-5 text-indigo-400" />;
+        return <TrendingUp className="w-4.5 h-4.5 text-[#FF7A00]" />;
       case 'pipeline':
-        return <DollarSign className="w-5 h-5 text-purple-400" />;
+        return <DollarSign className="w-4.5 h-4.5 text-[#FF7A00]" />;
       default:
-        return <Users className="w-5 h-5 text-slate-400" />;
+        return <Users className="w-4.5 h-4.5 text-[#A1A1AA]" />;
     }
   };
 
   const getIconBg = () => {
     switch (metric.type) {
       case 'total':
-        return 'bg-blue-500/10 border-blue-500/20';
+        return 'bg-[#1C1C1E] border-[#2A2A2E]';
       case 'hot':
-        return 'bg-emerald-500/10 border-emerald-500/20';
+        return 'bg-rose-500/10 border-rose-500/20';
       case 'conversion':
-        return 'bg-indigo-500/10 border-indigo-500/20';
+        return 'bg-[#FF7A00]/10 border-[#FF7A00]/20';
       case 'pipeline':
-        return 'bg-purple-500/10 border-purple-500/20';
+        return 'bg-[#FF7A00]/10 border-[#FF7A00]/20';
       default:
-        return 'bg-slate-500/10 border-slate-500/20';
+        return 'bg-[#1C1C1E] border-[#2A2A2E]';
     }
   };
 
   return (
-    <Card className="relative overflow-hidden bg-slate-900/60 border-slate-800/80 p-5 hover:border-slate-700/80 transition-all duration-200">
+    <Card className="relative overflow-hidden bg-[#171718] border-[#2A2A2E] p-5 hover:border-[#383838] hover:shadow-xl hover:shadow-[#FF7A00]/10 hover:-translate-y-1 transition-all duration-300 animate-slide-up">
       <div className="flex items-start justify-between">
         <div className="space-y-1">
-          <p className="text-xs font-semibold text-slate-400 tracking-wide">{metric.title}</p>
-          <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">{metric.value}</h3>
+          <p className="text-xs font-medium text-zinc-400 uppercase tracking-wider">{metric.title}</p>
+          <h3 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">{metric.value}</h3>
         </div>
 
-        <div className={`p-2.5 rounded-xl border ${getIconBg()} shrink-0`}>
+        <div className={`p-2.5 rounded-lg border ${getIconBg()} shrink-0 transition-transform duration-300 hover:scale-110`}>
           {getIcon()}
         </div>
       </div>
 
       <div className="mt-4 flex items-center space-x-2 text-xs">
         <span
-          className={`inline-flex items-center font-bold px-2 py-0.5 rounded-md ${
+          className={`inline-flex items-center font-medium px-2 py-0.5 rounded-full border transition-transform duration-200 hover:scale-105 ${
             metric.isPositive
-              ? 'bg-emerald-950/80 text-emerald-400 border border-emerald-800/60'
-              : 'bg-rose-950/80 text-rose-400 border border-rose-800/60'
+              ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+              : 'bg-rose-500/10 text-rose-400 border-rose-500/20'
           }`}
         >
           {metric.isPositive ? (
@@ -66,11 +66,10 @@ export const StatCard: React.FC<StatCardProps> = ({ metric }) => {
           )}
           {metric.change}
         </span>
-        <span className="text-slate-400 font-medium">{metric.comparison}</span>
+        <span className="text-zinc-500 font-normal">{metric.comparison}</span>
       </div>
     </Card>
   );
 };
 
 export default StatCard;
-

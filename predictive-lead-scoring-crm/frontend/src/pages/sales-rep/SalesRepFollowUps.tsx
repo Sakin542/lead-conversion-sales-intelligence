@@ -49,26 +49,26 @@ export const SalesRepFollowUps: React.FC = () => {
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-800 pb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-[#2A2A2E] pb-5">
           <div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
-              <Calendar className="w-7 h-7 text-indigo-400" />
+              <Calendar className="w-7 h-7 text-[#FF7A00]" />
               <span>Follow-up Management</span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1">
+            <p className="text-xs sm:text-sm text-zinc-400 mt-1">
               Manage scheduled reminders, overdue outreach, and completed prospect check-ins.
             </p>
           </div>
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex space-x-2 border-b border-slate-800 pb-3">
+        <div className="flex space-x-2 border-b border-[#2A2A2E] pb-3">
           <button
             onClick={() => setActiveTab('today')}
             className={`px-4 py-2 text-xs font-bold rounded-xl transition-colors ${
               activeTab === 'today'
-                ? 'bg-indigo-600 text-white'
-                : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
+                ? 'bg-[#FF7A00] text-white'
+                : 'bg-[#111113] text-zinc-400 hover:text-white border border-[#2A2A2E]'
             }`}
           >
             Today ({data?.today?.length || 0})
@@ -77,8 +77,8 @@ export const SalesRepFollowUps: React.FC = () => {
             onClick={() => setActiveTab('upcoming')}
             className={`px-4 py-2 text-xs font-bold rounded-xl transition-colors ${
               activeTab === 'upcoming'
-                ? 'bg-indigo-600 text-white'
-                : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
+                ? 'bg-[#FF7A00] text-white'
+                : 'bg-[#111113] text-zinc-400 hover:text-white border border-[#2A2A2E]'
             }`}
           >
             Upcoming ({data?.upcoming?.length || 0})
@@ -87,8 +87,8 @@ export const SalesRepFollowUps: React.FC = () => {
             onClick={() => setActiveTab('overdue')}
             className={`px-4 py-2 text-xs font-bold rounded-xl transition-colors ${
               activeTab === 'overdue'
-                ? 'bg-indigo-600 text-white'
-                : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
+                ? 'bg-[#FF7A00] text-white'
+                : 'bg-[#111113] text-zinc-400 hover:text-white border border-[#2A2A2E]'
             }`}
           >
             Overdue ({data?.overdue?.length || 0})
@@ -97,8 +97,8 @@ export const SalesRepFollowUps: React.FC = () => {
             onClick={() => setActiveTab('completed')}
             className={`px-4 py-2 text-xs font-bold rounded-xl transition-colors ${
               activeTab === 'completed'
-                ? 'bg-indigo-600 text-white'
-                : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
+                ? 'bg-[#FF7A00] text-white'
+                : 'bg-[#111113] text-zinc-400 hover:text-white border border-[#2A2A2E]'
             }`}
           >
             Completed ({data?.completed?.length || 0})
@@ -106,23 +106,23 @@ export const SalesRepFollowUps: React.FC = () => {
         </div>
 
         {/* List Content */}
-        <Card className="p-5 bg-slate-900/80 border-slate-800 space-y-4">
+        <Card className="p-5 bg-[#171718] border-[#2A2A2E] space-y-4">
           {loading ? (
             <div className="py-12 flex justify-center">
               <LoadingSpinner size="lg" />
             </div>
           ) : getActiveList().length === 0 ? (
-            <p className="text-xs text-slate-500 py-10 text-center">No follow-up items in this view.</p>
+            <p className="text-xs text-zinc-500 py-10 text-center">No follow-up items in this view.</p>
           ) : (
             <div className="space-y-3">
               {getActiveList().map((f: any) => (
-                <div key={f.id} className="p-4 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between">
+                <div key={f.id} className="p-4 bg-[#111113] rounded-xl border border-[#2A2A2E] flex items-center justify-between hover:border-[#29292C] transition-colors">
                   <div className="space-y-1">
                     <p className="text-sm font-extrabold text-white">
                       {f.lead ? `${f.lead.first_name} ${f.lead.last_name} (${f.lead.company})` : 'Follow-up Task'}
                     </p>
-                    <p className="text-xs text-slate-300">{f.notes || 'Scheduled follow-up reminder'}</p>
-                    <p className="text-[11px] text-slate-400">
+                    <p className="text-xs text-zinc-300">{f.notes || 'Scheduled follow-up reminder'}</p>
+                    <p className="text-[11px] text-zinc-500">
                       Scheduled: {new Date(f.scheduled_at).toLocaleString()}
                     </p>
                   </div>
@@ -130,10 +130,10 @@ export const SalesRepFollowUps: React.FC = () => {
                   <div className="flex items-center space-x-2">
                     {f.status !== 'completed' ? (
                       <Button
-                        variant="primary"
+                        variant="ai"
                         size="sm"
                         onClick={() => handleComplete(f.id)}
-                        className="bg-emerald-600 hover:bg-emerald-500 border-none font-bold text-xs"
+                        className="text-xs"
                       >
                         <CheckCircle2 className="w-3.5 h-3.5 mr-1" /> Complete
                       </Button>

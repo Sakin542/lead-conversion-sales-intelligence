@@ -20,13 +20,13 @@ class ManagerForecastController extends Controller
         $hotThreshold = (int) env('HOT_LEAD_SCORE_THRESHOLD', 80);
 
         // 1. Actual Won Revenue
-        $wonRevenue = (float) Deal::where('stage', 'won')->sum('value');
+        $wonRevenue = (float) Deal::whereHas('pipelineStage', fn($q) => $q->where('slug', 'won'))->sum('value');
         if ($wonRevenue == 0) {
             $wonRevenue = (float) Lead::whereIn('status', ['won', 'converted'])->sum('estimated_value');
         }
 
         // 2. Open Pipeline Deals
-        $openPipelineValue = (float) Deal::whereNotIn('stage', ['won', 'lost'])->sum('value');
+        $openPipelineValue = (float) Deal::whereHas('pipelineStage', fn($q) => $q->whereNotIn('slug', ['won', 'lost']))->sum('value');
         if ($openPipelineValue == 0) {
             $openPipelineValue = (float) Lead::whereNotIn('status', ['won', 'lost', 'converted'])->sum('estimated_value');
         }

@@ -89,26 +89,26 @@ export const SalesRepProfile: React.FC = () => {
   return (
     <DashboardLayout>
       <div className="space-y-6 max-w-4xl mx-auto min-w-0">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-800 pb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-[#2A2A2E] pb-5">
           <div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
-              <div className="p-2.5 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 text-indigo-400">
+              <div className="p-2.5 rounded-2xl bg-[#FF7A00]/10 border border-[#FF7A00]/20 text-[#FF7A00]">
                 <User className="w-6 h-6" />
               </div>
               <span>Sales Representative Profile</span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1">
+            <p className="text-xs sm:text-sm text-zinc-400 mt-1">
               Personal credentials, sales performance details, and security session logs.
             </p>
           </div>
 
           <div className="flex items-center space-x-3">
             <Button
-              variant="secondary"
+              variant="outline"
               size="sm"
               onClick={() => navigate('/sales-rep/settings')}
-              leftIcon={<Settings className="w-4 h-4 text-indigo-400" />}
-              className="border-slate-800 text-slate-300 font-bold text-xs"
+              leftIcon={<Settings className="w-4 h-4 text-[#FF7A00]" />}
+              className="border-[#2A2A2E] text-zinc-300 hover:bg-[#1C1C1E] hover:text-white font-bold text-xs"
             >
               Sales Rep Settings
             </Button>
@@ -117,7 +117,7 @@ export const SalesRepProfile: React.FC = () => {
               variant="outline"
               size="sm"
               onClick={logout}
-              className="border-rose-900 text-rose-300 hover:bg-rose-950/60 font-bold text-xs"
+              className="border-rose-900/60 text-rose-400 hover:bg-rose-950/40 font-bold text-xs"
               leftIcon={<LogOut className="w-4 h-4 text-rose-400" />}
             >
               Sign Out
@@ -132,35 +132,35 @@ export const SalesRepProfile: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Account Information Card */}
-            <Card className="p-5 bg-slate-900/80 border-slate-800 space-y-4">
-              <h3 className="text-xs font-extrabold text-slate-400 uppercase tracking-wider border-b border-slate-800 pb-2">
+            <Card className="p-5 bg-[#171718] border-[#2A2A2E] space-y-4">
+              <h3 className="text-xs font-extrabold text-zinc-400 uppercase tracking-wider border-b border-[#2A2A2E] pb-2">
                 Account Summary
               </h3>
 
               <div className="space-y-3 text-xs">
                 <div>
-                  <span className="text-slate-500 font-bold block">Display Name</span>
+                  <span className="text-zinc-500 font-bold block">Display Name</span>
                   <span className="text-white font-extrabold text-sm">{user?.name || name}</span>
                 </div>
                 <div>
-                  <span className="text-slate-500 font-bold block">Email Address (Unchangeable)</span>
-                  <span className="text-indigo-400 font-semibold">{user?.email || profileData?.email}</span>
+                  <span className="text-zinc-500 font-bold block">Email Address (Unchangeable)</span>
+                  <span className="text-[#FF7A00] font-semibold">{user?.email || profileData?.email}</span>
                 </div>
                 <div>
-                  <span className="text-slate-500 font-bold block">Assigned System Role</span>
+                  <span className="text-zinc-500 font-bold block">Assigned System Role</span>
                   <Badge variant="primary" size="sm" className="mt-1">SALES REP</Badge>
                 </div>
                 <div>
-                  <span className="text-slate-500 font-bold block">Title</span>
-                  <span className="text-slate-300">{profileData?.job_title || 'Account Executive'}</span>
+                  <span className="text-zinc-500 font-bold block">Title</span>
+                  <span className="text-zinc-300">{profileData?.job_title || 'Account Executive'}</span>
                 </div>
               </div>
             </Card>
 
             {/* Profile Update Form & Security Logs */}
             <div className="lg:col-span-2 space-y-6">
-              <Card className="p-5 bg-slate-900/90 border-slate-800 space-y-4">
-                <h3 className="text-sm font-bold text-white border-b border-slate-800 pb-3">
+              <Card className="p-5 bg-[#171718] border-[#2A2A2E] space-y-4">
+                <h3 className="text-sm font-bold text-white border-b border-[#2A2A2E] pb-3">
                   Edit Personal Information & Credentials
                 </h3>
 
@@ -182,25 +182,25 @@ export const SalesRepProfile: React.FC = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <Input label="Display Name (Editable)" value={name} onChange={(e) => setName(e.target.value)} required />
                     <div className="space-y-1">
-                      <label className="font-bold text-slate-300 block text-xs">Account Email (Unchangeable)</label>
+                      <label className="font-bold text-zinc-300 block text-xs">Account Email (Unchangeable)</label>
                       <div className="relative flex items-center">
                         <input
                           type="email"
                           value={user?.email || profileData?.email || 'rep@predictivecrm.com'}
                           disabled
                           readOnly
-                          className="w-full bg-slate-950 text-slate-400 font-mono text-xs px-3.5 py-2.5 rounded-xl border border-slate-800 opacity-80 cursor-not-allowed"
+                          className="w-full bg-[#111113] text-zinc-400 font-mono text-xs px-3.5 py-2.5 rounded-xl border border-[#2A2A2E] opacity-80 cursor-not-allowed"
                         />
-                        <Shield className="w-3.5 h-3.5 text-slate-500 absolute right-3 pointer-events-none" />
+                        <Shield className="w-3.5 h-3.5 text-zinc-500 absolute right-3 pointer-events-none" />
                       </div>
                     </div>
                   </div>
 
                   <Input label="Phone Number" value={phone} onChange={(e) => setPhone(e.target.value)} />
 
-                  <div className="border-t border-slate-800 pt-3 space-y-3">
-                    <h4 className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
-                      <Lock className="w-3.5 h-3.5 text-indigo-400" /> Change Password (Optional)
+                  <div className="border-t border-[#2A2A2E] pt-3 space-y-3">
+                    <h4 className="text-xs font-bold text-zinc-300 flex items-center gap-1.5">
+                      <Lock className="w-3.5 h-3.5 text-[#FF7A00]" /> Change Password (Optional)
                     </h4>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <Input
@@ -221,11 +221,11 @@ export const SalesRepProfile: React.FC = () => {
                   <div className="pt-2 flex justify-end">
                     <Button
                       type="submit"
-                      variant="primary"
+                      variant="ai"
                       size="sm"
                       isLoading={isSaving}
                       leftIcon={<Save className="w-4 h-4" />}
-                      className="bg-indigo-600 border-none font-bold text-xs px-4 py-2"
+                      className="px-4 py-2"
                     >
                       Save Profile Changes
                     </Button>
@@ -234,24 +234,24 @@ export const SalesRepProfile: React.FC = () => {
               </Card>
 
               {/* Recent Security Activity */}
-              <Card className="p-5 bg-slate-900/80 border-slate-800 space-y-4">
-                <h3 className="text-xs font-extrabold text-slate-400 uppercase tracking-wider border-b border-slate-800 pb-2">
+              <Card className="p-5 bg-[#171718] border-[#2A2A2E] space-y-4">
+                <h3 className="text-xs font-extrabold text-zinc-400 uppercase tracking-wider border-b border-[#2A2A2E] pb-2">
                   Recent Security & Audit Log
                 </h3>
 
                 <div className="space-y-2 text-xs">
                   {securityActivity.length === 0 ? (
-                    <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-slate-500 text-center">
+                    <div className="p-3 bg-[#111113] rounded-xl border border-[#2A2A2E] text-zinc-500 text-center">
                       No security audit events recorded.
                     </div>
                   ) : (
                     securityActivity.map((sa) => (
-                      <div key={sa.id} className="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between">
+                      <div key={sa.id} className="p-3 bg-[#111113] rounded-xl border border-[#2A2A2E] flex items-center justify-between">
                         <div className="flex items-center space-x-2">
-                          <Clock className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+                          <Clock className="w-3.5 h-3.5 text-[#FF7A00] shrink-0" />
                           <div>
                             <span className="font-bold text-white block">{sa.action}</span>
-                            <p className="text-[10px] text-slate-500">{sa.timestamp}</p>
+                            <p className="text-[10px] text-zinc-500">{sa.timestamp}</p>
                           </div>
                         </div>
                         <Badge variant="neutral" size="sm">{sa.ip_address || '127.0.0.1'}</Badge>

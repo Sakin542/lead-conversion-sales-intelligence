@@ -141,13 +141,13 @@ export const AdminUsers: React.FC = () => {
     <AdminLayout>
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-indigo-950 pb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-[#2A2A2E] pb-5">
           <div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
-              <Users className="w-7 h-7 text-indigo-400" />
+              <Users className="w-7 h-7 text-[#FF7A00]" />
               <span>User & Account Management</span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1">
+            <p className="text-xs sm:text-sm text-zinc-400 mt-1">
               Create, invite, audit roles, and control access permissions across all CRM accounts.
             </p>
           </div>
@@ -157,13 +157,13 @@ export const AdminUsers: React.FC = () => {
               variant="outline"
               size="sm"
               onClick={fetchUsers}
-              className="border-slate-800 text-slate-300 hover:bg-slate-900"
+              className="border-[#2A2A2E] text-zinc-300 hover:bg-[#29292C] hover:text-white"
               leftIcon={<RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />}
             >
               Refresh
             </Button>
             <Button
-              variant="primary"
+              variant="ai"
               size="sm"
               onClick={() => {
                 setName('');
@@ -173,7 +173,7 @@ export const AdminUsers: React.FC = () => {
                 setInviteError(null);
                 setIsInviteOpen(true);
               }}
-              className="bg-gradient-to-r from-indigo-600 to-purple-600 border-none font-bold"
+              className="font-bold"
               leftIcon={<UserPlus className="w-4 h-4" />}
             >
               Create / Invite User
@@ -182,7 +182,7 @@ export const AdminUsers: React.FC = () => {
         </div>
 
         {/* Search & Filter Bar */}
-        <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 shadow-xl">
+        <div className="bg-[#171718] border border-[#2A2A2E] rounded-xl p-4 shadow-xl">
           <form onSubmit={handleSearchSubmit} className="grid grid-cols-1 sm:grid-cols-12 gap-3">
             <div className="sm:col-span-6">
               <Input
@@ -218,17 +218,17 @@ export const AdminUsers: React.FC = () => {
         </div>
 
         {error && (
-          <div className="p-4 bg-rose-950/60 border border-rose-800 rounded-xl flex items-center space-x-3 text-rose-300 text-sm">
+          <div className="p-4 bg-rose-950/80 border border-rose-800 rounded-xl flex items-center space-x-3 text-rose-300 text-sm">
             <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
         {/* Users Table */}
-        <div className="bg-slate-900/80 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+        <div className="bg-[#171718] border border-[#2A2A2E] rounded-2xl overflow-hidden shadow-xl">
           <div className="w-full min-w-0 overflow-x-auto custom-scrollbar">
-            <table className="w-full min-w-[700px] text-left text-xs text-slate-300">
-              <thead className="bg-slate-950 text-slate-400 font-semibold uppercase tracking-wider border-b border-slate-800">
+            <table className="w-full min-w-[700px] text-left text-xs text-zinc-300">
+              <thead className="bg-[#111113] text-zinc-400 font-semibold uppercase tracking-wider border-b border-[#2A2A2E]">
                 <tr>
                   <th className="px-5 py-3.5">User Details</th>
                   <th className="px-5 py-3.5">Assigned Role</th>
@@ -237,30 +237,30 @@ export const AdminUsers: React.FC = () => {
                   <th className="px-5 py-3.5 text-right">Admin Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800">
+              <tbody className="divide-y divide-[#2A2A2E]">
                 {loading ? (
                   <tr>
-                    <td colSpan={5} className="px-5 py-8 text-center text-slate-500">
+                    <td colSpan={5} className="px-5 py-8 text-center text-zinc-500">
                       <LoadingSpinner size="md" />
                     </td>
                   </tr>
                 ) : users.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-5 py-8 text-center text-slate-500">
+                    <td colSpan={5} className="px-5 py-8 text-center text-zinc-500">
                       No matching user accounts found.
                     </td>
                   </tr>
                 ) : (
                   users.map((u) => (
-                    <tr key={u.id} className="hover:bg-slate-800/40 transition-colors">
+                    <tr key={u.id} className="hover:bg-[#1C1C1E] transition-colors">
                       <td className="px-5 py-3.5">
                         <div className="flex items-center space-x-3">
-                          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 text-white font-bold text-xs flex items-center justify-center">
+                          <div className="w-9 h-9 rounded-xl bg-[#29292C] border border-[#2A2A2E] text-[#FF7A00] font-bold text-xs flex items-center justify-center">
                             {u.name.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2)}
                           </div>
                           <div>
-                            <p className="font-bold text-white leading-snug">{u.name}</p>
-                            <p className="text-[11px] text-slate-400 leading-snug">{u.email}</p>
+                            <p className="font-semibold text-white leading-snug">{u.name}</p>
+                            <p className="text-[11px] text-zinc-400 leading-snug">{u.email}</p>
                           </div>
                         </div>
                       </td>
@@ -271,31 +271,31 @@ export const AdminUsers: React.FC = () => {
                       </td>
                       <td className="px-5 py-3.5">
                         {u.is_active ? (
-                          <span className="inline-flex items-center text-[11px] font-semibold text-emerald-400 bg-emerald-950/60 border border-emerald-800 px-2 py-0.5 rounded-full">
+                          <span className="inline-flex items-center text-[11px] font-semibold text-emerald-400 bg-emerald-950/60 border border-emerald-800/80 px-2.5 py-0.5 rounded-full">
                             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5"></span>
                             Active
                           </span>
                         ) : (
-                          <span className="inline-flex items-center text-[11px] font-semibold text-amber-400 bg-amber-950/60 border border-amber-800 px-2 py-0.5 rounded-full">
-                            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 mr-1.5 animate-pulse"></span>
+                          <span className="inline-flex items-center text-[11px] font-semibold text-[#FF7A00] bg-[#FF7A00]/10 border border-[#FF7A00]/40 px-2.5 py-0.5 rounded-full">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#FF7A00] mr-1.5 animate-pulse"></span>
                             Pending Invite
                           </span>
                         )}
                       </td>
-                      <td className="px-5 py-3.5 text-slate-400">
+                      <td className="px-5 py-3.5 text-zinc-400">
                         {u.created_at ? new Date(u.created_at).toLocaleDateString() : 'N/A'}
                       </td>
                       <td className="px-5 py-3.5 text-right space-x-1.5">
                         <button
                           onClick={() => handleToggleStatus(u.id)}
-                          className="p-1.5 text-slate-400 hover:text-amber-400 hover:bg-slate-800 rounded-lg"
+                          className="p-1.5 text-zinc-400 hover:text-[#FF7A00] hover:bg-[#29292C] rounded-lg transition-colors"
                           title={u.is_active ? 'Deactivate Account' : 'Activate Account'}
                         >
                           <Power className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => handleResetPassword(u.id, u.email)}
-                          className="p-1.5 text-slate-400 hover:text-indigo-400 hover:bg-slate-800 rounded-lg"
+                          className="p-1.5 text-zinc-400 hover:text-[#FF7A00] hover:bg-[#29292C] rounded-lg transition-colors"
                           title="Trigger Reset Password Email"
                         >
                           <Key className="w-4 h-4" />
@@ -303,7 +303,7 @@ export const AdminUsers: React.FC = () => {
                         {u.role !== 'ADMIN' && (
                           <button
                             onClick={() => handleDeleteUser(u.id)}
-                            className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-rose-950/40 rounded-lg"
+                            className="p-1.5 text-zinc-400 hover:text-rose-400 hover:bg-rose-950/40 rounded-lg transition-colors"
                             title="Delete User Account"
                           >
                             <Trash2 className="w-4 h-4" />
@@ -322,19 +322,19 @@ export const AdminUsers: React.FC = () => {
       {/* Create / Invite User Modal */}
       <Modal isOpen={isInviteOpen} onClose={() => setIsInviteOpen(false)} title="Create / Invite CRM User">
         <form onSubmit={handleInviteSubmit} className="space-y-4">
-          <p className="text-xs text-slate-400 leading-relaxed">
+          <p className="text-xs text-zinc-400 leading-relaxed">
             The user will receive an email invitation containing a secure single-use link to activate their account and set their password.
           </p>
 
           {inviteSuccess && (
-            <div className="p-3 bg-emerald-950/80 border border-emerald-800 rounded-lg flex items-center space-x-2 text-emerald-300 text-xs">
+            <div className="p-3 bg-emerald-950/80 border border-emerald-800 rounded-xl flex items-center space-x-2 text-emerald-300 text-xs">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
               <span>{inviteSuccess}</span>
             </div>
           )}
 
           {inviteError && (
-            <div className="p-3 bg-rose-950/80 border border-rose-800 rounded-lg flex items-center space-x-2 text-rose-300 text-xs">
+            <div className="p-3 bg-rose-950/80 border border-rose-800 rounded-xl flex items-center space-x-2 text-rose-300 text-xs">
               <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
               <span>{inviteError}</span>
             </div>
@@ -354,7 +354,7 @@ export const AdminUsers: React.FC = () => {
             placeholder="marcus@crm.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            leftIcon={<Mail className="w-4 h-4 text-slate-400" />}
+            leftIcon={<Mail className="w-4 h-4 text-zinc-400" />}
             required
           />
 
@@ -368,11 +368,11 @@ export const AdminUsers: React.FC = () => {
             ]}
           />
 
-          <div className="pt-4 flex justify-end space-x-3 border-t border-slate-800">
+          <div className="pt-4 flex justify-end space-x-3 border-t border-[#2A2A2E]">
             <Button type="button" variant="outline" size="sm" onClick={() => setIsInviteOpen(false)}>
               Cancel
             </Button>
-            <Button type="submit" variant="primary" size="sm" isLoading={isInviting} className="bg-indigo-600 hover:bg-indigo-500 border-none font-bold">
+            <Button type="submit" variant="ai" size="sm" isLoading={isInviting} className="font-bold">
               Send Invitation
             </Button>
           </div>

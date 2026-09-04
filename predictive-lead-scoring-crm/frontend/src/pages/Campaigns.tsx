@@ -25,13 +25,13 @@ export const Campaigns: React.FC = () => {
   return (
     <DashboardLayout>
       {/* 1. Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#2A2A2E] pb-6">
         <div className="space-y-1">
           <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center">
-            <Megaphone className="w-6 h-6 mr-2 text-indigo-400" />
+            <Megaphone className="w-6 h-6 mr-2 text-[#FF7A00]" />
             Campaign Management
           </h1>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-zinc-400">
             Track marketing campaign budget allocation, acquisition channels, and ROI.
           </p>
         </div>
@@ -41,7 +41,7 @@ export const Campaigns: React.FC = () => {
           size="md"
           leftIcon={<Plus className="w-4 h-4" />}
           onClick={() => setIsModalOpen(true)}
-          className="px-4 py-2.5 rounded-xl font-bold text-xs shadow-lg shadow-indigo-500/25 bg-gradient-to-r from-indigo-600 to-purple-600 border-none shrink-0"
+          className="px-4 py-2.5 rounded-xl font-bold text-xs bg-[#FF7A00] hover:bg-[#FF8C1A] text-white border-none shrink-0"
         >
           Create Campaign
         </Button>
@@ -50,13 +50,13 @@ export const Campaigns: React.FC = () => {
       {/* 2. Campaign KPI Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {campaignKpis.map((kpi, idx) => (
-          <Card key={idx} className="bg-slate-900/60 border-slate-800/80 p-5 space-y-2">
+          <Card key={idx} className="bg-[#171718] border-[#2A2A2E] p-5 space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-400">{kpi.title}</span>
-              {idx === 0 && <Megaphone className="w-4 h-4 text-indigo-400" />}
+              <span className="text-xs font-semibold text-zinc-400">{kpi.title}</span>
+              {idx === 0 && <Megaphone className="w-4 h-4 text-[#FF7A00]" />}
               {idx === 1 && <DollarSign className="w-4 h-4 text-emerald-400" />}
-              {idx === 2 && <Target className="w-4 h-4 text-blue-400" />}
-              {idx === 3 && <TrendingUp className="w-4 h-4 text-purple-400" />}
+              {idx === 2 && <Target className="w-4 h-4 text-[#FF7A00]" />}
+              {idx === 3 && <TrendingUp className="w-4 h-4 text-[#FF7A00]" />}
             </div>
 
             <div className="flex items-baseline justify-between">
@@ -64,15 +64,15 @@ export const Campaigns: React.FC = () => {
               <span className="text-xs font-bold text-emerald-400">{kpi.change}</span>
             </div>
 
-            {kpi.subText && <p className="text-xs text-slate-400 font-medium">{kpi.subText}</p>}
+            {kpi.subText && <p className="text-xs text-zinc-400 font-medium">{kpi.subText}</p>}
           </Card>
         ))}
       </div>
 
       {/* 3. Filter Pills */}
-      <div className="flex items-center justify-between bg-slate-900/60 border border-slate-800 rounded-2xl p-2.5 px-4 shadow-sm">
-        <div className="flex items-center space-x-2 text-xs font-semibold text-slate-400">
-          <Filter className="w-3.5 h-3.5 text-indigo-400" />
+      <div className="flex items-center justify-between bg-[#171718] border border-[#2A2A2E] rounded-2xl p-2.5 px-4 shadow-sm">
+        <div className="flex items-center space-x-2 text-xs font-semibold text-zinc-400">
+          <Filter className="w-3.5 h-3.5 text-[#FF7A00]" />
           <span>Status Filter:</span>
         </div>
 
@@ -83,8 +83,8 @@ export const Campaigns: React.FC = () => {
               onClick={() => setStatusFilter(status)}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                 statusFilter === status
-                  ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                  ? 'bg-[#FF7A00] text-white shadow-md shadow-orange-500/20'
+                  : 'text-zinc-400 hover:text-white hover:bg-[#29292C]'
               }`}
             >
               {status}

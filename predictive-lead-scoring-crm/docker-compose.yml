@@ -1,10 +1,16 @@
 services:
-
   app:
     build:
       context: ./docker/php
     container_name: predictive-crm-app
     working_dir: /var/www
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: predictive_crm
+      DB_USERNAME: root
+      DB_PASSWORD: root123
     volumes:
       - ./backend:/var/www
     ports:
@@ -17,8 +23,8 @@ services:
     container_name: predictive-crm-mysql
     restart: unless-stopped
     environment:
+      MYSQL_ROOT_PASSWORD: root123
       MYSQL_DATABASE: predictive_crm
-      MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: crm_user
       MYSQL_PASSWORD: crm_password
     ports:
@@ -26,6 +32,19 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
 
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: predictive-crm-phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+      MYSQL_ROOT_PASSWORD: root123
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
+
 volumes:
   mysql_data:
-
