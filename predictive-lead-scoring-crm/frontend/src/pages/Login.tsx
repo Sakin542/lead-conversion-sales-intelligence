@@ -194,6 +194,50 @@ export const Login: React.FC = () => {
             </div>
           </form>
 
+          {/* Quick Demo Credentials */}
+          <div className="pt-4 border-t border-[#2A2A2E]/60 space-y-2">
+            <p className="text-xs font-semibold uppercase tracking-wider text-[#71717A] text-center">
+              Quick Fill Demo Accounts
+            </p>
+            <div className="grid grid-cols-3 gap-2 text-xs">
+              <button
+                type="button"
+                onClick={() => {
+                  setFormData({ email: 'rashid.cse.20230104102@aust.edu', password: 'AdminPassword123!' });
+                  setErrors({});
+                  setApiError(null);
+                }}
+                className="px-2 py-1.5 rounded-lg bg-[#222225] hover:bg-[#2A2A2E] text-zinc-300 hover:text-white border border-[#2A2A2E] transition-all text-center"
+              >
+                <div className="font-semibold text-[#FF7A00]">Admin</div>
+                <div className="text-[10px] text-zinc-400 truncate">System Admin</div>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setFormData({ email: 'manager@crm.com', password: 'Password123!' });
+                  setErrors({});
+                  setApiError(null);
+                }}
+                className="px-2 py-1.5 rounded-lg bg-[#222225] hover:bg-[#2A2A2E] text-zinc-300 hover:text-white border border-[#2A2A2E] transition-all text-center"
+              >
+                <div className="font-semibold text-sky-400">Manager</div>
+                <div className="text-[10px] text-zinc-400 truncate">Sales Mgr</div>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setFormData({ email: 'sales@crm.com', password: 'Password123!' });
+                  setErrors({});
+                  setApiError(null);
+                }}
+                className="px-2 py-1.5 rounded-lg bg-[#222225] hover:bg-[#2A2A2E] text-zinc-300 hover:text-white border border-[#2A2A2E] transition-all text-center"
+              >
+                <div className="font-semibold text-emerald-400">Sales Rep</div>
+                <div className="text-[10px] text-zinc-400 truncate">Agent</div>
+              </button>
+            </div>
+          </div>
         </div>
       </main>
 

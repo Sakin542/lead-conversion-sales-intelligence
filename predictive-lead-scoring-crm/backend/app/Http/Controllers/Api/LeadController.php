@@ -307,4 +307,70 @@ class LeadController extends Controller
 
         return (int) min(99, max(10, $score));
     }
+
+    /**
+     * Get real-time ML score and prediction details for a lead.
+     */
+    public function getScore(Request $request, string $id): JsonResponse
+    {
+        $userId = $request->user()->id;
+        $userRole = $request->user()->role;
+
+        $query = Lead::with('latestScore');
+        if ($userRole === 'SALES_REP') {
+            $query->where(function ($q) use ($userId) {
+                $q->where('assigned_to', $userId)->orWhere('user_id', $userId);
+            });
+        }
+        $lead = $query->find($id);
+
+        if (!$lead) {
+            return response()->json(['success' => false, 'message' => 'Lead not found or unauthorized'], 404);
+        }
+
+        $latest = $lead->latestScore;
+        $score = $lead->score ?? ($latest ? $latest->score : 0);
+        $prob = $latest ? (float) $latest->conversion_probability : round($score / 100, 4);
+        $temp = $latest ? $latest->temperature : ($score >= 80 ? 'HOT' : ($score >= 50 ? 'WARM' : 'COLD'));
+        $model = $latest ? $latest->model_name : 'XGBoost';
+
+        return response()->json([
+            'success' => true,
+            'lead_id' => $lead->id,
+            'lead_score' => $score,
+            'conversion_probability' => $prob,
+            'temperature' => $temp,
+            'model' => $model,
+            'last_scored_at' => $latest ? $latest->scored_at->toIso8601String() : $lead->updated_at->toIso8601String(),
+        ]);
+    }
+
+    /**
+     * On-demand manual rescore for a lead using ML microservice.
+     */
+    public function rescore(Request $request, string $id, \App\Services\MLPredictionService $mlService): JsonResponse
+    {
+        $userId = $request->user()->id;
+        $userRole = $request->user()->role;
+
+        $query = Lead::query();
+        if ($userRole === 'SALES_REP') {
+            $query->where(function ($q) use ($userId) {
+                $q->where('assigned_to', $userId)->orWhere('user_id', $userId);
+            });
+        }
+        $lead = $query->find($id);
+
+        if (!$lead) {
+            return response()->json(['success' => false, 'message' => 'Lead not found or unauthorized'], 404);
+        }
+
+        $result = $mlService->scoreLead($lead, true);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Lead rescored successfully',
+            'data' => $result,
+        ]);
+    }
 }

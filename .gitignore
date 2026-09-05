@@ -1,0 +1,15 @@
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+vendor/
+**/vendor/
+.env
+**/.env
+!.env.example
+__pycache__/
+**/__pycache__/
+*.pyc
+storage/logs/*.log
+.DS_Store
+Thumbs.db

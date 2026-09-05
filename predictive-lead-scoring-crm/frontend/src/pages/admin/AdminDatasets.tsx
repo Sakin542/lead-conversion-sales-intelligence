@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import Button from '../../components/common/Button';
 import Card from '../../components/common/Card';
@@ -6,7 +6,7 @@ import Badge from '../../components/common/Badge';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import Modal from '../../components/common/Modal';
 import { adminApi } from '../../services/api';
-import { Database, Upload, Trash2, CheckCircle2, AlertCircle, FileText, RefreshCw, BarChart2, Eye, ShieldAlert } from 'lucide-react';
+import { Database, Upload, Trash2, CheckCircle2, AlertCircle, FileText, RefreshCw, BarChart2, Eye, ShieldAlert, X } from 'lucide-react';
 
 export const AdminDatasets: React.FC = () => {
   const [datasets, setDatasets] = useState<any[]>([]);
@@ -16,6 +16,8 @@ export const AdminDatasets: React.FC = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Quality Report & Preview state
   const [qualityReport, setQualityReport] = useState<any | null>(null);
@@ -71,10 +73,51 @@ export const AdminDatasets: React.FC = () => {
     fetchDatasets();
   }, []);
 
+  const handleFileSelect = (selectedFile: File | null) => {
+    setUploadError(null);
+    setUploadSuccess(null);
+    if (!selectedFile) {
+      setFile(null);
+      return;
+    }
+    const maxSizeBytes = 50 * 1024 * 1024;
+    if (selectedFile.size > maxSizeBytes) {
+      setUploadError(`File is too large (${(selectedFile.size / 1024 / 1024).toFixed(1)}MB). Maximum allowed size is 50MB.`);
+      setFile(null);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      return;
+    }
+    setFile(selectedFile);
+    if (!datasetName) {
+      setDatasetName(selectedFile.name);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleFileSelect(e.dataTransfer.files[0]);
+    }
+  };
+
   const handleUploadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!file) {
-      setUploadError('Please select a CSV file to upload.');
+      setUploadError('Please select a CSV or TXT file to upload.');
       return;
     }
 
@@ -82,20 +125,59 @@ export const AdminDatasets: React.FC = () => {
     setUploadSuccess(null);
     setUploadError(null);
 
-    const formData = new FormData();
-    formData.append('file', file);
-    if (datasetName) formData.append('name', datasetName);
+    const targetName = datasetName.trim() || file.name;
 
     try {
-      const res = await adminApi.uploadDataset(formData);
-      if (res.success) {
-        setUploadSuccess(res.message);
+      // 1. Try standard FormData upload
+      let textContent = '';
+      try {
+        textContent = await file.text();
+      } catch (_) {
+        // Fallback for older browsers
+      }
+
+      const formData = new FormData();
+      formData.append('file', file, file.name);
+      formData.append('name', targetName);
+      if (textContent) {
+        formData.append('csv_content', textContent);
+      }
+
+      let res: any;
+      try {
+        res = await adminApi.uploadDataset(formData);
+      } catch (uploadErr: any) {
+        // If FormData upload encountered a server size or multipart issue and we have textContent, fallback to JSON payload
+        if (textContent) {
+          res = await adminApi.uploadDatasetJson({
+            name: targetName,
+            content: textContent,
+          });
+        } else {
+          throw uploadErr;
+        }
+      }
+
+      if (res && res.success) {
+        setUploadSuccess(res.message || 'Dataset uploaded and validated successfully.');
         setFile(null);
         setDatasetName('');
+        if (fileInputRef.current) fileInputRef.current.value = '';
         fetchDatasets();
+      } else {
+        throw new Error(res?.message || 'Upload failed');
       }
     } catch (err: any) {
-      setUploadError(err.data?.message || err.message || 'Failed to upload dataset.');
+      let errorMsg = 'Failed to upload dataset.';
+      if (err.data?.errors) {
+        const firstField = Object.values(err.data.errors)[0];
+        errorMsg = Array.isArray(firstField) ? firstField[0] : String(firstField);
+      } else if (err.data?.message) {
+        errorMsg = err.data.message;
+      } else if (err.message) {
+        errorMsg = err.message;
+      }
+      setUploadError(errorMsg);
     } finally {
       setIsUploading(false);
     }
@@ -148,7 +230,7 @@ export const AdminDatasets: React.FC = () => {
                 <Upload className="w-4 h-4 text-[#FF7A00]" />
                 <span>Upload CSV Dataset</span>
               </h3>
-              <Badge variant="neutral" size="sm">Max 10MB</Badge>
+              <Badge variant="neutral" size="sm">Max 50MB</Badge>
             </div>
 
             {uploadSuccess && (
@@ -177,21 +259,56 @@ export const AdminDatasets: React.FC = () => {
                 />
               </div>
 
-              <div className="border-2 border-dashed border-[#2A2A2E] hover:border-[#FF7A00] bg-[#111113] rounded-2xl p-6 text-center space-y-2 transition-colors cursor-pointer">
+              <div
+                onClick={() => fileInputRef.current?.click()}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                className={`relative border-2 border-dashed rounded-2xl p-6 text-center space-y-2 transition-all cursor-pointer select-none ${
+                  isDragging
+                    ? 'border-[#FF7A00] bg-[#FF7A00]/10'
+                    : file
+                    ? 'border-emerald-500/60 bg-emerald-950/20'
+                    : 'border-[#2A2A2E] hover:border-[#FF7A00] bg-[#111113]'
+                }`}
+              >
                 <input
+                  ref={fileInputRef}
                   type="file"
-                  accept=".csv,.txt"
+                  accept=".csv,.txt,.tsv,text/csv,text/plain,application/vnd.ms-excel"
                   id="dataset-file-input"
-                  onChange={(e) => setFile(e.target.files?.[0] || null)}
+                  onChange={(e) => {
+                    const selected = e.target.files?.[0] || null;
+                    handleFileSelect(selected);
+                    e.target.value = '';
+                  }}
                   className="hidden"
                 />
-                <label htmlFor="dataset-file-input" className="cursor-pointer block space-y-2">
-                  <FileText className="w-8 h-8 text-[#FF7A00] mx-auto" />
-                  <p className="text-xs font-bold text-zinc-200">
+                <div className="block space-y-2">
+                  <FileText className={`w-8 h-8 mx-auto ${file ? 'text-emerald-400' : 'text-[#FF7A00]'}`} />
+                  <p className="text-xs font-bold text-zinc-200 truncate max-w-full px-2">
                     {file ? file.name : 'Click or Drag CSV file here'}
                   </p>
-                  <p className="text-[11px] text-zinc-500">Supports .CSV up to 10MB</p>
-                </label>
+                  <p className="text-[11px] text-zinc-500">
+                    {file ? `${(file.size / 1024 / 1024).toFixed(2)} MB selected` : 'Supports .CSV, .TSV, .TXT up to 50MB'}
+                  </p>
+                </div>
+
+                {file && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setFile(null);
+                      setDatasetName('');
+                      if (fileInputRef.current) fileInputRef.current.value = '';
+                    }}
+                    className="absolute top-2 right-2 p-1 text-zinc-400 hover:text-white bg-[#1E1E20] hover:bg-[#2A2A2E] rounded-full transition-colors"
+                    title="Remove file"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
               </div>
 
               <div className="flex justify-end pt-1">
@@ -259,8 +376,8 @@ export const AdminDatasets: React.FC = () => {
                         <td className="px-4 py-3 text-amber-400 font-semibold">{d.missing_values_count}</td>
                         <td className="px-4 py-3 text-zinc-400">{d.duplicate_count}</td>
                         <td className="px-4 py-3">
-                          <Badge variant={d.status === 'valid' ? 'success' : 'danger'} size="sm">
-                            {d.status.toUpperCase()}
+                          <Badge variant={['valid', 'validated', 'ready'].includes(d.status?.toLowerCase()) ? 'success' : 'danger'} size="sm">
+                            {(d.status || 'valid').toUpperCase()}
                           </Badge>
                         </td>
                         <td className="px-4 py-3 text-right">
@@ -420,4 +537,3 @@ export const AdminDatasets: React.FC = () => {
 };
 
 export default AdminDatasets;
-

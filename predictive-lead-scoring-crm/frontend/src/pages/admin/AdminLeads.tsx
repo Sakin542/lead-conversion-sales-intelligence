@@ -7,8 +7,10 @@ import Modal from '../../components/common/Modal';
 import Badge from '../../components/common/Badge';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import { adminApi } from '../../services/api';
+import { leadService } from '../../services/leadService';
 import { User } from '../../types/auth';
-import { Target, Download, Search, UserCheck, Globe, Building, RefreshCw, Trash2 } from 'lucide-react';
+import { Target, Plus, Search, UserCheck, Globe, Building, RefreshCw, Trash2, AlertCircle } from 'lucide-react';
+
 export const AdminLeads: React.FC = () => {
   const [leads, setLeads] = useState<any[]>([]);
   const [pagination, setPagination] = useState<any>(null);
@@ -30,6 +32,23 @@ export const AdminLeads: React.FC = () => {
   const [selectedLead, setSelectedLead] = useState<any | null>(null);
   const [targetRepId, setTargetRepId] = useState<string>('');
   const [isAssigning, setIsAssigning] = useState(false);
+
+  // Add Lead Modal State
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
+  const [createError, setCreateError] = useState<string | null>(null);
+  const [newLead, setNewLead] = useState({
+    first_name: '',
+    last_name: '',
+    email: '',
+    phone: '',
+    company: '',
+    job_title: '',
+    status: 'new',
+    source: 'Website',
+    estimated_value: '',
+    assigned_to: '',
+  });
 
   const fetchLeads = async () => {
     setLoading(true);
@@ -119,9 +138,56 @@ export const AdminLeads: React.FC = () => {
     }
   };
 
-  const handleExportCsv = () => {
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
-    window.open(`${API_URL}/admin/leads/export`, '_blank');
+  const handleCreateLead = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newLead.first_name || !newLead.last_name || !newLead.email) {
+      setCreateError('First Name, Last Name, and Email are required.');
+      return;
+    }
+
+    setIsCreating(true);
+    setCreateError(null);
+    try {
+      const payload: any = {
+        first_name: newLead.first_name.trim(),
+        last_name: newLead.last_name.trim(),
+        email: newLead.email.trim(),
+        phone: newLead.phone.trim() || undefined,
+        company: newLead.company.trim() || undefined,
+        job_title: newLead.job_title.trim() || undefined,
+        status: newLead.status || 'new',
+        source: newLead.source || 'Website',
+      };
+
+      if (newLead.estimated_value) {
+        payload.estimated_value = Number(newLead.estimated_value);
+      }
+      if (newLead.assigned_to) {
+        payload.assigned_to = Number(newLead.assigned_to);
+      }
+
+      const res = await leadService.createLead(payload);
+      if (res && (res.success || res.data)) {
+        setIsCreateModalOpen(false);
+        setNewLead({
+          first_name: '',
+          last_name: '',
+          email: '',
+          phone: '',
+          company: '',
+          job_title: '',
+          status: 'new',
+          source: 'Website',
+          estimated_value: '',
+          assigned_to: '',
+        });
+        fetchLeads();
+      }
+    } catch (err: any) {
+      setCreateError(err.data?.message || err.message || 'Failed to create lead.');
+    } finally {
+      setIsCreating(false);
+    }
   };
 
   const getTemperatureBadge = (score: number) => {
@@ -156,12 +222,15 @@ export const AdminLeads: React.FC = () => {
               Refresh
             </Button>
             <Button
-              variant="secondary"
+              variant="ai"
               size="sm"
-              onClick={handleExportCsv}
-              leftIcon={<Download className="w-4 h-4 text-emerald-400" />}
+              onClick={() => {
+                setCreateError(null);
+                setIsCreateModalOpen(true);
+              }}
+              leftIcon={<Plus className="w-4 h-4" />}
             >
-              Export Leads CSV
+              Add Lead
             </Button>
           </div>
         </div>
@@ -400,6 +469,126 @@ export const AdminLeads: React.FC = () => {
             </Button>
             <Button type="submit" variant="primary" size="sm" isLoading={isAssigning}>
               Save Lead Assignment
+            </Button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Create Lead Modal */}
+      <Modal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} title="Create New Lead">
+        <form onSubmit={handleCreateLead} className="space-y-4">
+          {createError && (
+            <div className="p-3 bg-rose-950/80 border border-rose-800 rounded-lg flex items-center space-x-2 text-rose-300 text-xs">
+              <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+              <span>{createError}</span>
+            </div>
+          )}
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <Input
+              label="First Name *"
+              placeholder="e.g. John"
+              value={newLead.first_name}
+              onChange={(e) => setNewLead({ ...newLead, first_name: e.target.value })}
+              required
+            />
+            <Input
+              label="Last Name *"
+              placeholder="e.g. Doe"
+              value={newLead.last_name}
+              onChange={(e) => setNewLead({ ...newLead, last_name: e.target.value })}
+              required
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <Input
+              label="Email Address *"
+              type="email"
+              placeholder="e.g. john@company.com"
+              value={newLead.email}
+              onChange={(e) => setNewLead({ ...newLead, email: e.target.value })}
+              required
+            />
+            <Input
+              label="Phone Number"
+              placeholder="e.g. +1 555-0199"
+              value={newLead.phone}
+              onChange={(e) => setNewLead({ ...newLead, phone: e.target.value })}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <Input
+              label="Company"
+              placeholder="e.g. Acme Corp"
+              value={newLead.company}
+              onChange={(e) => setNewLead({ ...newLead, company: e.target.value })}
+            />
+            <Input
+              label="Job Title"
+              placeholder="e.g. VP of Sales"
+              value={newLead.job_title}
+              onChange={(e) => setNewLead({ ...newLead, job_title: e.target.value })}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <Select
+              label="Status"
+              value={newLead.status}
+              onChange={(e) => setNewLead({ ...newLead, status: e.target.value })}
+              options={[
+                { value: 'new', label: 'New' },
+                { value: 'contacted', label: 'Contacted' },
+                { value: 'qualified', label: 'Qualified' },
+                { value: 'proposal', label: 'Proposal' },
+                { value: 'negotiation', label: 'Negotiation' },
+                { value: 'won', label: 'Won' },
+                { value: 'lost', label: 'Lost' },
+              ]}
+            />
+            <Select
+              label="Lead Source"
+              value={newLead.source}
+              onChange={(e) => setNewLead({ ...newLead, source: e.target.value })}
+              options={[
+                { value: 'Website', label: 'Website' },
+                { value: 'Referral', label: 'Referral' },
+                { value: 'Inbound Call', label: 'Inbound Call' },
+                { value: 'Cold Outreach', label: 'Cold Outreach' },
+                { value: 'LinkedIn', label: 'LinkedIn' },
+                { value: 'Event', label: 'Event' },
+                { value: 'Partner', label: 'Partner' },
+              ]}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <Input
+              label="Estimated Value ($)"
+              type="number"
+              placeholder="e.g. 25000"
+              value={newLead.estimated_value}
+              onChange={(e) => setNewLead({ ...newLead, estimated_value: e.target.value })}
+            />
+            <Select
+              label="Assign to Sales Rep"
+              value={newLead.assigned_to}
+              onChange={(e) => setNewLead({ ...newLead, assigned_to: e.target.value })}
+              options={[
+                { value: '', label: '-- Unassigned --' },
+                ...salesReps.map((r) => ({ value: String(r.id), label: `${r.name} (${r.role.replace('_', ' ')})` })),
+              ]}
+            />
+          </div>
+
+          <div className="pt-4 flex justify-end space-x-3 border-t border-[#222222]">
+            <Button type="button" variant="secondary" size="sm" onClick={() => setIsCreateModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" variant="ai" size="sm" isLoading={isCreating}>
+              Create & Score Lead
             </Button>
           </div>
         </form>

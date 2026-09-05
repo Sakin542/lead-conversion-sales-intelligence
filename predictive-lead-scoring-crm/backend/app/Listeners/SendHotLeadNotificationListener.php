@@ -5,9 +5,7 @@ namespace App\Listeners;
 use App\Events\HotLeadDetected;
 use App\Notifications\HotLeadNotification;
 use App\Services\NotificationService;
-use Illuminate\Contracts\Queue\ShouldQueue;
-
-class SendHotLeadNotificationListener implements ShouldQueue
+class SendHotLeadNotificationListener
 {
     public function handle(HotLeadDetected $event): void
     {

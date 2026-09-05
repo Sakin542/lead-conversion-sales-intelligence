@@ -5,9 +5,7 @@ namespace App\Listeners;
 use App\Events\SalesFollowUpDue;
 use App\Notifications\SalesFollowUpReminderNotification;
 use App\Services\NotificationService;
-use Illuminate\Contracts\Queue\ShouldQueue;
-
-class SendSalesFollowUpReminderListener implements ShouldQueue
+class SendSalesFollowUpReminderListener
 {
     public function handle(SalesFollowUpDue $event): void
     {

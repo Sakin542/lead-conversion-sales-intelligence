@@ -5,9 +5,7 @@ namespace App\Listeners;
 use App\Events\LeadScoreUpdated;
 use App\Notifications\LeadScoreUpdatedNotification;
 use App\Services\NotificationService;
-use Illuminate\Contracts\Queue\ShouldQueue;
-
-class SendLeadScoreUpdatedNotificationListener implements ShouldQueue
+class SendLeadScoreUpdatedNotificationListener
 {
     public function handle(LeadScoreUpdated $event): void
     {

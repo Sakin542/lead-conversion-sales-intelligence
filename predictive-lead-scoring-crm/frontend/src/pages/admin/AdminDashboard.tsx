@@ -50,8 +50,8 @@ export const AdminDashboard: React.FC = () => {
   const [searchResults, setSearchResults] = useState<{ leads: any[]; users: any[]; deals: any[] } | null>(null);
   const [isSearching, setIsSearching] = useState(false);
 
-  const fetchDashboardData = async () => {
-    setLoading(true);
+  const fetchDashboardData = async (silent = false) => {
+    if (!silent) setLoading(true);
     try {
       const [res, healthRes] = await Promise.all([
         adminApi.getDashboard(),
@@ -66,12 +66,16 @@ export const AdminDashboard: React.FC = () => {
     } catch (err: any) {
       console.error('Failed to load dashboard data', err);
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchDashboardData();
+    const interval = setInterval(() => {
+      fetchDashboardData(true);
+    }, 15000);
+    return () => clearInterval(interval);
   }, []);
 
   const handleGlobalSearch = async (e: React.FormEvent) => {
@@ -122,7 +126,7 @@ export const AdminDashboard: React.FC = () => {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={fetchDashboardData}
+                onClick={() => fetchDashboardData(false)}
                 className="border-[#222222] text-zinc-300 hover:bg-[#151515]"
                 leftIcon={<RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />}
               >
@@ -354,7 +358,7 @@ export const AdminDashboard: React.FC = () => {
             <div className="flex items-center space-x-3">
               <span className="text-[11px] text-zinc-400">Last checked: {healthData?.checkedAt || 'Just now'}</span>
               <button
-                onClick={fetchDashboardData}
+                onClick={() => fetchDashboardData(false)}
                 className="p-1 rounded text-zinc-400 hover:text-white hover:bg-[#151515]"
                 title="Refresh Health Status"
               >

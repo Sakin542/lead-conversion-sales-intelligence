@@ -24,8 +24,8 @@ export const SalesRepDashboard: React.FC = () => {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const fetchDashboard = async () => {
-    setLoading(true);
+  const fetchDashboard = async (silent = false) => {
+    if (!silent) setLoading(true);
     try {
       const res = await salesRepApi.getDashboard();
       if (res.success) {
@@ -34,12 +34,16 @@ export const SalesRepDashboard: React.FC = () => {
     } catch (e) {
       console.error(e);
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchDashboard();
+    const interval = setInterval(() => {
+      fetchDashboard(true);
+    }, 15000);
+    return () => clearInterval(interval);
   }, []);
 
   const kpis = data?.kpis || {};

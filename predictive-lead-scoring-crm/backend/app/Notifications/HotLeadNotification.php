@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class HotLeadNotification extends Notification implements ShouldQueue
+class HotLeadNotification extends Notification
 {
     use Queueable;
 

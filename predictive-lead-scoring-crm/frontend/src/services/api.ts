@@ -21,14 +21,27 @@ export async function apiRequest<T>(
 ): Promise<T> {
   const token = getToken();
 
+  const isFormData =
+    (typeof FormData !== 'undefined' && options.body instanceof FormData) ||
+    (options.body && typeof (options.body as any).append === 'function') ||
+    Object.prototype.toString.call(options.body) === '[object FormData]';
+
   const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
     Accept: 'application/json',
-    ...(options.headers as Record<string, string>),
   };
 
-  if (options.body instanceof FormData) {
-    delete headers['Content-Type'];
+  if (!isFormData) {
+    headers['Content-Type'] = 'application/json';
+  }
+
+  if (options.headers) {
+    const customHeaders = options.headers as Record<string, string>;
+    for (const [key, value] of Object.entries(customHeaders)) {
+      if (isFormData && key.toLowerCase() === 'content-type') {
+        continue;
+      }
+      headers[key] = value;
+    }
   }
 
   if (token) {
@@ -336,6 +349,14 @@ export const adminApi = {
     return apiRequest('/admin/ml/feature-importance', { method: 'GET' });
   },
 
+  getMlStatus: async (): Promise<{ success: boolean; status: string; api_url: string; latency_ms: number | null; microservice: any }> => {
+    return apiRequest('/admin/ml/status', { method: 'GET' });
+  },
+
+  getMlMetrics: async (): Promise<{ success: boolean; model_name: string; metrics: any; distribution: any; feature_importance: Record<string, number> }> => {
+    return apiRequest('/admin/ml/metrics', { method: 'GET' });
+  },
+
   getPredictions: async (page = 1): Promise<{ success: boolean; data: any[]; pagination: any }> => {
     return apiRequest(`/admin/ml/predictions?page=${page}`, { method: 'GET' });
   },
@@ -363,6 +384,13 @@ export const adminApi = {
     return apiRequest('/admin/datasets', {
       method: 'POST',
       body: formData,
+    });
+  },
+
+  uploadDatasetJson: async (payload: { name: string; content: string }): Promise<{ success: boolean; message: string; dataset: any }> => {
+    return apiRequest('/admin/datasets', {
+      method: 'POST',
+      body: JSON.stringify(payload),
     });
   },
 

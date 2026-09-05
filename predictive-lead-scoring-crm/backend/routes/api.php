@@ -80,6 +80,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/leads', [LeadController::class, 'index']);
     Route::post('/leads', [LeadController::class, 'store']);
     Route::get('/leads/{id}', [LeadController::class, 'show']);
+    Route::get('/leads/{id}/score', [LeadController::class, 'getScore']);
+    Route::post('/leads/{id}/score', [LeadController::class, 'rescore']);
     Route::put('/leads/{id}', [LeadController::class, 'update']);
     Route::patch('/leads/{id}', [LeadController::class, 'update']);
     Route::patch('/leads/{id}/score', [LeadController::class, 'updateScore']);
@@ -220,6 +222,10 @@ Route::middleware(['auth:sanctum', 'role:ADMIN'])->prefix('admin')->group(functi
     Route::post('/ml/models/{id}/activate', [AdminMlController::class, 'activateModel']);
     Route::get('/ml/feature-importance', [AdminMlController::class, 'featureImportance']);
     Route::get('/ml/predictions', [AdminMlController::class, 'predictions']);
+    Route::post('/ml/predict', [AdminMlController::class, 'predict']);
+    Route::get('/ml/status', [AdminMlController::class, 'status']);
+    Route::get('/ml/metrics', [AdminMlController::class, 'metrics']);
+    Route::get('/ml/horizon-stats', [AdminMlController::class, 'horizonStats']);
     Route::post('/ml/train', [AdminMlController::class, 'train']);
 
     // Datasets, Quality & Preview

@@ -119,4 +119,20 @@ class Lead extends Model
     {
         return $this->hasMany(FollowUp::class);
     }
+
+    /**
+     * Get all scores recorded for the lead.
+     */
+    public function scores(): HasMany
+    {
+        return $this->hasMany(LeadScore::class);
+    }
+
+    /**
+     * Get the most recent lead score.
+     */
+    public function latestScore(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(LeadScore::class)->latestOfMany();
+    }
 }

@@ -5,9 +5,7 @@ namespace App\Listeners;
 use App\Events\LeadAssigned;
 use App\Notifications\LeadAssignedNotification;
 use App\Services\NotificationService;
-use Illuminate\Contracts\Queue\ShouldQueue;
-
-class SendLeadAssignedNotificationListener implements ShouldQueue
+class SendLeadAssignedNotificationListener
 {
     public function handle(LeadAssigned $event): void
     {

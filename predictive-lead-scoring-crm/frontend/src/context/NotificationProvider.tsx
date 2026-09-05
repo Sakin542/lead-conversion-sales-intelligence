@@ -207,7 +207,13 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     fetchUnreadCount();
     fetchNotifications();
 
+    // Background real-time polling fallback
+    const pollInterval = setInterval(() => {
+      fetchUnreadCount();
+    }, 12000);
+
     return () => {
+      clearInterval(pollInterval);
       if (socket) {
         socket.off();
         if (socket.connected) {
