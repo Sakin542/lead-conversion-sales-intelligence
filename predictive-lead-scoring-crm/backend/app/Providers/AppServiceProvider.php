@@ -54,5 +54,7 @@ class AppServiceProvider extends ServiceProvider
             SalesFollowUpDue::class,
             SendSalesFollowUpReminderListener::class
         );
+
+        \App\Models\Lead::observe(\App\Observers\LeadObserver::class);
     }
 }

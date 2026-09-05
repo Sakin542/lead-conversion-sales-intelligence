@@ -4,7 +4,7 @@ import Button from '../../components/common/Button';
 import Card from '../../components/common/Card';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import { adminApi } from '../../services/api';
-import { ClipboardList, Search, RefreshCw, Download } from 'lucide-react';
+import { ClipboardList, Search, RefreshCw } from 'lucide-react';
 
 export const AdminAuditLogs: React.FC = () => {
   const [logs, setLogs] = useState<any[]>([]);
@@ -49,14 +49,6 @@ export const AdminAuditLogs: React.FC = () => {
     fetchAuditLogs();
   };
 
-  const handleExportCsv = () => {
-    const params = new URLSearchParams();
-    if (search) params.append('search', search);
-    if (actionFilter) params.append('action', actionFilter);
-    const token = localStorage.getItem('token');
-    window.open(`/api/admin/audit-logs/export-csv?${params.toString()}&token=${token}`, '_blank');
-  };
-
   return (
     <AdminLayout>
       <div className="space-y-6">
@@ -72,15 +64,6 @@ export const AdminAuditLogs: React.FC = () => {
           </div>
 
           <div className="flex items-center space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleExportCsv}
-              className="border-[#222222] text-zinc-300 hover:bg-[#151515] hover:text-white"
-              leftIcon={<Download className="w-4 h-4" />}
-            >
-              Export CSV
-            </Button>
             <Button
               variant="outline"
               size="sm"

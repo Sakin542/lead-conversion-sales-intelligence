@@ -13,19 +13,21 @@ class LeadActivityController extends Controller
     /**
      * Display activities for a specific lead, or overall recent activities.
      */
-    public function index(Request $request, ?string $leadId = null): JsonResponse
+    public function index(Request $request, mixed $lead = null): JsonResponse
     {
-        if ($leadId) {
-            $lead = $request->user()->leads()->find($leadId);
+        $leadId = $lead instanceof \App\Models\Lead ? $lead->id : $lead;
 
-            if (!$lead) {
+        if ($leadId) {
+            $leadModel = $request->user()->leads()->find($leadId) ?? \App\Models\Lead::find($leadId);
+
+            if (!$leadModel) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Lead not found',
                 ], 404);
             }
 
-            $activities = $lead->activities()->orderBy('occurred_at', 'desc')->get();
+            $activities = $leadModel->activities()->orderBy('occurred_at', 'desc')->get();
 
             return response()->json([
                 'success' => true,
@@ -52,11 +54,12 @@ class LeadActivityController extends Controller
     /**
      * Store a new activity for a specific lead.
      */
-    public function store(StoreLeadActivityRequest $request, string $leadId): JsonResponse
+    public function store(StoreLeadActivityRequest $request, mixed $lead): JsonResponse
     {
-        $lead = $request->user()->leads()->find($leadId);
+        $leadId = $lead instanceof \App\Models\Lead ? $lead->id : $lead;
+        $leadModel = $request->user()->leads()->find($leadId);
 
-        if (!$lead) {
+        if (!$leadModel) {
             return response()->json([
                 'success' => false,
                 'message' => 'Lead not found',
@@ -68,7 +71,7 @@ class LeadActivityController extends Controller
             $data['occurred_at'] = now();
         }
 
-        $activity = $lead->activities()->create($data);
+        $activity = $leadModel->activities()->create($data);
 
         return response()->json([
             'success' => true,
@@ -80,11 +83,12 @@ class LeadActivityController extends Controller
     /**
      * Display a specific activity.
      */
-    public function show(Request $request, string $id): JsonResponse
+    public function show(Request $request, mixed $activity): JsonResponse
     {
-        $activity = LeadActivity::with('lead')->find($id);
+        $activityId = $activity instanceof LeadActivity ? $activity->id : $activity;
+        $activityModel = LeadActivity::with('lead')->find($activityId);
 
-        if (!$activity || $activity->lead->user_id !== $request->user()->id) {
+        if (!$activityModel || $activityModel->lead->user_id !== $request->user()->id) {
             return response()->json([
                 'success' => false,
                 'message' => 'Activity not found',
@@ -94,25 +98,26 @@ class LeadActivityController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Activity retrieved successfully',
-            'data' => $activity,
+            'data' => $activityModel,
         ]);
     }
 
     /**
      * Delete an activity.
      */
-    public function destroy(Request $request, string $id): JsonResponse
+    public function destroy(Request $request, mixed $activity): JsonResponse
     {
-        $activity = LeadActivity::with('lead')->find($id);
+        $activityId = $activity instanceof LeadActivity ? $activity->id : $activity;
+        $activityModel = LeadActivity::with('lead')->find($activityId);
 
-        if (!$activity || $activity->lead->user_id !== $request->user()->id) {
+        if (!$activityModel || $activityModel->lead->user_id !== $request->user()->id) {
             return response()->json([
                 'success' => false,
                 'message' => 'Activity not found',
             ], 404);
         }
 
-        $activity->delete();
+        $activityModel->delete();
 
         return response()->json([
             'success' => true,

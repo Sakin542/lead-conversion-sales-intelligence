@@ -193,7 +193,6 @@ export const Login: React.FC = () => {
               </Button>
             </div>
           </form>
-
         </div>
       </main>
 

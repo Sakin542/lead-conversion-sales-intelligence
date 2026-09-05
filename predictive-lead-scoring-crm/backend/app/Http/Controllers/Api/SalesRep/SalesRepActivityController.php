@@ -109,8 +109,9 @@ class SalesRepActivityController extends Controller
 
         $activity = LeadActivity::create($activityData);
 
-        // Update lead's last activity timestamp
+        // Update lead's last activity timestamp and trigger async ML rescoring
         $lead->touch();
+        \App\Jobs\ScoreLeadJob::dispatch($lead);
 
         AuditLog::log(
             $userId,

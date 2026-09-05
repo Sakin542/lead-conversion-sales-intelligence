@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class SalesFollowUpReminderNotification extends Notification implements ShouldQueue
+class SalesFollowUpReminderNotification extends Notification
 {
     use Queueable;
 

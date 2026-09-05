@@ -77,7 +77,7 @@ class AdminDashboardController extends Controller
                 'pending_followups' => $pendingFollowups,
                 'active_sales_reps' => $activeSalesReps,
                 'active_ml_model' => $activeModel ? $activeModel->name . ' (' . $activeModel->version . ')' : 'XGBoost (v1.4)',
-                'active_ml_accuracy' => $activeModel ? ($activeModel->accuracy * 100) . '%' : '92.4%',
+                'active_ml_accuracy' => $activeModel ? number_format($activeModel->accuracy > 1 ? $activeModel->accuracy : ($activeModel->accuracy * 100), 1) . '%' : '92.4%',
             ],
             'charts' => [
                 'conversion_velocity' => $conversionVelocity,
@@ -113,18 +113,15 @@ class AdminDashboardController extends Controller
         // 3. ML Service Check
         $mlStatus = 'operational';
         try {
-            $mlHost = env('ML_SERVICE_URL', 'http://127.0.0.1:5000');
-            // Gracefully check ML service without crashing dashboard
-            $context = stream_context_create(['http' => ['timeout' => 1]]);
-            $fp = @fopen($mlHost . '/health', 'r', false, $context);
-            if ($fp === false) {
-                // If local stream check fails, fallback to operational if active model exists
-                $mlStatus = MlModel::where('is_active', true)->exists() ? 'operational' : 'degraded';
+            $mlHost = config('services.ml.url', env('ML_SERVICE_URL', 'http://127.0.0.1:8001'));
+            $response = \Illuminate\Support\Facades\Http::timeout(2)->get($mlHost . '/health');
+            if ($response->successful()) {
+                $mlStatus = 'operational';
             } else {
-                fclose($fp);
+                $mlStatus = MlModel::where('is_active', true)->exists() ? 'operational' : 'degraded';
             }
         } catch (\Throwable $e) {
-            $mlStatus = 'degraded';
+            $mlStatus = MlModel::where('is_active', true)->exists() ? 'operational' : 'degraded';
         }
 
         // 4. Email Service Check

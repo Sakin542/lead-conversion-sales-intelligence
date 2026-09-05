@@ -40,7 +40,10 @@ def predict_lead(lead_data, model=None):
     Accepts lead_data dict, list of dicts, or DataFrame.
     """
     bundle = None
-    if model is None:
+    if isinstance(model, dict):
+        bundle = model
+        model = bundle.get('pipeline')
+    elif model is None:
         bundle = load_best_model_bundle()
         if 'pipeline' in bundle:
             model = bundle['pipeline']
