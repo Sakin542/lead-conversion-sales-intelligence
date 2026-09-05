@@ -5,7 +5,7 @@ import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import { useNotifications } from '../../context/NotificationProvider';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Bell,
   CheckCheck,
@@ -37,6 +37,8 @@ export const AdminNotifications: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const navigate = useNavigate();
+  const location = useLocation();
+  const highlightedId = (location.state as any)?.highlightId || (location.state as any)?.selectedNotificationId;
 
   useEffect(() => {
     fetchNotifications({ type: activeCategory, search: searchTerm });
@@ -169,12 +171,16 @@ export const AdminNotifications: React.FC = () => {
           <div className="space-y-3">
             {notifications.map((n) => {
               const isUnread = !n.is_read && !n.read;
+              const isHighlighted = highlightedId && String(n.id) === String(highlightedId);
 
               return (
                 <Card
                   key={n.id}
-                  className={`p-4 transition-all duration-200 border ${
-                    isUnread
+                  id={`notif-${n.id}`}
+                  className={`p-4 transition-all duration-300 border ${
+                    isHighlighted
+                      ? 'bg-[#1D1815] border-[#FF7A00] ring-2 ring-[#FF7A00] shadow-xl shadow-orange-950/40'
+                      : isUnread
                       ? 'bg-[#171718] border-[#FF7A00]/40 shadow-lg shadow-orange-950/20 ring-1 ring-[#FF7A00]/20'
                       : 'bg-[#111113] border-[#2A2A2E] hover:bg-[#171718]'
                   }`}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import { Flame, CheckCircle2, Clock, AlertTriangle, X, ArrowRight, Sparkles } from 'lucide-react';
 
 export interface ToastItem {
@@ -24,8 +25,15 @@ export const NotificationToastContainer: React.FC<NotificationToastProps> = ({
   onNotificationClick,
 }) => {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   if (!toasts || toasts.length === 0) return null;
+
+  const getNotificationCenterPath = () => {
+    if (user?.role === 'ADMIN') return '/admin/notifications';
+    if (user?.role === 'SALES_MANAGER') return '/manager/notifications';
+    return '/sales-rep/notifications';
+  };
 
   const getToastIcon = (type?: string, priority?: string) => {
     const isCritical = priority === 'CRITICAL' || priority === 'HIGH' || type?.includes('HOT') || type?.includes('OVERDUE');
@@ -48,8 +56,10 @@ export const NotificationToastContainer: React.FC<NotificationToastProps> = ({
     onDismiss(toast.id);
     if (onNotificationClick) {
       onNotificationClick(toast);
-    } else if (toast.action_url) {
-      navigate(toast.action_url);
+    } else {
+      navigate(getNotificationCenterPath(), {
+        state: { selectedNotificationId: toast.id, highlightId: toast.id, actionUrl: toast.action_url },
+      });
     }
   };
 

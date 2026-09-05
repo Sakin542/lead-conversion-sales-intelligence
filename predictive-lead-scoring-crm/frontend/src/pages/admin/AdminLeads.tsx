@@ -475,7 +475,7 @@ export const AdminLeads: React.FC = () => {
       </Modal>
 
       {/* Create Lead Modal */}
-      <Modal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} title="Create New Lead">
+      <Modal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} title="Create New Lead" size="2xl">
         <form onSubmit={handleCreateLead} className="space-y-4">
           {createError && (
             <div className="p-3 bg-rose-950/80 border border-rose-800 rounded-lg flex items-center space-x-2 text-rose-300 text-xs">

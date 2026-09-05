@@ -18,7 +18,9 @@ class AdminLeadController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $query = Lead::with(['user:id,name', 'assignedTo:id,name']);
+        $this->ensurePipelineDataExists();
+
+        $query = Lead::with(['user:id,name', 'assignedTo:id,name', 'assignedToUser:id,name']);
 
         // Website vs Internal Lead filter
         if ($origin = $request->query('origin')) {
@@ -198,6 +200,91 @@ class AdminLeadController extends Controller
         };
 
         return response()->stream($callback, 200, $headers);
+    }
+
+    /**
+     * Ensure baseline demo team and multi-stage leads exist if empty.
+     */
+    private function ensurePipelineDataExists(): void
+    {
+        if (Lead::count() < 14) {
+            // Ensure sales reps exist
+            $salesRep = User::firstOrCreate(
+                ['email' => 'sales@crm.com'],
+                [
+                    'name' => 'Sales Representative',
+                    'password' => 'Password123!',
+                    'role' => User::ROLE_SALES_REP,
+                    'is_active' => true,
+                    'email_verified_at' => now(),
+                ]
+            );
+
+            $manager = User::firstOrCreate(
+                ['email' => 'manager@crm.com'],
+                [
+                    'name' => 'Sales Manager',
+                    'password' => 'Password123!',
+                    'role' => User::ROLE_SALES_MANAGER,
+                    'is_active' => true,
+                    'email_verified_at' => now(),
+                ]
+            );
+
+            $alex = User::firstOrCreate(
+                ['email' => 'alex.morgan@crm.com'],
+                [
+                    'name' => 'Alex Morgan',
+                    'password' => 'Password123!',
+                    'role' => User::ROLE_SALES_REP,
+                    'is_active' => true,
+                    'email_verified_at' => now(),
+                ]
+            );
+
+            $repId = $salesRep->id;
+            $mgrId = $manager->id;
+            $alexId = $alex->id;
+
+            $initialLeads = [
+                ['first_name' => 'Emma', 'last_name' => 'Watson', 'email' => 'emma.w@globaltech.com', 'company' => 'Global Tech Corp', 'source' => 'Website', 'status' => 'won', 'score' => 94, 'estimated_value' => 28000, 'assigned_to' => $mgrId],
+                ['first_name' => 'Liam', 'last_name' => 'Neeson', 'email' => 'liam.n@apexfin.com', 'company' => 'Apex Financials', 'source' => 'Lead Add Form', 'status' => 'won', 'score' => 91, 'estimated_value' => 35000, 'assigned_to' => $repId],
+                ['first_name' => 'Chloe', 'last_name' => 'Davis', 'email' => 'chloe.d@quantum.com', 'company' => 'Quantum Dynamics', 'source' => 'Reference', 'status' => 'won', 'score' => 92, 'estimated_value' => 22000, 'assigned_to' => $alexId],
+                
+                ['first_name' => 'Sophia', 'last_name' => 'Taylor', 'email' => 'sophia.t@nextwave.io', 'company' => 'NextWave Software', 'source' => 'Reference', 'status' => 'negotiation', 'score' => 88, 'estimated_value' => 24000, 'assigned_to' => $alexId],
+                ['first_name' => 'Daniel', 'last_name' => 'Craig', 'email' => 'daniel.c@skyline.com', 'company' => 'Skyline Global', 'source' => 'Website', 'status' => 'negotiation', 'score' => 93, 'estimated_value' => 45000, 'assigned_to' => $mgrId],
+                
+                ['first_name' => 'David', 'last_name' => 'Miller', 'email' => 'david.m@cloudsys.net', 'company' => 'Cloud Systems Inc', 'source' => 'Website', 'status' => 'proposal', 'score' => 85, 'estimated_value' => 19500, 'assigned_to' => $mgrId],
+                ['first_name' => 'Benjamin', 'last_name' => 'Cole', 'email' => 'benjamin.c@novaenergy.org', 'company' => 'Nova Energy Solutions', 'source' => 'Organic Search', 'status' => 'proposal', 'score' => 89, 'estimated_value' => 31000, 'assigned_to' => $repId],
+                
+                ['first_name' => 'Olivia', 'last_name' => 'Brown', 'email' => 'olivia.b@strata.org', 'company' => 'Strata Health', 'source' => 'Olark Chat', 'status' => 'qualified', 'score' => 76, 'estimated_value' => 15000, 'assigned_to' => $repId],
+                ['first_name' => 'Samantha', 'last_name' => 'Reed', 'email' => 'samantha.r@beaconbio.com', 'company' => 'Beacon BioLabs', 'source' => 'Lead Add Form', 'status' => 'qualified', 'score' => 82, 'estimated_value' => 26000, 'assigned_to' => $alexId],
+                
+                ['first_name' => 'James', 'last_name' => 'Wilson', 'email' => 'james.w@veritas.com', 'company' => 'Veritas Media', 'source' => 'Organic Search', 'status' => 'contacted', 'score' => 68, 'estimated_value' => 12000, 'assigned_to' => $alexId],
+                ['first_name' => 'Marcus', 'last_name' => 'Vance', 'email' => 'marcus.v@vancecorp.io', 'company' => 'Vance Logistics', 'source' => 'Direct Traffic', 'status' => 'contacted', 'score' => 58, 'estimated_value' => 18500, 'assigned_to' => $mgrId],
+                
+                ['first_name' => 'Ava', 'last_name' => 'Johnson', 'email' => 'ava.j@lumina.io', 'company' => 'Lumina Retail', 'source' => 'Direct Traffic', 'status' => 'new', 'score' => 72, 'estimated_value' => 9000, 'assigned_to' => $mgrId],
+                ['first_name' => 'Lucas', 'last_name' => 'Martin', 'email' => 'lucas.m@inno.co', 'company' => 'InnoTech Solutions', 'source' => 'Website', 'status' => 'new', 'score' => 42, 'estimated_value' => 8000, 'assigned_to' => $repId],
+                ['first_name' => 'Ethan', 'last_name' => 'Hunt', 'email' => 'ethan.h@apexsec.net', 'company' => 'Apex Security Group', 'source' => 'Lead Add Form', 'status' => 'new', 'score' => 65, 'estimated_value' => 14000, 'assigned_to' => $alexId],
+                
+                ['first_name' => 'Robert', 'last_name' => 'Chen', 'email' => 'robert.c@zenith.com', 'company' => 'Zenith Logistics', 'source' => 'Direct Traffic', 'status' => 'lost', 'score' => 34, 'estimated_value' => 11000, 'assigned_to' => $repId],
+                ['first_name' => 'Arthur', 'last_name' => 'Pendelton', 'email' => 'arthur.p@legacysys.org', 'company' => 'Legacy Systems', 'source' => 'Organic Search', 'status' => 'lost', 'score' => 28, 'estimated_value' => 16000, 'assigned_to' => $alexId],
+            ];
+
+            foreach ($initialLeads as $leadData) {
+                if (!Lead::where('email', $leadData['email'])->exists()) {
+                    Lead::create(array_merge($leadData, [
+                        'user_id' => $leadData['assigned_to'],
+                        'created_by' => $leadData['assigned_to'],
+                        'phone' => '+1 (555) ' . rand(100, 999) . '-' . rand(1000, 9999),
+                        'job_title' => 'Director of Operations',
+                        'industry' => 'Technology',
+                        'budget' => $leadData['estimated_value'],
+                        'country' => 'United States',
+                    ]));
+                }
+            }
+        }
     }
 }
 

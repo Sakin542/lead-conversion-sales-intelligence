@@ -5,7 +5,19 @@ import { Sparkles, ArrowRight, Bot } from 'lucide-react';
 import Button from '../common/Button';
 import { Link } from 'react-router-dom';
 
-export const AIScoringInsight: React.FC = () => {
+interface AIScoringInsightProps {
+  insight?: {
+    high_intent_count?: number;
+    timeframe?: string;
+    recommendation?: string;
+  };
+}
+
+export const AIScoringInsight: React.FC<AIScoringInsightProps> = ({ insight }) => {
+  const highIntentCount = insight?.high_intent_count ?? aiInsightData.highIntentUncontactedCount;
+  const insightTimeframe = insight?.timeframe ?? aiInsightData.timeframe;
+  const recommendation = insight?.recommendation ?? aiInsightData.recommendation;
+
   return (
     <Card className="relative overflow-hidden bg-[#171718] border-[#2A2A2E] p-6 sm:p-7 space-y-5 shadow-sm hover:border-[#FF7A00]/40 hover:shadow-lg hover:shadow-[#FF7A00]/10 transition-all duration-300 animate-fade-in">
       {/* Background Subtle AI Glow */}
@@ -26,11 +38,11 @@ export const AIScoringInsight: React.FC = () => {
             </div>
 
             <h3 className="text-base sm:text-lg font-semibold text-white tracking-tight leading-snug">
-              You have <span className="text-[#FF7A00] font-bold">{aiInsightData.highIntentUncontactedCount} high-intent leads</span> that haven't been contacted in the last {aiInsightData.timeframe}.
+              You have <span className="text-[#FF7A00] font-bold">{highIntentCount} high-intent leads</span> that haven't been contacted in the last {insightTimeframe}.
             </h3>
 
             <p className="text-xs text-[#A1A1AA]">
-              <strong className="text-white font-medium">Recommended Action:</strong> {aiInsightData.recommendation}
+              <strong className="text-white font-medium">Recommended Action:</strong> {recommendation}
             </p>
           </div>
         </div>
@@ -41,7 +53,7 @@ export const AIScoringInsight: React.FC = () => {
               variant="ai"
               size="md"
               rightIcon={<ArrowRight className="w-4 h-4" />}
-              className="whitespace-nowrap shadow-[#FF7A00]/20 hover:shadow-[#FF7A00]/40"
+              className="whitespace-nowrap px-4.5 py-2.5 min-h-[44px] rounded-xl font-bold text-sm shadow-md shadow-[#FF7A00]/20 hover:shadow-[#FF7A00]/40"
             >
               View Hot Leads
             </Button>

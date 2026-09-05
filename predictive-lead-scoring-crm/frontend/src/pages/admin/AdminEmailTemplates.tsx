@@ -9,8 +9,68 @@ import LoadingSpinner from '../../components/common/LoadingSpinner';
 import { adminApi } from '../../services/api';
 import { Mail, Edit3, Eye, RefreshCw } from 'lucide-react';
 
+const DEFAULT_EMAIL_TEMPLATES = [
+  {
+    id: 1,
+    key: 'hot_lead_alert',
+    name: 'Hot Lead Detected Alert',
+    subject: '🔥 [URGENT] Hot Lead Detected: {{lead_name}} (Score: {{score}})',
+    body_html: '<div style="font-family: Arial, sans-serif; color: #111; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;">\n<h2 style="color: #FF7A00; margin-top: 0;">🔥 High-Conversion Hot Lead Alert</h2>\n<p>Hello <strong>{{rep_name}}</strong>,</p>\n<p>An AI predictive scoring surge has qualified <strong>{{lead_name}}</strong> from <strong>{{company}}</strong> as a <strong>HOT LEAD</strong> with an estimated conversion probability score of <span style="font-size: 16px; font-weight: bold; color: #10B981;">{{score}}/100</span>.</p>\n<div style="background-color: #f9f9f9; padding: 15px; border-radius: 6px; margin: 20px 0;">\n<p style="margin: 5px 0;"><strong>Estimated Value:</strong> ${{estimated_value}}</p>\n<p style="margin: 5px 0;"><strong>Source:</strong> {{source}}</p>\n<p style="margin: 5px 0;"><strong>Primary Interest:</strong> {{interested_in}}</p>\n</div>\n<p style="margin-top: 25px;"><a href="{{lead_url}}" style="background-color: #FF7A00; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold;">Contact Lead Now</a></p>\n<hr style="border: none; border-top: 1px solid #eee; margin: 25px 0;" />\n<p style="font-size: 12px; color: #888;">Automated alert from Predictive CRM Sales Intelligence.</p>\n</div>',
+    is_enabled: true,
+  },
+  {
+    id: 2,
+    key: 'lead_assigned',
+    name: 'New Lead Assigned Notification',
+    subject: '📋 New Lead Assigned to You: {{lead_name}} ({{company}})',
+    body_html: '<div style="font-family: Arial, sans-serif; color: #111; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;">\n<h2 style="color: #6366F1; margin-top: 0;">📋 New Lead Assigned</h2>\n<p>Hello <strong>{{rep_name}}</strong>,</p>\n<p>You have been assigned a new prospective account by sales leadership.</p>\n<div style="background-color: #f9f9f9; padding: 15px; border-radius: 6px; margin: 20px 0;">\n<p style="margin: 5px 0;"><strong>Contact:</strong> {{lead_name}} ({{job_title}})</p>\n<p style="margin: 5px 0;"><strong>Company:</strong> {{company}}</p>\n<p style="margin: 5px 0;"><strong>Email:</strong> {{email}}</p>\n<p style="margin: 5px 0;"><strong>Phone:</strong> {{phone}}</p>\n<p style="margin: 5px 0;"><strong>Pipeline Stage:</strong> {{stage}}</p>\n</div>\n<p style="margin-top: 25px;"><a href="{{lead_url}}" style="background-color: #6366F1; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold;">View in CRM Pipeline</a></p>\n<hr style="border: none; border-top: 1px solid #eee; margin: 25px 0;" />\n<p style="font-size: 12px; color: #888;">Predictive CRM & Lead Intelligence Platform.</p>\n</div>',
+    is_enabled: true,
+  },
+  {
+    id: 3,
+    key: 'score_threshold_crossed',
+    name: 'AI Conversion Score Surge Alert',
+    subject: '⚡ AI Score Surge Alert: {{lead_name}} score increased to {{score}}',
+    body_html: '<div style="font-family: Arial, sans-serif; color: #111; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;">\n<h2 style="color: #10B981; margin-top: 0;">⚡ Lead Intent & Score Surge</h2>\n<p>Hello <strong>{{rep_name}}</strong>,</p>\n<p>The ML scoring engine detected high buyer intent activity for <strong>{{lead_name}}</strong> at <strong>{{company}}</strong>.</p>\n<p>Updated predictive score: <strong style="font-size: 18px; color: #10B981;">{{score}}/100</strong> (Previous: {{previous_score}}).</p>\n<div style="background-color: #f0fdf4; border-left: 4px solid #10B981; padding: 12px; margin: 15px 0;">\n<p style="margin: 0; font-size: 13px; color: #166534;"><strong>Recommended Action:</strong> High intent detected. Follow up within 2 hours to maximize deal close probability.</p>\n</div>\n<p style="margin-top: 25px;"><a href="{{lead_url}}" style="background-color: #10B981; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold;">Open Lead Details</a></p>\n</div>',
+    is_enabled: true,
+  },
+  {
+    id: 4,
+    key: 'followup_reminder',
+    name: 'Scheduled Follow-Up Due Reminder',
+    subject: '⏰ Action Due: Follow up with {{lead_name}} ({{company}})',
+    body_html: '<div style="font-family: Arial, sans-serif; color: #111; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;">\n<h2 style="color: #F59E0B; margin-top: 0;">⏰ Follow-Up Reminder</h2>\n<p>Hello <strong>{{rep_name}}</strong>,</p>\n<p>You have a pending follow-up action scheduled for today:</p>\n<div style="background-color: #fefce8; border-left: 4px solid #F59E0B; padding: 15px; margin: 20px 0;">\n<p style="margin: 5px 0;"><strong>Task:</strong> {{task_title}}</p>\n<p style="margin: 5px 0;"><strong>Lead:</strong> {{lead_name}} ({{company}})</p>\n<p style="margin: 5px 0;"><strong>Due Time:</strong> {{due_time}}</p>\n<p style="margin: 5px 0;"><strong>Notes:</strong> {{task_notes}}</p>\n</div>\n<p style="margin-top: 25px;"><a href="{{action_url}}" style="background-color: #F59E0B; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold;">Complete Follow-Up</a></p>\n</div>',
+    is_enabled: true,
+  },
+  {
+    id: 5,
+    key: 'user_invitation',
+    name: 'Team Member Invitation & Onboarding',
+    subject: '📩 Welcome to Predictive CRM: Activate Your {{role}} Account',
+    body_html: '<div style="font-family: Arial, sans-serif; color: #111; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;">\n<h2 style="color: #8B5CF6; margin-top: 0;">Welcome to Predictive CRM</h2>\n<p>Hello <strong>{{name}}</strong>,</p>\n<p>You have been invited by your organization administrator to join the Predictive CRM team as a <strong>{{role}}</strong>.</p>\n<p>Click below to verify your email and create your secure password to get started:</p>\n<p style="margin: 30px 0;"><a href="{{invitation_url}}" style="background-color: #8B5CF6; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">Activate My Account</a></p>\n<p style="font-size: 13px; color: #666;">This activation link is unique to your email address ({{email}}) and will expire in 48 hours.</p>\n</div>',
+    is_enabled: true,
+  },
+  {
+    id: 6,
+    key: 'password_reset',
+    name: 'Security: Password Reset Confirmation',
+    subject: '🔐 Security Alert: Reset Your CRM Password',
+    body_html: '<div style="font-family: Arial, sans-serif; color: #111; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;">\n<h2 style="color: #EF4444; margin-top: 0;">🔐 Password Reset Request</h2>\n<p>Hello <strong>{{name}}</strong>,</p>\n<p>We received a request to reset the password for your Predictive CRM account (<strong>{{email}}</strong>).</p>\n<p style="margin: 25px 0;"><a href="{{reset_url}}" style="background-color: #EF4444; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">Reset Password</a></p>\n<p style="font-size: 12px; color: #666;">If you did not request a password reset, you can safely ignore this email.</p>\n</div>',
+    is_enabled: true,
+  },
+];
+
 export const AdminEmailTemplates: React.FC = () => {
-  const [templates, setTemplates] = useState<any[]>([]);
+  const [templates, setTemplates] = useState<any[]>(() => {
+    try {
+      const saved = localStorage.getItem('crm_admin_email_templates');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (_) {}
+    return DEFAULT_EMAIL_TEMPLATES;
+  });
   const [loading, setLoading] = useState<boolean>(true);
 
   // Edit Modal
@@ -49,11 +109,23 @@ export const AdminEmailTemplates: React.FC = () => {
     setLoading(true);
     try {
       const res = await adminApi.getEmailTemplates();
-      if (res.success) {
+      if (res.success && Array.isArray(res.templates) && res.templates.length > 0) {
         setTemplates(res.templates);
+        try {
+          localStorage.setItem('crm_admin_email_templates', JSON.stringify(res.templates));
+        } catch (_) {}
+      } else {
+        setTemplates((prev) => {
+          const list = prev.length > 0 ? prev : DEFAULT_EMAIL_TEMPLATES;
+          try {
+            localStorage.setItem('crm_admin_email_templates', JSON.stringify(list));
+          } catch (_) {}
+          return list;
+        });
       }
     } catch (e) {
       console.error(e);
+      setTemplates((prev) => (prev.length > 0 ? prev : DEFAULT_EMAIL_TEMPLATES));
     } finally {
       setLoading(false);
     }
@@ -83,7 +155,13 @@ export const AdminEmailTemplates: React.FC = () => {
       });
 
       if (res.success) {
-        setTemplates((prev) => prev.map((t) => (t.id === selectedTemplate.id ? res.template : t)));
+        setTemplates((prev) => {
+          const updated = prev.map((t) => (t.id === selectedTemplate.id ? res.template : t));
+          try {
+            localStorage.setItem('crm_admin_email_templates', JSON.stringify(updated));
+          } catch (_) {}
+          return updated;
+        });
         setSelectedTemplate(null);
       }
     } catch (err: any) {

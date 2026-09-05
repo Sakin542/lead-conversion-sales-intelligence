@@ -20,8 +20,11 @@ class AdminSeeder extends Seeder
         $adminEmail = env('INITIAL_ADMIN_EMAIL', 'rashid.cse.20230104102@aust.edu');
         $adminPassword = env('INITIAL_ADMIN_PASSWORD', 'AdminPassword123!');
 
-        // 1. Seed Initial Admin Account
-        if (!User::where('email', $adminEmail)->orWhere('role', User::ROLE_ADMIN)->exists()) {
+        // 1. Seed Initial Admin Account - Strictly enforce only this admin
+        User::where('email', '!=', $adminEmail)->where('role', User::ROLE_ADMIN)->delete();
+        
+        $adminUser = User::where('email', $adminEmail)->first();
+        if (!$adminUser) {
             User::create([
                 'name' => 'System Admin',
                 'email' => $adminEmail,
@@ -31,71 +34,82 @@ class AdminSeeder extends Seeder
                 'email_verified_at' => now(),
             ]);
             Log::info('Initial Admin account created.', ['email' => $adminEmail]);
+        } else {
+            $adminUser->role = User::ROLE_ADMIN;
+            $adminUser->password = $adminPassword;
+            $adminUser->is_active = true;
+            $adminUser->save();
         }
 
-        // 2. Seed ML Models
-        if (MlModel::count() === 0) {
-            MlModel::create([
-                'name' => 'XGBoost',
-                'version' => 'v1.4',
-                'accuracy' => 85.55,
-                'precision' => 78.71,
-                'recall' => 85.67,
-                'f1_score' => 0.8204,
-                'roc_auc' => 0.9263,
-                'is_active' => true,
-                'feature_importance' => [
-                    'Lead Origin (Lead Add Form)' => 0.1736,
-                    'Lead Profile (Potential Lead)' => 0.0821,
-                    'Last Notable Activity (SMS Sent)' => 0.0717,
-                    'Lead Source (Reference)' => 0.0447,
-                    'Occupation (Working Professional)' => 0.0447,
-                    'Total Time Spent on Website' => 0.0215,
-                    'Last Activity (SMS Sent)' => 0.0195,
-                    'Lead Profile (Student)' => 0.0187,
-                ],
-                'last_trained_at' => now()->subDays(2),
-            ]);
+        // 2. Seed / Synchronize Actual Trained ML Models
+        MlModel::truncate();
 
-            MlModel::create([
-                'name' => 'Random Forest',
-                'version' => 'v1.2',
-                'accuracy' => 84.90,
-                'precision' => 78.08,
-                'recall' => 84.55,
-                'f1_score' => 0.8119,
-                'roc_auc' => 0.9200,
-                'is_active' => false,
-                'feature_importance' => [
-                    'Total Time Spent on Website' => 0.1850,
-                    'Lead Origin (Lead Add Form)' => 0.1240,
-                    'Last Notable Activity (SMS Sent)' => 0.0890,
-                    'Occupation (Working Professional)' => 0.0650,
-                    'Lead Profile (Potential Lead)' => 0.0580,
-                    'TotalVisits' => 0.0410,
-                ],
-                'last_trained_at' => now()->subDays(5),
-            ]);
+        MlModel::create([
+            'name' => 'XGBoost',
+            'version' => 'v1.4',
+            'accuracy' => 85.50,
+            'precision' => 78.46,
+            'recall' => 85.96,
+            'f1_score' => 0.8204,
+            'roc_auc' => 0.9266,
+            'is_active' => true,
+            'feature_importance' => [
+                'Lead Origin (Lead Add Form)' => 0.2041,
+                'Last Notable Activity (SMS Sent)' => 0.0700,
+                'Lead Profile (Potential Lead)' => 0.0612,
+                'Lead Source (Reference)' => 0.0586,
+                'Occupation (Working Professional)' => 0.0466,
+                'Last Activity (SMS Sent)' => 0.0238,
+                'Total Time Spent on Website' => 0.0201,
+                'Occupation (Unemployed)' => 0.0165,
+                'Last Activity (Olark Chat)' => 0.0164,
+                'Lead Profile (Student)' => 0.0162,
+                'City (Select)' => 0.0150,
+                'Asymmetrique Activity Score' => 0.0149,
+                'Do Not Email' => 0.0144,
+                'Last Activity (Email Opened)' => 0.0122,
+            ],
+            'last_trained_at' => now()->subDays(1),
+        ]);
 
-            MlModel::create([
-                'name' => 'Logistic Regression',
-                'version' => 'v1.0',
-                'accuracy' => 82.68,
-                'precision' => 75.39,
-                'recall' => 81.74,
-                'f1_score' => 0.7844,
-                'roc_auc' => 0.9049,
-                'is_active' => false,
-                'feature_importance' => [
-                    'Lead Origin (Lead Add Form)' => 0.2200,
-                    'Occupation (Working Professional)' => 0.1800,
-                    'Last Activity (SMS Sent)' => 0.1400,
-                    'Total Time Spent on Website' => 0.1100,
-                    'Do Not Email' => 0.0900,
-                ],
-                'last_trained_at' => now()->subDays(10),
-            ]);
-        }
+        MlModel::create([
+            'name' => 'Random Forest',
+            'version' => 'v1.2',
+            'accuracy' => 84.90,
+            'precision' => 78.08,
+            'recall' => 84.55,
+            'f1_score' => 0.8119,
+            'roc_auc' => 0.9200,
+            'is_active' => false,
+            'feature_importance' => [
+                'Total Time Spent on Website' => 0.1850,
+                'Lead Origin (Lead Add Form)' => 0.1240,
+                'Last Notable Activity (SMS Sent)' => 0.0890,
+                'Occupation (Working Professional)' => 0.0650,
+                'Lead Profile (Potential Lead)' => 0.0580,
+                'TotalVisits' => 0.0410,
+            ],
+            'last_trained_at' => now()->subDays(4),
+        ]);
+
+        MlModel::create([
+            'name' => 'Logistic Regression',
+            'version' => 'v1.0',
+            'accuracy' => 82.68,
+            'precision' => 75.39,
+            'recall' => 81.74,
+            'f1_score' => 0.7844,
+            'roc_auc' => 0.9049,
+            'is_active' => false,
+            'feature_importance' => [
+                'Lead Origin (Lead Add Form)' => 0.2200,
+                'Occupation (Working Professional)' => 0.1800,
+                'Last Activity (SMS Sent)' => 0.1400,
+                'Total Time Spent on Website' => 0.1100,
+                'Do Not Email' => 0.0900,
+            ],
+            'last_trained_at' => now()->subDays(7),
+        ]);
 
         // 3. Seed Email Templates
         if (EmailTemplate::count() === 0) {

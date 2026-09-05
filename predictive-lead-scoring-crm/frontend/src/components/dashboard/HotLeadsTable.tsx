@@ -5,8 +5,13 @@ import { topHotLeads, Lead } from '../../data/dashboardData';
 import { Flame, ExternalLink, Sparkles } from 'lucide-react';
 import LeadModal from './LeadModal';
 
-export const HotLeadsTable: React.FC = () => {
+interface HotLeadsTableProps {
+  leads?: any[];
+}
+
+export const HotLeadsTable: React.FC<HotLeadsTableProps> = ({ leads }) => {
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
+  const leadsList = leads && leads.length > 0 ? leads : topHotLeads;
 
   const getScoreBadge = (score: number) => {
     if (score >= 80) {
@@ -87,7 +92,7 @@ export const HotLeadsTable: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-[#222222]">
-              {topHotLeads.map((lead) => (
+              {leadsList.map((lead) => (
                 <tr key={lead.id} className="hover:bg-[#151515] transition-colors group">
                   {/* Lead Name & Email */}
                   <td className="py-3.5 px-4 font-medium text-white">

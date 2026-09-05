@@ -20,40 +20,40 @@ export const QuickActions: React.FC = () => {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <Button
             variant="secondary"
-            size="sm"
-            leftIcon={<UserPlus className="w-4 h-4 text-purple-400" />}
+            size="md"
+            leftIcon={<UserPlus className="w-4 h-4 text-[#FF7A00]" />}
             onClick={() => navigate('/leads/new')}
-            className="justify-start text-xs font-semibold bg-[#0A0A0A] border border-[#222222] hover:bg-[#151515] text-zinc-200"
+            className="justify-start text-xs font-semibold bg-[#111113] border border-[#2A2A2E] hover:bg-[#252528] text-white min-h-[44px] rounded-xl px-3.5"
           >
             Add Lead
           </Button>
 
           <Button
             variant="secondary"
-            size="sm"
+            size="md"
             leftIcon={<Briefcase className="w-4 h-4 text-emerald-400" />}
             onClick={() => navigate('/pipeline')}
-            className="justify-start text-xs font-semibold bg-[#0A0A0A] border border-[#222222] hover:bg-[#151515] text-zinc-200"
+            className="justify-start text-xs font-semibold bg-[#111113] border border-[#2A2A2E] hover:bg-[#252528] text-white min-h-[44px] rounded-xl px-3.5"
           >
             Create Deal
           </Button>
 
           <Button
             variant="secondary"
-            size="sm"
-            leftIcon={<Upload className="w-4 h-4 text-purple-400" />}
+            size="md"
+            leftIcon={<Upload className="w-4 h-4 text-[#FF7A00]" />}
             onClick={() => setShowImportModal(true)}
-            className="justify-start text-xs font-semibold bg-[#0A0A0A] border border-[#222222] hover:bg-[#151515] text-zinc-200"
+            className="justify-start text-xs font-semibold bg-[#111113] border border-[#2A2A2E] hover:bg-[#252528] text-white min-h-[44px] rounded-xl px-3.5"
           >
             Import Leads
           </Button>
 
           <Button
             variant="secondary"
-            size="sm"
-            leftIcon={<GitCommitHorizontal className="w-4 h-4 text-blue-400" />}
+            size="md"
+            leftIcon={<GitCommitHorizontal className="w-4 h-4 text-sky-400" />}
             onClick={() => navigate('/pipeline')}
-            className="justify-start text-xs font-semibold bg-[#0A0A0A] border border-[#222222] hover:bg-[#151515] text-zinc-200"
+            className="justify-start text-xs font-semibold bg-[#111113] border border-[#2A2A2E] hover:bg-[#252528] text-white min-h-[44px] rounded-xl px-3.5"
           >
             View Pipeline
           </Button>

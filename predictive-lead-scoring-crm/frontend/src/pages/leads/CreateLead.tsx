@@ -28,7 +28,7 @@ export const CreateLead: React.FC = () => {
         <div className="flex items-center space-x-3">
           <button
             onClick={() => navigate('/leads')}
-            className="p-2 rounded-lg bg-[#111111] border border-[#222222] text-zinc-400 hover:text-white hover:bg-[#151515] transition-colors"
+            className="p-2 rounded-xl bg-[#171718] border border-[#2A2A2E] text-zinc-400 hover:text-white hover:bg-[#29292C] transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
           </button>
@@ -38,7 +38,7 @@ export const CreateLead: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-6 bg-[#111111] border border-[#222222] rounded-xl shadow-xl">
+        <div className="p-6 sm:p-8 bg-[#171718] border border-[#2A2A2E] rounded-2xl shadow-xl">
           <LeadForm
             onSubmit={handleSubmit}
             onCancel={() => navigate('/leads')}

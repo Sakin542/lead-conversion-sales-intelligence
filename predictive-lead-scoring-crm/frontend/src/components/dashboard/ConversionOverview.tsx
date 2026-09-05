@@ -12,7 +12,13 @@ import Card from '../common/Card';
 import { conversionTrendData } from '../../data/dashboardData';
 import { TrendingUp } from 'lucide-react';
 
-export const ConversionOverview: React.FC = () => {
+interface ConversionOverviewProps {
+  data?: any[];
+}
+
+export const ConversionOverview: React.FC<ConversionOverviewProps> = ({ data }) => {
+  const chartData = data && data.length > 0 ? data : conversionTrendData;
+
   return (
     <Card className="p-6 flex flex-col justify-between space-y-6">
       {/* Header */}
@@ -37,7 +43,7 @@ export const ConversionOverview: React.FC = () => {
       <div className="h-64 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
-            data={conversionTrendData}
+            data={chartData}
             margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
           >
             <defs>

@@ -482,7 +482,7 @@ Laravel then stores this prediction in the `lead_scores` table.
 
 ---
 
-## 🔐 Security Considerations
+##  Security Considerations
 
 The system should implement:
 

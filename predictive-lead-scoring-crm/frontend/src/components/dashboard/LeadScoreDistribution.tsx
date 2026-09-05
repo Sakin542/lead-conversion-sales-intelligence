@@ -4,8 +4,21 @@ import Card from '../common/Card';
 import { scoreDistributionData } from '../../data/dashboardData';
 import { Target } from 'lucide-react';
 
-export const LeadScoreDistribution: React.FC = () => {
-  const totalLeads = scoreDistributionData.reduce((acc, curr) => acc + curr.count, 0);
+interface LeadScoreDistributionProps {
+  data?: any[];
+  total?: number;
+}
+
+export const LeadScoreDistribution: React.FC<LeadScoreDistributionProps> = ({ data, total }) => {
+  const distributionData = data && data.length > 0 ? data.map(item => ({
+    name: item.range.includes('Hot') ? 'Hot Leads' : item.range.includes('Warm') ? 'Warm Leads' : item.range.includes('Medium') ? 'Medium Leads' : 'Cold Leads',
+    range: item.range.split(' ')[0],
+    count: item.count,
+    percentage: total && total > 0 ? Math.round((item.count / total) * 100) : 0,
+    color: item.color,
+  })) : scoreDistributionData;
+
+  const totalLeads = total ?? distributionData.reduce((acc, curr) => acc + curr.count, 0);
 
   return (
     <Card className="p-6 flex flex-col justify-between space-y-6">
@@ -27,7 +40,7 @@ export const LeadScoreDistribution: React.FC = () => {
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
-                data={scoreDistributionData}
+                data={distributionData}
                 cx="50%"
                 cy="50%"
                 innerRadius={55}
@@ -35,7 +48,7 @@ export const LeadScoreDistribution: React.FC = () => {
                 paddingAngle={4}
                 dataKey="count"
               >
-                {scoreDistributionData.map((entry, index) => (
+                {distributionData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} stroke="#171718" strokeWidth={2} />
                 ))}
               </Pie>
@@ -61,7 +74,7 @@ export const LeadScoreDistribution: React.FC = () => {
 
         {/* Legend / Category List */}
         <div className="space-y-3">
-          {scoreDistributionData.map((item) => (
+          {distributionData.map((item) => (
             <div key={item.name} className="flex items-center justify-between text-xs p-2 rounded-xl bg-[#111113] border border-[#2A2A2E]">
               <div className="flex items-center space-x-2.5">
                 <span

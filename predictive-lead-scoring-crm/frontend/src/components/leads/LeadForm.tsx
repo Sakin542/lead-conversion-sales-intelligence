@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { LeadFormData, LeadStatus } from '../../types/lead';
 import Button from '../common/Button';
 import Input from '../common/Input';
-import { AlertCircle } from 'lucide-react';
+import Select from '../common/Select';
+import { AlertCircle, User, Mail, Phone, Building, Briefcase, DollarSign, FileText } from 'lucide-react';
 
 interface LeadFormProps {
   initialValues?: Partial<LeadFormData>;
@@ -87,7 +88,7 @@ export const LeadForm: React.FC<LeadFormProps> = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-6 text-zinc-200">
       {error && (
         <div className="p-3.5 bg-rose-950/40 border border-rose-800/60 rounded-xl text-rose-300 text-xs flex items-center space-x-2">
           <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
@@ -95,148 +96,128 @@ export const LeadForm: React.FC<LeadFormProps> = ({
         </div>
       )}
 
-      {/* Basic Contact Info */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-            First Name <span className="text-rose-400">*</span>
-          </label>
+      {/* 1. Contact Information */}
+      <div className="space-y-3">
+        <div className="flex items-center space-x-2 text-xs font-bold text-zinc-400 uppercase tracking-wider">
+          <User className="w-3.5 h-3.5 text-[#FF7A00]" />
+          <span>Primary Contact</span>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input
+            label="First Name *"
             name="first_name"
             value={formData.first_name}
             onChange={handleChange}
             placeholder="e.g. Sarah"
             required
+            className="min-h-[44px]"
           />
-        </div>
 
-        <div>
-          <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-            Last Name <span className="text-rose-400">*</span>
-          </label>
           <Input
+            label="Last Name *"
             name="last_name"
             value={formData.last_name}
             onChange={handleChange}
             placeholder="e.g. Connor"
             required
+            className="min-h-[44px]"
           />
-        </div>
 
-        <div>
-          <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-            Email Address <span className="text-rose-400">*</span>
-          </label>
           <Input
+            label="Email Address *"
             type="email"
             name="email"
             value={formData.email}
             onChange={handleChange}
             placeholder="sarah@example.com"
+            leftIcon={<Mail className="w-4 h-4 text-zinc-500" />}
             required
+            className="min-h-[44px]"
           />
-        </div>
 
-        <div>
-          <label className="block text-xs font-semibold text-zinc-300 mb-1.5">Phone Number</label>
           <Input
+            label="Phone Number"
             name="phone"
             value={formData.phone}
             onChange={handleChange}
             placeholder="+1 (555) 000-0000"
+            leftIcon={<Phone className="w-4 h-4 text-zinc-500" />}
+            className="min-h-[44px]"
           />
         </div>
       </div>
 
-      {/* Company Info */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-[#222222]">
-        <div>
-          <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
-            Company Name <span className="text-rose-400">*</span>
-          </label>
+      {/* 2. Organization & Firmographics */}
+      <div className="space-y-3 pt-4 border-t border-[#222228]">
+        <div className="flex items-center space-x-2 text-xs font-bold text-zinc-400 uppercase tracking-wider">
+          <Building className="w-3.5 h-3.5 text-sky-400" />
+          <span>Organization Profile</span>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input
+            label="Company Name *"
             name="company"
             value={formData.company}
             onChange={handleChange}
             placeholder="e.g. Cyberdyne Systems"
             required
+            className="min-h-[44px]"
           />
-        </div>
 
-        <div>
-          <label className="block text-xs font-semibold text-zinc-300 mb-1.5">Job Title</label>
           <Input
+            label="Job Title"
             name="job_title"
             value={formData.job_title}
             onChange={handleChange}
             placeholder="e.g. CTO / VP Engineering"
+            leftIcon={<Briefcase className="w-4 h-4 text-zinc-500" />}
+            className="min-h-[44px]"
           />
-        </div>
 
-        <div>
-          <label className="block text-xs font-semibold text-zinc-300 mb-1.5">Industry</label>
           <Input
+            label="Industry"
             name="industry"
             value={formData.industry}
             onChange={handleChange}
-            placeholder="e.g. Software / Fintech"
+            placeholder="e.g. Software / Enterprise SaaS"
+            className="min-h-[44px]"
           />
-        </div>
 
-        <div>
-          <label className="block text-xs font-semibold text-zinc-300 mb-1.5">Company Size</label>
-          <select
+          <Select
+            label="Company Size"
             name="company_size"
             value={formData.company_size}
             onChange={handleChange}
-            className="w-full px-3.5 py-2.5 min-h-[42px] bg-[#0A0A0A] border border-[#222222] rounded-xl text-sm text-zinc-200 focus:outline-none focus:border-zinc-500 transition-colors"
-          >
-            {COMPANY_SIZE_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
+            options={COMPANY_SIZE_OPTIONS}
+          />
         </div>
       </div>
 
-      {/* Deal / Lead Pipeline Details */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2 border-t border-[#222222]">
-        <div>
-          <label className="block text-xs font-semibold text-zinc-300 mb-1.5">Status</label>
-          <select
+      {/* 3. Deal & Pipeline Details */}
+      <div className="space-y-3 pt-4 border-t border-[#222228]">
+        <div className="flex items-center space-x-2 text-xs font-bold text-zinc-400 uppercase tracking-wider">
+          <DollarSign className="w-3.5 h-3.5 text-emerald-400" />
+          <span>Pipeline & Valuation</span>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <Select
+            label="Lead Status"
             name="status"
             value={formData.status}
             onChange={handleChange}
-            className="w-full px-3.5 py-2.5 min-h-[42px] bg-[#0A0A0A] border border-[#222222] rounded-xl text-sm text-zinc-200 focus:outline-none focus:border-zinc-500 transition-colors"
-          >
-            {STATUS_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
-        </div>
+            options={STATUS_OPTIONS}
+          />
 
-        <div>
-          <label className="block text-xs font-semibold text-zinc-300 mb-1.5">Source</label>
-          <select
+          <Select
+            label="Acquisition Source"
             name="source"
             value={formData.source}
             onChange={handleChange}
-            className="w-full px-3.5 py-2.5 min-h-[42px] bg-[#0A0A0A] border border-[#222222] rounded-xl text-sm text-zinc-200 focus:outline-none focus:border-zinc-500 transition-colors"
-          >
-            {SOURCE_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
-        </div>
+            options={SOURCE_OPTIONS}
+          />
 
-        <div>
-          <label className="block text-xs font-semibold text-zinc-300 mb-1.5">Estimated Value ($)</label>
           <Input
+            label="Estimated Deal Value ($)"
             type="number"
             name="estimated_value"
             value={formData.estimated_value}
@@ -244,32 +225,38 @@ export const LeadForm: React.FC<LeadFormProps> = ({
             placeholder="e.g. 50000"
             min="0"
             step="100"
+            leftIcon={<DollarSign className="w-4 h-4 text-zinc-500" />}
+            className="min-h-[44px]"
           />
         </div>
       </div>
 
-      {/* Notes */}
-      <div className="pt-2 border-t border-[#222222]">
-        <label className="block text-xs font-semibold text-zinc-300 mb-1.5">Lead Notes</label>
+      {/* 4. Notes */}
+      <div className="space-y-2 pt-4 border-t border-[#222228]">
+        <div className="flex items-center space-x-2 text-xs font-bold text-zinc-400 uppercase tracking-wider">
+          <FileText className="w-3.5 h-3.5 text-amber-400" />
+          <span>Internal Intelligence Notes</span>
+        </div>
         <textarea
           name="notes"
           value={formData.notes}
           onChange={handleChange}
           rows={3}
-          placeholder="Add background info, preferences, meeting summaries..."
-          className="w-full px-3.5 py-2.5 bg-[#0A0A0A] border border-[#222222] rounded-xl text-sm text-zinc-200 focus:outline-none focus:border-zinc-500 transition-colors custom-scrollbar"
+          placeholder="Add background context, buyer pain points, key decision maker notes..."
+          className="w-full px-4 py-3 bg-[#111113] border border-[#2A2A2E] rounded-xl text-sm text-zinc-200 focus:outline-none focus:border-[#FF7A00] focus:ring-1 focus:ring-[#FF7A00] transition-colors custom-scrollbar"
         />
       </div>
 
-      {/* Footer Buttons: Cancel & Create Lead / Save Lead */}
-      <div className="flex items-center justify-end space-x-3 pt-4 border-t border-[#222222]">
+      {/* Footer Buttons: Cancel & Submit */}
+      <div className="flex items-center justify-end space-x-3 pt-5 border-t border-[#222228]">
         {onCancel && (
           <Button
             type="button"
             variant="secondary"
+            size="md"
             onClick={onCancel}
             disabled={isSubmitting}
-            className="min-w-[100px] border-[#222222] text-zinc-300 hover:bg-[#151515]"
+            className="min-w-[100px] border-[#2A2A2E] text-zinc-300 hover:bg-[#222225] font-semibold"
           >
             Cancel
           </Button>
@@ -277,8 +264,9 @@ export const LeadForm: React.FC<LeadFormProps> = ({
         <Button
           type="submit"
           variant="primary"
+          size="md"
           isLoading={isSubmitting}
-          className="min-w-[130px] bg-white text-black hover:bg-zinc-200 border-none font-semibold"
+          className="min-w-[140px] bg-[#FF7A00] hover:bg-[#FF8C1A] text-white border-none font-bold shadow-lg shadow-orange-500/20"
         >
           {submitLabel}
         </Button>

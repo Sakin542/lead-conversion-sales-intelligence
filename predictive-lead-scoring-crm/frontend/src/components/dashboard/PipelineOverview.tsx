@@ -3,7 +3,20 @@ import Card from '../common/Card';
 import { pipelineStages } from '../../data/dashboardData';
 import { Layers } from 'lucide-react';
 
-export const PipelineOverview: React.FC = () => {
+interface PipelineOverviewProps {
+  stages?: any[];
+}
+
+export const PipelineOverview: React.FC<PipelineOverviewProps> = ({ stages }) => {
+  const stageList = stages && stages.length > 0 ? stages.map(s => ({
+    id: s.stage.toLowerCase(),
+    name: s.stage,
+    count: s.count,
+    value: `$${(s.value || 0).toLocaleString()}`,
+    percentage: 100,
+    color: s.stage === 'Won' ? '#10b981' : s.stage === 'Qualified' ? '#6366f1' : s.stage === 'Proposal' ? '#a855f7' : s.stage === 'Negotiation' ? '#f59e0b' : '#FF7A00',
+  })) : pipelineStages;
+
   return (
     <Card className="p-6 space-y-6">
       {/* Header */}
@@ -19,7 +32,7 @@ export const PipelineOverview: React.FC = () => {
 
       {/* Horizontal Pipeline Stages */}
       <div className="space-y-4">
-        {pipelineStages.map((stage) => (
+        {stageList.map((stage) => (
           <div key={stage.id} className="space-y-1.5">
             <div className="flex items-center justify-between text-xs font-semibold">
               <div className="flex items-center space-x-2">

@@ -16,6 +16,14 @@ import Settings from '../pages/Settings';
 import ForgotPassword from '../pages/ForgotPassword';
 import ResetPassword from '../pages/ResetPassword';
 import ProtectedRoute from './ProtectedRoute';
+import { useAuth } from '../context/AuthContext';
+
+const NotificationRedirect: React.FC = () => {
+  const { user } = useAuth();
+  if (user?.role === 'ADMIN') return <Navigate to="/admin/notifications" replace />;
+  if (user?.role === 'SALES_MANAGER') return <Navigate to="/manager/notifications" replace />;
+  return <Navigate to="/sales-rep/notifications" replace />;
+};
 
 // Admin Panel Dedicated Imports
 import AdminDashboard from '../pages/admin/AdminDashboard';
@@ -365,6 +373,16 @@ export const AppRoutes: React.FC = () => {
         element={
           <ProtectedRoute allowedRoles={['ADMIN', 'SALES_MANAGER', 'SALES_REP']}>
             <SalesRepSettings />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* General Notifications Redirect */}
+      <Route
+        path="/notifications"
+        element={
+          <ProtectedRoute>
+            <NotificationRedirect />
           </ProtectedRoute>
         }
       />

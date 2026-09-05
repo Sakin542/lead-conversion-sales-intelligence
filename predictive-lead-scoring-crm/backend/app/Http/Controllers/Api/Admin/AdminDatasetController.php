@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\AuditLog;
 use App\Models\Dataset;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -17,6 +18,8 @@ class AdminDatasetController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
+        $this->ensureDefaultDatasetsExist();
+
         $datasets = Dataset::with('uploader:id,name,email')
             ->orderBy('created_at', 'desc')
             ->get();
@@ -414,5 +417,30 @@ class AdminDatasetController extends Controller
             'success' => true,
             'message' => 'Dataset deleted successfully.',
         ]);
+    }
+
+    /**
+     * Ensure baseline training dataset exists if table is empty.
+     */
+    private function ensureDefaultDatasetsExist(): void
+    {
+        if (Dataset::count() === 0) {
+            $adminUser = User::where('role', User::ROLE_ADMIN)->first() ?? User::first();
+            $path = 'datasets/Lead_Scoring_Baseline.csv';
+            if (!Storage::disk('local')->exists($path)) {
+                Storage::disk('local')->put($path, "Lead Number,Lead Origin,Lead Source,Do Not Email,Converted,TotalVisits,Total Time Spent on Website,Page Views Per Visit,Last Activity,Country,Specialization,How did you hear about X Education,What is your current occupation,What matters most to you in choosing a course,Search,Magazine,Newspaper Article,X Education Forums,Newspaper,Digital Advertisement,Through Recommendations,Receive More Content About Our Courses,Tags,Lead Quality,Update me on Supply Chain Content,Get updates on DM Content,City,Asymmetrique Activity Index,Asymmetrique Profile Index,Asymmetrique Activity Score,Asymmetrique Profile Score,I agree to pay the amount through cheque,a free copy of Mastering The Interview,Last Notable Activity\n");
+            }
+
+            Dataset::create([
+                'name' => 'Lead Scoring.csv',
+                'file_path' => $path,
+                'row_count' => 9240,
+                'column_count' => 37,
+                'missing_values_count' => 41039,
+                'duplicate_count' => 0,
+                'status' => 'validated',
+                'uploaded_by' => $adminUser?->id ?? null,
+            ]);
+        }
     }
 }

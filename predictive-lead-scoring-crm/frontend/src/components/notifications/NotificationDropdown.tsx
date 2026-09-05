@@ -44,11 +44,9 @@ export const NotificationDropdown: React.FC<NotificationDropdownProps> = ({ onCl
       markRead(item.id);
     }
     onClose();
-    if (item.action_url) {
-      navigate(item.action_url);
-    } else {
-      navigate(getNotificationCenterPath());
-    }
+    navigate(getNotificationCenterPath(), {
+      state: { selectedNotificationId: item.id, highlightId: item.id, actionUrl: item.action_url },
+    });
   };
 
   const displayList = notifications.slice(0, 6);

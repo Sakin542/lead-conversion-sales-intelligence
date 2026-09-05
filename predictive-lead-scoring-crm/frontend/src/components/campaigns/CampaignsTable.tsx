@@ -58,19 +58,19 @@ export const CampaignsTable: React.FC<CampaignsTableProps> = ({ campaigns }) => 
   };
 
   return (
-    <Card className="bg-slate-900/60 border-slate-800/80 p-6 space-y-4">
+    <Card className="bg-[#171718] border-[#2A2A2E] p-6 space-y-4">
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-base font-bold text-white tracking-tight">All Campaigns</h3>
-          <p className="text-xs text-slate-400">Track active marketing campaigns and budget utilization</p>
+          <p className="text-xs text-zinc-400">Track active marketing campaigns and budget utilization</p>
         </div>
-        <span className="text-xs text-slate-400 font-mono">{campaigns.length} total</span>
+        <span className="text-xs text-zinc-400 font-mono">{campaigns.length} total</span>
       </div>
 
       <div className="w-full min-w-0 overflow-x-auto custom-scrollbar">
-        <table className="w-full min-w-[700px] text-left text-xs text-slate-300">
+        <table className="w-full min-w-[700px] text-left text-xs text-zinc-300">
           <thead>
-            <tr className="border-b border-slate-800 text-slate-400 font-semibold uppercase text-[11px] tracking-wider">
+            <tr className="border-b border-[#2A2A2E] text-zinc-400 font-semibold uppercase text-[11px] tracking-wider">
               <th className="py-3 px-4">Campaign</th>
               <th className="py-3 px-4">Channel</th>
               <th className="py-3 px-4">Status</th>
@@ -81,12 +81,12 @@ export const CampaignsTable: React.FC<CampaignsTableProps> = ({ campaigns }) => 
               <th className="py-3 px-4 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800/60">
+          <tbody className="divide-y divide-[#222225]">
             {campaigns.map((camp) => {
               const pctSpent = Math.min(100, Math.round((camp.spent / camp.budget) * 100));
 
               return (
-                <tr key={camp.id} className="hover:bg-slate-800/40 transition-colors">
+                <tr key={camp.id} className="hover:bg-[#222225]/50 transition-colors">
                   {/* Campaign Name */}
                   <td className="py-3.5 px-4 font-bold text-white whitespace-nowrap">
                     {camp.name}
@@ -95,10 +95,10 @@ export const CampaignsTable: React.FC<CampaignsTableProps> = ({ campaigns }) => 
                   {/* Channel */}
                   <td className="py-3.5 px-4 whitespace-nowrap">
                     <div className="flex items-center space-x-2">
-                      <div className="p-1.5 rounded-lg bg-slate-950 border border-slate-800">
+                      <div className="p-1.5 rounded-lg bg-[#111113] border border-[#2A2A2E]">
                         {getChannelIcon(camp.channel)}
                       </div>
-                      <span className="font-semibold text-slate-200">{camp.channel}</span>
+                      <span className="font-semibold text-zinc-200">{camp.channel}</span>
                     </div>
                   </td>
 
@@ -111,11 +111,11 @@ export const CampaignsTable: React.FC<CampaignsTableProps> = ({ campaigns }) => 
                   <td className="py-3.5 px-4 whitespace-nowrap space-y-1">
                     <div className="flex items-center justify-between text-[11px] font-mono">
                       <span className="text-white font-bold">${camp.spent.toLocaleString()}</span>
-                      <span className="text-slate-400">/ ${camp.budget.toLocaleString()}</span>
+                      <span className="text-zinc-400">/ ${camp.budget.toLocaleString()}</span>
                     </div>
-                    <div className="w-32 h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+                    <div className="w-32 h-2 bg-[#111113] rounded-full overflow-hidden border border-[#2A2A2E]">
                       <div
-                        className="h-full bg-indigo-500 rounded-full transition-all duration-300"
+                        className="h-full bg-[#FF7A00] rounded-full transition-all duration-300"
                         style={{ width: `${pctSpent}%` }}
                       />
                     </div>
@@ -132,13 +132,13 @@ export const CampaignsTable: React.FC<CampaignsTableProps> = ({ campaigns }) => 
                   </td>
 
                   {/* ROI */}
-                  <td className="py-3.5 px-4 font-extrabold text-indigo-400 whitespace-nowrap font-mono">
+                  <td className="py-3.5 px-4 font-extrabold text-[#FF7A00] whitespace-nowrap font-mono">
                     {camp.roi}
                   </td>
 
                   {/* Actions */}
                   <td className="py-3.5 px-4 text-right whitespace-nowrap">
-                    <button className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+                    <button className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-[#29292C] transition-colors">
                       <MoreVertical className="w-4 h-4" />
                     </button>
                   </td>
