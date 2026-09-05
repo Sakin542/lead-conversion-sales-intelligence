@@ -26,7 +26,7 @@ export const Select: React.FC<SelectProps> = ({
         </label>
       )}
       <select
-        className={`w-full bg-[#111113] text-white text-sm rounded-xl px-3.5 py-2.5 min-h-[42px] border border-[#2A2A2E] focus:outline-none focus:border-[#FF7A00] focus:ring-1 focus:ring-[#FF7A00] transition-all ${className}`}
+        className={`w-full bg-[#111113] text-white text-sm rounded-xl px-3.5 py-2.5 min-h-[44px] border border-[#2A2A2E] focus:outline-none focus:border-[#FF7A00] focus:ring-1 focus:ring-[#FF7A00] transition-all ${className}`}
         {...props}
       >
         {options.map((opt) => (

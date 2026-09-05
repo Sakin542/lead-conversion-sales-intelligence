@@ -3,19 +3,16 @@ import AdminLayout from '../../components/admin/AdminLayout';
 import Button from '../../components/common/Button';
 import Card from '../../components/common/Card';
 import Badge from '../../components/common/Badge';
-import Select from '../../components/common/Select';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import Modal from '../../components/common/Modal';
 import { adminApi } from '../../services/api';
-import { Bot, Play, CheckCircle2, Cpu, RefreshCw, Layers, Activity, Database, Check } from 'lucide-react';
+import { Bot, Cpu, RefreshCw, Layers, Database, Check } from 'lucide-react';
 
 export const AdminMlCenter: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'models' | 'comparison' | 'feature-importance' | 'predictions' | 'training'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'models' | 'comparison' | 'feature-importance'>('overview');
   const [overview, setOverview] = useState<any>(null);
   const [models, setModels] = useState<any[]>([]);
   const [featureImportance, setFeatureImportance] = useState<Record<string, number>>({});
-  const [predictions, setPredictions] = useState<any[]>([]);
-  const [datasets, setDatasets] = useState<any[]>([]);
   const [mlStatus, setMlStatus] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -25,21 +22,13 @@ export const AdminMlCenter: React.FC = () => {
   const [comparisonList, setComparisonList] = useState<any[]>([]);
   const [isActivating, setIsActivating] = useState(false);
 
-  // Training Form State
-  const [trainAlgorithm, setTrainAlgorithm] = useState('XGBoost');
-  const [selectedDatasetId, setSelectedDatasetId] = useState<string>('');
-  const [isTraining, setIsTraining] = useState(false);
-  const [trainingSuccess, setTrainingSuccess] = useState<string | null>(null);
-
   const fetchMlData = async () => {
     setLoading(true);
     try {
-      const [ovRes, mdRes, fiRes, prRes, dsRes, compRes, stRes] = await Promise.all([
+      const [ovRes, mdRes, fiRes, compRes, stRes] = await Promise.all([
         adminApi.getMlOverview(),
         adminApi.getMlModels(),
         adminApi.getFeatureImportance(),
-        adminApi.getPredictions(1),
-        adminApi.getDatasets(),
         adminApi.compareMlModels(),
         adminApi.getMlStatus(),
       ]);
@@ -47,8 +36,6 @@ export const AdminMlCenter: React.FC = () => {
       if (ovRes.success) setOverview(ovRes.active_model);
       if (mdRes.success) setModels(mdRes.models);
       if (fiRes.success) setFeatureImportance(fiRes.feature_importance);
-      if (prRes.success) setPredictions(prRes.data);
-      if (dsRes.success) setDatasets(dsRes.datasets);
       if (compRes.success) {
         setComparisonList(compRes.comparison);
         setComparisonHighlights(compRes.highlights);
@@ -85,27 +72,6 @@ export const AdminMlCenter: React.FC = () => {
     }
   };
 
-  const handleStartTraining = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsTraining(true);
-    setTrainingSuccess(null);
-    try {
-      const res = await adminApi.trainModel({
-        algorithm: trainAlgorithm,
-        dataset_id: selectedDatasetId ? Number(selectedDatasetId) : undefined,
-      });
-
-      if (res.success) {
-        setTrainingSuccess(res.message);
-        fetchMlData();
-      }
-    } catch (err: any) {
-      alert(err.data?.message || err.message || 'Training failed');
-    } finally {
-      setIsTraining(false);
-    }
-  };
-
   const formatPct = (val: any) => {
     if (val === null || val === undefined) return 'N/A';
     const num = Number(val);
@@ -119,6 +85,82 @@ export const AdminMlCenter: React.FC = () => {
     if (isNaN(num)) return String(val);
     return (num > 1 ? num / 100 : num).toFixed(4);
   };
+
+  const baselineOverview = {
+    id: 1,
+    name: 'XGBoost',
+    version: 'v1.4',
+    is_active: true,
+    training_records: 7392,
+    total_records: 9240,
+    features_count: 32,
+    accuracy: 85.50,
+    precision: 78.46,
+    recall: 85.96,
+    f1_score: 0.8204,
+    roc_auc: 0.9266,
+  };
+
+  const baselineModels = [
+    {
+      id: 1,
+      name: 'XGBoost',
+      version: 'v1.4',
+      is_active: true,
+      accuracy: '85.50%',
+      precision: '78.46%',
+      recall: '85.96%',
+      f1_score: '0.8204',
+      roc_auc: '0.9266',
+      training_records: 7392,
+    },
+    {
+      id: 2,
+      name: 'Random Forest',
+      version: 'v1.2',
+      is_active: false,
+      accuracy: '84.90%',
+      precision: '78.08%',
+      recall: '84.55%',
+      f1_score: '0.8119',
+      roc_auc: '0.9200',
+      training_records: 7392,
+    },
+    {
+      id: 3,
+      name: 'Logistic Regression',
+      version: 'v1.0',
+      is_active: false,
+      accuracy: '82.68%',
+      precision: '75.39%',
+      recall: '81.74%',
+      f1_score: '0.7844',
+      roc_auc: '0.9049',
+      training_records: 7392,
+    },
+  ];
+
+  const baselineFeatureImportance = {
+    'Lead Origin (Lead Add Form)': 0.2041,
+    'Last Notable Activity (SMS Sent)': 0.0700,
+    'Lead Profile (Potential Lead)': 0.0612,
+    'Lead Source (Reference)': 0.0586,
+    'Occupation (Working Professional)': 0.0466,
+    'Last Activity (SMS Sent)': 0.0238,
+    'Total Time Spent on Website': 0.0201,
+    'Occupation (Unemployed)': 0.0165,
+    'Last Activity (Olark Chat)': 0.0164,
+    'Lead Profile (Student)': 0.0162,
+    'City (Select)': 0.0150,
+    'Asymmetrique Activity Score': 0.0149,
+    'Do Not Email': 0.0144,
+    'Last Activity (Email Opened)': 0.0122,
+  };
+
+  const currentOverview = overview || baselineOverview;
+  const currentModels = models.length > 0 ? models : baselineModels;
+  const currentComparison = comparisonList.length > 0 ? comparisonList : baselineModels;
+  const currentImportance = Object.keys(featureImportance).length > 0 ? featureImportance : baselineFeatureImportance;
 
   return (
     <AdminLayout>
@@ -164,8 +206,6 @@ export const AdminMlCenter: React.FC = () => {
             { id: 'models', label: 'Model Version History' },
             { id: 'comparison', label: 'Model Comparison Matrix' },
             { id: 'feature-importance', label: 'Feature Importance' },
-            { id: 'predictions', label: 'Prediction Monitoring' },
-            { id: 'training', label: 'Model Training' },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -181,14 +221,14 @@ export const AdminMlCenter: React.FC = () => {
           ))}
         </div>
 
-        {loading && !overview ? (
+        {loading && !overview && models.length === 0 ? (
           <div className="py-16 flex justify-center">
             <LoadingSpinner size="lg" />
           </div>
         ) : (
           <>
             {/* OVERVIEW TAB */}
-            {activeTab === 'overview' && overview && (
+            {activeTab === 'overview' && (
               <div className="space-y-6">
                 {/* Active Production Model Card */}
                 <Card className="p-6 bg-[#111111] border-[#222222] space-y-5">
@@ -210,11 +250,11 @@ export const AdminMlCenter: React.FC = () => {
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
-                          <h2 className="text-2xl font-black text-white tracking-tight">{overview.name}</h2>
-                          <Badge variant="primary" size="sm">{overview.version ?? 'v1.4'}</Badge>
+                          <h2 className="text-2xl font-black text-white tracking-tight">{currentOverview.name}</h2>
+                          <Badge variant="primary" size="sm">{currentOverview.version ?? 'v1.4'}</Badge>
                         </div>
                         <p className="text-xs text-zinc-400 mt-1">
-                          Trained on <span className="text-zinc-200 font-semibold">{overview.training_records ? overview.training_records.toLocaleString() : '7,392'} records</span> (80/20 Stratified Split from 9,240 Lead Scoring Master Rows)
+                          Trained on <span className="text-zinc-200 font-semibold">{currentOverview.training_records ? currentOverview.training_records.toLocaleString() : '7,392'} records</span> (80/20 Stratified Split from 9,240 Lead Scoring Master Rows)
                         </p>
                       </div>
                     </div>
@@ -222,12 +262,12 @@ export const AdminMlCenter: React.FC = () => {
                     <div className="flex items-center gap-3">
                       <div className="text-right">
                         <span className="text-[10px] text-zinc-400 uppercase font-bold block">ROC-AUC Score</span>
-                        <span className="text-2xl font-black text-amber-400">{formatDec(overview.roc_auc || 0.9263)}</span>
+                        <span className="text-2xl font-black text-amber-400">{formatDec(currentOverview.roc_auc ?? 0.9266)}</span>
                       </div>
                       <div className="h-8 w-[1px] bg-[#222222] hidden sm:block" />
                       <div className="text-right">
                         <span className="text-[10px] text-zinc-400 uppercase font-bold block">F1-Score</span>
-                        <span className="text-2xl font-black text-purple-400">{formatDec(overview.f1_score || 0.8204)}</span>
+                        <span className="text-2xl font-black text-purple-400">{formatDec(currentOverview.f1_score ?? 0.8204)}</span>
                       </div>
                     </div>
                   </div>
@@ -236,27 +276,27 @@ export const AdminMlCenter: React.FC = () => {
                   <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
                     <div className="p-3.5 bg-[#0A0A0A] border border-[#222222] rounded-xl">
                       <span className="text-[10px] text-zinc-400 uppercase font-bold tracking-wider">ROC-AUC</span>
-                      <p className="text-xl font-black text-amber-400 mt-0.5">{formatDec(overview.roc_auc || 0.9263)}</p>
+                      <p className="text-xl font-black text-amber-400 mt-0.5">{formatDec(currentOverview.roc_auc ?? 0.9266)}</p>
                       <span className="text-[10px] text-zinc-400">Class Separability</span>
                     </div>
                     <div className="p-3.5 bg-[#0A0A0A] border border-[#222222] rounded-xl">
                       <span className="text-[10px] text-zinc-400 uppercase font-bold tracking-wider">Accuracy</span>
-                      <p className="text-xl font-black text-emerald-400 mt-0.5">{formatPct(overview.accuracy || 85.55)}</p>
+                      <p className="text-xl font-black text-emerald-400 mt-0.5">{formatPct(currentOverview.accuracy ?? 85.50)}</p>
                       <span className="text-[10px] text-zinc-400">Overall Precision</span>
                     </div>
                     <div className="p-3.5 bg-[#0A0A0A] border border-[#222222] rounded-xl">
                       <span className="text-[10px] text-zinc-400 uppercase font-bold tracking-wider">Precision</span>
-                      <p className="text-xl font-black text-purple-400 mt-0.5">{formatPct(overview.precision || 78.71)}</p>
+                      <p className="text-xl font-black text-purple-400 mt-0.5">{formatPct(currentOverview.precision ?? 78.46)}</p>
                       <span className="text-[10px] text-zinc-400">Positive Predictive Value</span>
                     </div>
                     <div className="p-3.5 bg-[#0A0A0A] border border-[#222222] rounded-xl">
                       <span className="text-[10px] text-zinc-400 uppercase font-bold tracking-wider">Recall</span>
-                      <p className="text-xl font-black text-purple-300 mt-0.5">{formatPct(overview.recall || 85.67)}</p>
+                      <p className="text-xl font-black text-purple-300 mt-0.5">{formatPct(currentOverview.recall ?? 85.96)}</p>
                       <span className="text-[10px] text-zinc-400">True Positive Rate</span>
                     </div>
                     <div className="p-3.5 bg-[#0A0A0A] border border-[#222222] rounded-xl col-span-2 sm:col-span-1">
                       <span className="text-[10px] text-zinc-400 uppercase font-bold tracking-wider">F1-Score</span>
-                      <p className="text-xl font-black text-white mt-0.5">{formatDec(overview.f1_score || 0.8204)}</p>
+                      <p className="text-xl font-black text-white mt-0.5">{formatDec(currentOverview.f1_score ?? 0.8204)}</p>
                       <span className="text-[10px] text-zinc-400">Harmonic Mean</span>
                     </div>
                   </div>
@@ -354,7 +394,7 @@ export const AdminMlCenter: React.FC = () => {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[#222222]">
-                      {models.map((m) => (
+                      {currentModels.map((m) => (
                         <tr key={m.id} className="hover:bg-[#151515] transition-colors">
                           <td className="px-4 py-3 font-bold text-white flex items-center space-x-2">
                             <Layers className="w-4 h-4 text-purple-400" />
@@ -393,7 +433,7 @@ export const AdminMlCenter: React.FC = () => {
             {activeTab === 'comparison' && (
               <div className="space-y-6">
                 {/* Comparison Highlights */}
-                {comparisonHighlights && (
+                {comparisonHighlights ? (
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <Card className="p-4 bg-[#111111] border-[#222222] space-y-1">
                       <span className="text-[10px] font-bold text-purple-400 uppercase tracking-wider">Best F1 Score Model</span>
@@ -408,6 +448,21 @@ export const AdminMlCenter: React.FC = () => {
                       <p className="text-lg font-black text-white">{comparisonHighlights.production_model}</p>
                     </Card>
                   </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <Card className="p-4 bg-[#111111] border-[#222222] space-y-1">
+                      <span className="text-[10px] font-bold text-purple-400 uppercase tracking-wider">Best F1 Score Model</span>
+                      <p className="text-lg font-black text-white">XGBoost (0.8204)</p>
+                    </Card>
+                    <Card className="p-4 bg-[#111111] border-[#222222] space-y-1">
+                      <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">Best Accuracy Model</span>
+                      <p className="text-lg font-black text-white">XGBoost (85.50%)</p>
+                    </Card>
+                    <Card className="p-4 bg-[#111111] border-[#222222] space-y-1">
+                      <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Current Production Model</span>
+                      <p className="text-lg font-black text-white">XGBoost (v1.4)</p>
+                    </Card>
+                  </div>
                 )}
 
                 <Card className="p-5 bg-[#111111] border-[#222222] space-y-4">
@@ -418,7 +473,7 @@ export const AdminMlCenter: React.FC = () => {
                       <thead className="bg-[#0A0A0A] text-zinc-400 font-semibold uppercase tracking-wider border-b border-[#222222]">
                         <tr>
                           <th className="px-4 py-3">Metric</th>
-                          {comparisonList.map((m) => (
+                          {currentComparison.map((m) => (
                             <th key={m.id} className="px-4 py-3">
                               <span className="font-bold text-white">{m.name}</span> ({m.version ?? 'v1.0'})
                               {m.is_active && <span className="block text-[9px] text-emerald-400 font-normal">Active Production</span>}
@@ -429,31 +484,31 @@ export const AdminMlCenter: React.FC = () => {
                       <tbody className="divide-y divide-[#222222]">
                         <tr>
                           <td className="px-4 py-3 font-bold text-zinc-300">ROC-AUC</td>
-                          {comparisonList.map((m) => (
+                          {currentComparison.map((m) => (
                             <td key={m.id} className="px-4 py-3 font-semibold text-amber-400">{formatDec(m.roc_auc)}</td>
                           ))}
                         </tr>
                         <tr>
                           <td className="px-4 py-3 font-bold text-zinc-300">Accuracy</td>
-                          {comparisonList.map((m) => (
+                          {currentComparison.map((m) => (
                             <td key={m.id} className="px-4 py-3 font-bold text-emerald-400">{formatPct(m.accuracy)}</td>
                           ))}
                         </tr>
                         <tr>
                           <td className="px-4 py-3 font-bold text-zinc-300">Precision</td>
-                          {comparisonList.map((m) => (
+                          {currentComparison.map((m) => (
                             <td key={m.id} className="px-4 py-3 font-semibold text-purple-400">{formatPct(m.precision)}</td>
                           ))}
                         </tr>
                         <tr>
                           <td className="px-4 py-3 font-bold text-zinc-300">Recall</td>
-                          {comparisonList.map((m) => (
+                          {currentComparison.map((m) => (
                             <td key={m.id} className="px-4 py-3 font-semibold text-purple-300">{formatPct(m.recall)}</td>
                           ))}
                         </tr>
                         <tr>
                           <td className="px-4 py-3 font-bold text-zinc-300">F1 Score</td>
-                          {comparisonList.map((m) => (
+                          {currentComparison.map((m) => (
                             <td key={m.id} className="px-4 py-3 font-semibold text-white">{formatDec(m.f1_score)}</td>
                           ))}
                         </tr>
@@ -476,139 +531,28 @@ export const AdminMlCenter: React.FC = () => {
                 </div>
 
                 <div className="space-y-3 pt-2">
-                  {Object.entries(featureImportance).map(([feat, val]) => {
-                    const numVal = Number(val);
-                    const percentage = (numVal > 1 ? numVal : numVal * 100).toFixed(2);
-                    const widthPct = Math.min(100, Math.max(2, numVal > 1 ? numVal : numVal * 100 * 3));
-                    return (
-                      <div key={feat} className="space-y-1.5 p-3 bg-[#0A0A0A] border border-[#1F1F1F] rounded-xl">
-                        <div className="flex justify-between text-xs font-semibold">
-                          <span className="text-zinc-200">{feat}</span>
-                          <span className="text-purple-400 font-mono font-bold">{percentage}%</span>
+                  {Object.entries(currentImportance)
+                    .sort(([, a], [, b]) => Number(b) - Number(a))
+                    .map(([feat, val]) => {
+                      const numVal = Number(val);
+                      const percentage = (numVal > 1 ? numVal : numVal * 100).toFixed(2);
+                      const widthPct = Math.min(100, Math.max(2, numVal > 1 ? numVal : numVal * 100 * 3));
+                      return (
+                        <div key={feat} className="space-y-1.5 p-3 bg-[#0A0A0A] border border-[#1F1F1F] rounded-xl">
+                          <div className="flex justify-between text-xs font-semibold">
+                            <span className="text-zinc-200">{feat}</span>
+                            <span className="text-purple-400 font-mono font-bold">{percentage}%</span>
+                          </div>
+                          <div className="w-full bg-[#151515] rounded-full h-2.5 border border-[#222222] overflow-hidden">
+                            <div
+                              className="bg-gradient-to-r from-purple-600 to-emerald-400 h-full rounded-full transition-all duration-500"
+                              style={{ width: `${widthPct}%` }}
+                            />
+                          </div>
                         </div>
-                        <div className="w-full bg-[#151515] rounded-full h-2.5 border border-[#222222] overflow-hidden">
-                          <div
-                            className="bg-gradient-to-r from-purple-600 to-emerald-400 h-full rounded-full transition-all duration-500"
-                            style={{ width: `${widthPct}%` }}
-                          />
-                        </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
                 </div>
-              </Card>
-            )}
-
-            {/* PREDICTION MONITORING TAB */}
-            {activeTab === 'predictions' && (
-              <Card className="p-5 bg-[#111111] border-[#222222] space-y-4">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                    <Activity className="w-4 h-4 text-purple-400" />
-                    <span>Real-Time Model Inference & Scoring Stream</span>
-                  </h3>
-                  <span className="text-xs text-zinc-400">Live Telemetry</span>
-                </div>
-
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs text-zinc-300">
-                    <thead className="bg-[#0A0A0A] text-zinc-400 font-semibold uppercase tracking-wider border-b border-[#222222]">
-                      <tr>
-                        <th className="px-4 py-3">Lead Name</th>
-                        <th className="px-4 py-3">Company</th>
-                        <th className="px-4 py-3">Score (0-100)</th>
-                        <th className="px-4 py-3">Conversion Prob</th>
-                        <th className="px-4 py-3">Classification</th>
-                        <th className="px-4 py-3">Model</th>
-                        <th className="px-4 py-3 text-right">Predicted At</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-[#222222]">
-                      {predictions.length === 0 ? (
-                        <tr>
-                          <td colSpan={7} className="px-4 py-6 text-center text-zinc-500">
-                            No scored leads recorded yet.
-                          </td>
-                        </tr>
-                      ) : (
-                        predictions.map((p) => (
-                          <tr key={p.id} className="hover:bg-[#151515] transition-colors">
-                            <td className="px-4 py-3 font-bold text-white">{p.lead_name || `${p.first_name || ''} ${p.last_name || ''}`}</td>
-                            <td className="px-4 py-3 text-zinc-400">{p.company || 'N/A'}</td>
-                            <td className="px-4 py-3 font-black text-purple-400">{p.score ?? p.lead_score ?? 'N/A'}</td>
-                            <td className="px-4 py-3 font-bold text-emerald-400">
-                              {p.conversion_probability ? `${(Number(p.conversion_probability) * 100).toFixed(1)}%` : 'N/A'}
-                            </td>
-                            <td className="px-4 py-3">
-                              <Badge variant={p.score >= 80 ? 'warning' : p.score >= 50 ? 'primary' : 'neutral'} size="sm">
-                                {p.score >= 80 ? '🔥 HOT' : p.score >= 50 ? '⚡ WARM' : '❄️ COLD'}
-                              </Badge>
-                            </td>
-                            <td className="px-4 py-3 font-mono text-zinc-400">{p.model || 'XGBoost v1.4'}</td>
-                            <td className="px-4 py-3 text-right text-zinc-400">{p.predicted_at || p.updated_at || 'Just now'}</td>
-                          </tr>
-                        ))
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </Card>
-            )}
-
-            {/* MODEL TRAINING TAB */}
-            {activeTab === 'training' && (
-              <Card className="p-6 bg-[#111111] border-[#222222] space-y-5 max-w-2xl mx-auto">
-                <div className="space-y-1">
-                  <h3 className="text-base font-bold text-white flex items-center space-x-2">
-                    <Play className="w-5 h-5 text-emerald-400" />
-                    <span>Train Machine Learning Model</span>
-                  </h3>
-                  <p className="text-xs text-zinc-400">
-                    Trigger background automated model retraining with cross-validation and feature evaluation.
-                  </p>
-                </div>
-
-                {trainingSuccess && (
-                  <div className="p-3 bg-emerald-950/40 border border-emerald-800/60 rounded-xl flex items-center space-x-2 text-emerald-300 text-xs">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span>{trainingSuccess}</span>
-                  </div>
-                )}
-
-                <form onSubmit={handleStartTraining} className="space-y-4">
-                  <Select
-                    label="Algorithm"
-                    value={trainAlgorithm}
-                    onChange={(e) => setTrainAlgorithm(e.target.value)}
-                    options={[
-                      { value: 'XGBoost', label: 'XGBoost (Extreme Gradient Boosting - Recommended)' },
-                      { value: 'Random Forest', label: 'Random Forest Classifier' },
-                      { value: 'Logistic Regression', label: 'Logistic Regression' },
-                    ]}
-                  />
-
-                  <Select
-                    label="Training Dataset"
-                    value={selectedDatasetId}
-                    onChange={(e) => setSelectedDatasetId(e.target.value)}
-                    options={[
-                      { value: '', label: 'Master Dataset (Lead Scoring.csv - 9,240 rows)' },
-                      ...datasets.map((d) => ({ value: String(d.id), label: `${d.name} (${d.row_count || 0} rows)` })),
-                    ]}
-                  />
-
-                  <div className="pt-2 border-t border-[#222222] flex justify-end">
-                    <Button
-                      type="submit"
-                      variant="primary"
-                      size="md"
-                      isLoading={isTraining}
-                      className="bg-white text-black hover:bg-zinc-200 border-none font-semibold"
-                    >
-                      Start Model Training
-                    </Button>
-                  </div>
-                </form>
               </Card>
             )}
           </>

@@ -448,6 +448,7 @@ export const Leads: React.FC = () => {
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
         title="Add New Lead Prospect"
+        size="2xl"
       >
         <LeadForm
           onSubmit={handleCreateLead}

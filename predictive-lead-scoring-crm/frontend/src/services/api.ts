@@ -194,6 +194,22 @@ export const userManagementApi = {
 };
 
 export const managerApi = {
+  getDashboard: async (params?: Record<string, string>): Promise<{
+    success: boolean;
+    kpis: any;
+    monthly_trend: any[];
+    score_distribution: any[];
+    top_hot_leads: any[];
+    pipeline_stages: any[];
+    recent_activities: any[];
+    activity_counters: any;
+    ai_insight: any;
+    generated_at: string;
+  }> => {
+    const query = params ? `?${new URLSearchParams(params).toString()}` : '';
+    return apiRequest(`/manager/dashboard${query}`, { method: 'GET' });
+  },
+
   getAiAssignments: async (leadId?: number): Promise<{ success: boolean; recommendations: any[] }> => {
     const query = leadId ? `?lead_id=${leadId}` : '';
     return apiRequest(`/manager/ai-assignment/recommendations${query}`, { method: 'GET' });

@@ -41,9 +41,10 @@ export const Login: React.FC = () => {
   const validate = (): boolean => {
     const newErrors: FormErrors = {};
 
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email address is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    const cleanEmail = formData.email.trim().toLowerCase();
+    if (!cleanEmail) {
+      newErrors.email = 'Email address or username is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail) && !['admin', 'manager', 'sales', 'rep', 'root', 'administrator'].includes(cleanEmail)) {
       newErrors.email = 'Please enter a valid email address';
     }
 

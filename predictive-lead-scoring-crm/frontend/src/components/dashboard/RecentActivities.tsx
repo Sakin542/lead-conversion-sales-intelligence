@@ -5,10 +5,19 @@ import activityService from '../../services/activityService';
 import { LeadActivity } from '../../types/lead';
 import { Mail, Globe, FileText, MousePointer, PlayCircle, PhoneCall, Calendar, Activity } from 'lucide-react';
 
-export const RecentActivities: React.FC = () => {
+interface RecentActivitiesProps {
+  activities?: any[];
+}
+
+export const RecentActivities: React.FC<RecentActivitiesProps> = ({ activities }) => {
   const [realActivities, setRealActivities] = useState<LeadActivity[]>([]);
 
   useEffect(() => {
+    if (activities && activities.length > 0) {
+      setRealActivities(activities as any);
+      return;
+    }
+
     activityService
       .getRecentActivities()
       .then((res) => {
@@ -17,7 +26,7 @@ export const RecentActivities: React.FC = () => {
         }
       })
       .catch(() => {});
-  }, []);
+  }, [activities]);
 
   const getActivityIcon = (type: string) => {
     switch (type) {

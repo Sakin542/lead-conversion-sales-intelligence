@@ -37,11 +37,11 @@ export const Campaigns: React.FC = () => {
         </div>
 
         <Button
-          variant="primary"
+          variant="ai"
           size="md"
           leftIcon={<Plus className="w-4 h-4" />}
           onClick={() => setIsModalOpen(true)}
-          className="px-4 py-2.5 rounded-xl font-bold text-xs bg-[#FF7A00] hover:bg-[#FF8C1A] text-white border-none shrink-0"
+          className="px-4 py-2.5 rounded-xl font-bold text-sm shadow-md shadow-[#FF7A00]/20 shrink-0"
         >
           Create Campaign
         </Button>

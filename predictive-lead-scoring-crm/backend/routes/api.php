@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\LeadController;
 use App\Http\Controllers\Api\Manager\ManagerAiAssignmentController;
 use App\Http\Controllers\Api\Manager\ManagerAtRiskLeadController;
 use App\Http\Controllers\Api\Manager\ManagerBulkOperationController;
+use App\Http\Controllers\Api\Manager\ManagerDashboardController;
 use App\Http\Controllers\Api\Manager\ManagerForecastController;
 use App\Http\Controllers\Api\Manager\ManagerGoalController;
 use App\Http\Controllers\Api\Manager\ManagerReportController;
@@ -126,6 +127,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
 // Manager Dedicated Endpoints (Restricted to SALES_MANAGER and ADMIN)
 Route::middleware(['auth:sanctum', 'role:ADMIN,SALES_MANAGER'])->prefix('manager')->group(function () {
+    // Manager Real-Time Dashboard
+    Route::get('/dashboard', [ManagerDashboardController::class, 'index']);
+
     // AI Lead Assignment Recommendation
     Route::get('/ai-assignment/recommendations', [ManagerAiAssignmentController::class, 'recommendations']);
     Route::post('/ai-assignment/{leadId}/assign', [ManagerAiAssignmentController::class, 'assign']);

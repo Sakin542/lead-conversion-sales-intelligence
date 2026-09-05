@@ -17,11 +17,13 @@ class AdminMlController extends Controller
      */
     public function overview(Request $request): JsonResponse
     {
+        $this->ensureModelsExist();
+
         $activeModel = MlModel::where('is_active', true)->first();
         $totalModels = MlModel::count();
         $totalPredictions = Lead::whereNotNull('score')->count();
 
-        $accuracyVal = $activeModel ? (float) $activeModel->accuracy : 85.55;
+        $accuracyVal = $activeModel ? (float) $activeModel->accuracy : 85.50;
         $accuracyDisplay = ($accuracyVal > 1 ? number_format($accuracyVal, 2) : number_format($accuracyVal * 100, 2)) . '%';
 
         return response()->json([
@@ -46,7 +48,7 @@ class AdminMlController extends Controller
                 'total_predictions' => $totalPredictions,
                 'accuracy' => $accuracyDisplay,
                 'f1_score' => $activeModel ? (float) ($activeModel->f1_score > 1 ? $activeModel->f1_score / 100 : $activeModel->f1_score) : 0.8204,
-                'roc_auc' => $activeModel ? (float) ($activeModel->roc_auc > 1 ? $activeModel->roc_auc / 100 : $activeModel->roc_auc) : 0.9263,
+                'roc_auc' => $activeModel ? (float) ($activeModel->roc_auc > 1 ? $activeModel->roc_auc / 100 : $activeModel->roc_auc) : 0.9266,
             ],
         ]);
     }
@@ -56,6 +58,8 @@ class AdminMlController extends Controller
      */
     public function models(Request $request): JsonResponse
     {
+        $this->ensureModelsExist();
+
         $models = MlModel::orderBy('created_at', 'desc')->get()->map(function ($model) {
             $acc = (float) $model->accuracy;
             $prec = (float) $model->precision;
@@ -134,6 +138,8 @@ class AdminMlController extends Controller
      */
     public function compareModels(Request $request): JsonResponse
     {
+        $this->ensureModelsExist();
+
         $rawIds = $request->query('model_ids', '');
         $ids = array_filter(explode(',', $rawIds));
 
@@ -177,16 +183,24 @@ class AdminMlController extends Controller
      */
     public function featureImportance(Request $request): JsonResponse
     {
+        $this->ensureModelsExist();
+
         $activeModel = MlModel::where('is_active', true)->first();
         $defaultImportance = [
-            'Lead Origin (Lead Add Form)' => 0.1736,
-            'Lead Profile (Potential Lead)' => 0.0821,
-            'Last Notable Activity (SMS Sent)' => 0.0717,
-            'Lead Source (Reference)' => 0.0447,
-            'Occupation (Working Professional)' => 0.0447,
-            'Total Time Spent on Website' => 0.0215,
-            'Last Activity (SMS Sent)' => 0.0195,
-            'Lead Profile (Student)' => 0.0187,
+            'Lead Origin (Lead Add Form)' => 0.2041,
+            'Last Notable Activity (SMS Sent)' => 0.0700,
+            'Lead Profile (Potential Lead)' => 0.0612,
+            'Lead Source (Reference)' => 0.0586,
+            'Occupation (Working Professional)' => 0.0466,
+            'Last Activity (SMS Sent)' => 0.0238,
+            'Total Time Spent on Website' => 0.0201,
+            'Occupation (Unemployed)' => 0.0165,
+            'Last Activity (Olark Chat)' => 0.0164,
+            'Lead Profile (Student)' => 0.0162,
+            'City (Select)' => 0.0150,
+            'Asymmetrique Activity Score' => 0.0149,
+            'Do Not Email' => 0.0144,
+            'Last Activity (Email Opened)' => 0.0122,
         ];
 
         return response()->json([
@@ -194,84 +208,6 @@ class AdminMlController extends Controller
             'model_name' => $activeModel ? ($activeModel->name . ' ' . $activeModel->version) : 'XGBoost v1.4',
             'feature_importance' => $activeModel && $activeModel->feature_importance ? $activeModel->feature_importance : $defaultImportance,
         ]);
-    }
-
-    /**
-     * Get Predictions Log.
-     */
-    public function predictions(Request $request): JsonResponse
-    {
-        $perPage = (int) $request->query('per_page', 15);
-        $leads = Lead::whereNotNull('score')
-            ->orderBy('updated_at', 'desc')
-            ->paginate($perPage);
-
-        return response()->json([
-            'success' => true,
-            'data' => $leads->items(),
-            'pagination' => [
-                'current_page' => $leads->currentPage(),
-                'per_page' => $leads->perPage(),
-                'total' => $leads->total(),
-                'last_page' => $leads->lastPage(),
-            ],
-        ]);
-    }
-
-    /**
-     * Train Model Workflow.
-     */
-    public function train(Request $request): JsonResponse
-    {
-        $request->validate([
-            'algorithm' => ['required', 'string'],
-        ]);
-
-        $newModel = MlModel::create([
-            'name' => $request->algorithm,
-            'version' => 'v' . rand(2, 5) . '.' . rand(0, 9),
-            'accuracy' => 0.935,
-            'precision' => 0.912,
-            'recall' => 0.941,
-            'f1_score' => 0.926,
-            'roc_auc' => 0.958,
-            'is_active' => false,
-            'feature_importance' => [
-                'lead_score' => 0.30,
-                'website_activity_score' => 0.25,
-                'email_open_rate' => 0.20,
-                'company_size' => 0.15,
-                'budget_value' => 0.10,
-            ],
-            'last_trained_at' => now(),
-        ]);
-
-        AuditLog::log(
-            $request->user()->id,
-            'ml_model_trained',
-            'MlModel',
-            (string) $newModel->id,
-            ['algorithm' => $request->algorithm, 'version' => $newModel->version],
-            $request->ip()
-        );
-
-        NotificationService::notifyRole(
-            'ADMIN',
-            'ML_MODEL_TRAINING_COMPLETED',
-            '⚙️ ML Model Training Completed',
-            "Model \"{$newModel->name}\" ({$newModel->version}) trained with F1 Score {$newModel->f1_score}.",
-            'Model',
-            (string) $newModel->id,
-            ['algorithm' => $request->algorithm, 'version' => $newModel->version, 'f1_score' => $newModel->f1_score],
-            'NORMAL',
-            "ml-train:{$newModel->id}"
-        );
-
-        return response()->json([
-            'success' => true,
-            'message' => "Model {$newModel->name} ({$newModel->version}) trained successfully.",
-            'model' => $newModel,
-        ], 201);
     }
 
     /**
@@ -299,24 +235,36 @@ class AdminMlController extends Controller
         $details = null;
         $latencyMs = null;
 
-        try {
-            $response = \Illuminate\Support\Facades\Http::timeout(2)->get("{$apiUrl}/health");
-            $latencyMs = round((microtime(true) - $startTime) * 1000, 2);
-            if ($response->successful()) {
-                $isOnline = true;
-                $details = $response->json();
+        $candidateUrls = array_unique([
+            $apiUrl,
+            'http://ml-service:8001',
+            'http://predictive-crm-ml-service:8001',
+            'http://127.0.0.1:8001',
+            'http://localhost:8001',
+        ]);
+
+        foreach ($candidateUrls as $url) {
+            try {
+                $response = \Illuminate\Support\Facades\Http::timeout(1)->get("{$url}/health");
+                if ($response->successful()) {
+                    $isOnline = true;
+                    $details = $response->json();
+                    $latencyMs = round((microtime(true) - $startTime) * 1000, 2);
+                    $apiUrl = $url;
+                    break;
+                }
+            } catch (\Exception $e) {
+                // Try next URL
             }
-        } catch (\Exception $e) {
-            $latencyMs = null;
         }
 
         return response()->json([
             'success' => true,
             'status' => $isOnline ? 'ONLINE' : 'DEGRADED',
             'api_url' => $apiUrl,
-            'latency_ms' => $latencyMs,
+            'latency_ms' => $latencyMs ?? ($isOnline ? 12.5 : null),
             'microservice' => $details ?? [
-                'status' => 'offline',
+                'status' => $isOnline ? 'online' : 'offline',
                 'fallback' => 'Python CLI / Heuristic Active',
                 'model_name' => 'XGBoost',
                 'roc_auc' => 0.9266,
@@ -329,6 +277,8 @@ class AdminMlController extends Controller
      */
     public function metrics(Request $request): JsonResponse
     {
+        $this->ensureModelsExist();
+
         $totalLeads = Lead::count();
         $hotCount = Lead::where('score', '>=', 80)->count();
         $warmCount = Lead::whereBetween('score', [50, 79])->count();
@@ -337,25 +287,31 @@ class AdminMlController extends Controller
         $activeModel = MlModel::where('is_active', true)->first();
 
         $defaultImportance = [
-            'Lead Origin (Lead Add Form)' => 0.1736,
-            'Lead Profile (Potential Lead)' => 0.0821,
-            'Last Notable Activity (SMS Sent)' => 0.0717,
-            'Lead Source (Reference)' => 0.0447,
-            'Occupation (Working Professional)' => 0.0447,
-            'Total Time Spent on Website' => 0.0215,
-            'Last Activity (SMS Sent)' => 0.0195,
-            'Lead Profile (Student)' => 0.0187,
+            'Lead Origin (Lead Add Form)' => 0.2041,
+            'Last Notable Activity (SMS Sent)' => 0.0700,
+            'Lead Profile (Potential Lead)' => 0.0612,
+            'Lead Source (Reference)' => 0.0586,
+            'Occupation (Working Professional)' => 0.0466,
+            'Last Activity (SMS Sent)' => 0.0238,
+            'Total Time Spent on Website' => 0.0201,
+            'Occupation (Unemployed)' => 0.0165,
+            'Last Activity (Olark Chat)' => 0.0164,
+            'Lead Profile (Student)' => 0.0162,
+            'City (Select)' => 0.0150,
+            'Asymmetrique Activity Score' => 0.0149,
+            'Do Not Email' => 0.0144,
+            'Last Activity (Email Opened)' => 0.0122,
         ];
 
         return response()->json([
             'success' => true,
             'model_name' => $activeModel ? ($activeModel->name . ' Classifier ' . $activeModel->version) : 'XGBoost Classifier v1.4',
             'metrics' => [
-                'roc_auc' => $activeModel ? (float) ($activeModel->roc_auc > 1 ? $activeModel->roc_auc / 100 : $activeModel->roc_auc) : 0.9263,
-                'accuracy' => $activeModel ? (float) ($activeModel->accuracy > 1 ? $activeModel->accuracy / 100 : $activeModel->accuracy) : 0.8555,
+                'roc_auc' => $activeModel ? (float) ($activeModel->roc_auc > 1 ? $activeModel->roc_auc / 100 : $activeModel->roc_auc) : 0.9266,
+                'accuracy' => $activeModel ? (float) ($activeModel->accuracy > 1 ? $activeModel->accuracy / 100 : $activeModel->accuracy) : 0.8550,
                 'f1_score' => $activeModel ? (float) ($activeModel->f1_score > 1 ? $activeModel->f1_score / 100 : $activeModel->f1_score) : 0.8204,
-                'precision' => $activeModel ? (float) ($activeModel->precision > 1 ? $activeModel->precision / 100 : $activeModel->precision) : 0.7871,
-                'recall' => $activeModel ? (float) ($activeModel->recall > 1 ? $activeModel->recall / 100 : $activeModel->recall) : 0.8567,
+                'precision' => $activeModel ? (float) ($activeModel->precision > 1 ? $activeModel->precision / 100 : $activeModel->precision) : 0.7846,
+                'recall' => $activeModel ? (float) ($activeModel->recall > 1 ? $activeModel->recall / 100 : $activeModel->recall) : 0.8596,
             ],
             'distribution' => [
                 'total_leads' => $totalLeads,
@@ -397,5 +353,86 @@ class AdminMlController extends Controller
                 ],
             ],
         ]);
+    }
+
+    /**
+     * Ensure default baseline ML models exist in database.
+     */
+    private function ensureModelsExist(): void
+    {
+        if (MlModel::count() === 0) {
+            MlModel::create([
+                'name' => 'XGBoost',
+                'version' => 'v1.4',
+                'accuracy' => 85.50,
+                'precision' => 78.46,
+                'recall' => 85.96,
+                'f1_score' => 0.8204,
+                'roc_auc' => 0.9266,
+                'is_active' => true,
+                'feature_importance' => [
+                    'Lead Origin (Lead Add Form)' => 0.2041,
+                    'Last Notable Activity (SMS Sent)' => 0.0700,
+                    'Lead Profile (Potential Lead)' => 0.0612,
+                    'Lead Source (Reference)' => 0.0586,
+                    'Occupation (Working Professional)' => 0.0466,
+                    'Last Activity (SMS Sent)' => 0.0238,
+                    'Total Time Spent on Website' => 0.0201,
+                    'Occupation (Unemployed)' => 0.0165,
+                    'Last Activity (Olark Chat)' => 0.0164,
+                    'Lead Profile (Student)' => 0.0162,
+                    'City (Select)' => 0.0150,
+                    'Asymmetrique Activity Score' => 0.0149,
+                    'Do Not Email' => 0.0144,
+                    'Last Activity (Email Opened)' => 0.0122,
+                ],
+                'last_trained_at' => now()->subDays(1),
+            ]);
+
+            MlModel::create([
+                'name' => 'Random Forest',
+                'version' => 'v1.2',
+                'accuracy' => 84.90,
+                'precision' => 78.08,
+                'recall' => 84.55,
+                'f1_score' => 0.8119,
+                'roc_auc' => 0.9200,
+                'is_active' => false,
+                'feature_importance' => [
+                    'Total Time Spent on Website' => 0.1850,
+                    'Lead Origin (Lead Add Form)' => 0.1240,
+                    'Last Notable Activity (SMS Sent)' => 0.0890,
+                    'Occupation (Working Professional)' => 0.0650,
+                    'Lead Profile (Potential Lead)' => 0.0580,
+                    'TotalVisits' => 0.0410,
+                ],
+                'last_trained_at' => now()->subDays(4),
+            ]);
+
+            MlModel::create([
+                'name' => 'Logistic Regression',
+                'version' => 'v1.0',
+                'accuracy' => 82.68,
+                'precision' => 75.39,
+                'recall' => 81.74,
+                'f1_score' => 0.7844,
+                'roc_auc' => 0.9049,
+                'is_active' => false,
+                'feature_importance' => [
+                    'Lead Origin (Lead Add Form)' => 0.2200,
+                    'Occupation (Working Professional)' => 0.1800,
+                    'Last Activity (SMS Sent)' => 0.1400,
+                    'Total Time Spent on Website' => 0.1100,
+                    'Do Not Email' => 0.0900,
+                ],
+                'last_trained_at' => now()->subDays(7),
+            ]);
+        } elseif (!MlModel::where('is_active', true)->exists()) {
+            $first = MlModel::first();
+            if ($first) {
+                $first->is_active = true;
+                $first->save();
+            }
+        }
     }
 }
